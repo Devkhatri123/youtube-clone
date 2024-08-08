@@ -1,14 +1,48 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Library from "./Component/Library";
+import MainPage from "./Component/MainPage";
+import Footer from "./Component/Footer";
+import Navbar from "./Component/Navbar";
+import {AuthProvider} from "./Context/ContextProvider";
+import VideoPage from "./Component/VideoPage";
+const root = ReactDOM.createRoot(document.getElementById("root"));
+let router = createBrowserRouter([
+  {
+    path: "/",
+    element: <><Navbar/><MainPage /><Footer/></>,
+  },
+  {
+    path: "/Library",
+    element: (
+      <>
+        <Navbar />
+        <Library />
+        <Footer />
+      </>
+    ),
+  },
+  {
+    path: "/watch/:id",
+    element: (
+      <>
+        <Navbar />
+        <VideoPage/>
+        <Footer />
+      </>
+    ),
+  },
+]);
 root.render(
-  <React.StrictMode>
+  <RouterProvider router={router}>
+    <AuthProvider>
     <App />
-  </React.StrictMode>
+    </AuthProvider>
+  </RouterProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,0 +1,80 @@
+.header {
+  border-bottom: 1px solid white;
+}
+
+  .header {
+    padding: 0.7em;
+    display: flex;
+    justify-content: space-between;
+    background-color: #0f0f0f;
+  }
+  .center {
+    display: none;
+  }
+  #menu {
+    display: none;
+  }
+  #logo {
+    width: 100%;
+    min-width: 42px;
+    max-width: 5.3rem;
+  }
+  .left_side {
+    display: flex;
+    align-items: center;
+    flex: 0.5;
+  }
+  .right_side {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    flex: 0.6 1;
+    max-width: 110px;
+  }
+  .right_side > img {
+    border-radius: 50%;
+    width: 24%;
+    min-width: 13px;
+  }
+  #search_logo {
+    color: white;
+    font-size: 1.2rem;
+    margin-right: 0.9em;
+    font-weight: bolder;
+  }
+  .mobile_search_Input {
+    width: 100%;
+  }
+  .search_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #212121;
+    padding: 0.7em;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 2px -2px;
+  }
+  .search_container > svg {
+    color: white;
+    font-size: 32px;
+    margin-left: -7px;
+    margin-right: 3px;
+  }
+  .search_container > input {
+    background: #383838;
+    width: 100%;
+    border-radius: 46px;
+    padding: 0.3em 0.2em 0.4em 0.6em;
+    color: rgb(241, 241, 241);
+  }
+  .right_search_icon{
+    position: absolute;
+    right: 17px;
+    font-size: 23px !important;
+    top: 14.7px;
+  }
+  .FaRegUserCircle{
+    color: white;
+    font-size: 20px;
+  }
+
