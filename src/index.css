@@ -18,3 +18,8 @@ code {
     monospace;
 }
 
+@media screen and (max-width:687px) {
+  html{
+  font-size: calc(15px + 6*((100vw - 320px) / 680));
+  }
+}

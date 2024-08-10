@@ -19,37 +19,39 @@ function Library() {
         console.log(user);
       });
     }, []);
-  return (
-    <div className='library'>
-      {user?
-      <>
-      <div className="top_Section">
-        <div className="left">
-        <GoHistory/>
-        <h4>History</h4>
-        </div>
-        <a href='#' className='viewAll'>View all</a>
-      </div>
-      <div className="watched_Videos">
-        <WatchedVideos/>
-      </div>
-      <div className="createVideo">
-        <a href="#">
-      <IoPlayOutline/>
-      <p>Your Vidoes</p>
-      </a>
-      <a href="#" >
-      <MdOutlineVideocam onClick={HandleUploadVideo}/>
-      <p onClick={HandleUploadVideo}>Create Vidoe</p>
-      
-      </a>
-      {isUploadVideoEnabled === true ? <UploadVideo/>:null}
-      </div>
-      </>
-      :<NotSignedIn/>}
-    </div>
-   
-  )
+    return (
+      isUploadVideoEnabled ? (
+        <UploadVideo />
+      ) : (
+        user ? (
+          <div className='library'>
+            <div className="top_Section">
+              <div className="left">
+                <GoHistory />
+                <h4>History</h4>
+              </div>
+              <a href='#' className='viewAll'>View all</a>
+            </div>
+            <div className="watched_Videos">
+              <WatchedVideos />
+            </div>
+            <div className="createVideo">
+              <a href="#">
+                <IoPlayOutline />
+                <p>Your Videos</p>
+              </a>
+              <a href="#" >
+                <MdOutlineVideocam onClick={HandleUploadVideo} />
+                <p onClick={HandleUploadVideo}>Create Video</p>
+              </a>
+            </div>
+          </div>
+        ) : (
+          <NotSignedIn />
+        )
+      )
+    );
+    
 }
 
 export default Library

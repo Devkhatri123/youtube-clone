@@ -32,17 +32,14 @@ let router = createBrowserRouter([
       <>
         <Navbar />
         <VideoPage/>
-        <Footer />
       </>
     ),
   },
 ]);
 root.render(
   <RouterProvider router={router}>
-    <AuthProvider>
     <App />
-    </AuthProvider>
-  </RouterProvider>
+    </RouterProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

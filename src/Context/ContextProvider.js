@@ -1,12 +1,13 @@
 import { createContext, useState } from "react";
 export const currentUser = createContext(null);
 
-export const AuthProvider = ({ children }) => {
-  let [user, setuser] = useState(null);
-  
- 
+export const VideoProvider = ({ children }) => {
+  let [Videos, setVideos] = useState([]);
+   const GetNonFilteredVideos = () => {
+   
+   } 
   return (
-    <currentUser.Provider value={user}>{children}</currentUser.Provider>
+    <currentUser.Provider >{children}</currentUser.Provider>
   );
 };
 

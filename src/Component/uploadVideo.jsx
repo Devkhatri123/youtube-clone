@@ -109,7 +109,10 @@ function UploadVideo() {
  
 };
 
-  return (
+return (
+  closeUploadPage ? (
+    <Library />
+  ) : (
     <div className="uploadVideo">
       <p className='text-white'>{videouploadProgress}%</p>
       <IoMdClose className="close_page_icon" onClick={closePage} />
@@ -187,14 +190,14 @@ function UploadVideo() {
         {commentMode ? <CommentType /> : null}
       </div>
       <div className="btn_div">
-        {" "}
         <button className="select_file" onClick={uploadVideo}>
           Upload Video
         </button>
       </div>
-      {closeUploadPage ? <Library /> : null}
     </div>
-  );
+  )
+);
+
 }
 
 export default UploadVideo;
