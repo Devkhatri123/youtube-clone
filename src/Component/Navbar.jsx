@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdMenu } from "react-icons/io";
 import youtubeImage from "../Pics/youtube.png";
 import { CiSearch } from "react-icons/ci";
@@ -7,11 +7,10 @@ import "../CSS/Navbar.css";
 import SearchBar from "./SearchBar";
 import { auth,firestore } from "../firebase/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc,setDoc } from "firebase/firestore";
 function Navbar() {
   let [IsSearchBarVisible, setIsSearchBarVisible] = useState(true);
   let [user,Setuser] = useState(null);
-  let [users,setUsers] = useState([]);
   const HandleSeachToggle = () => {
     setIsSearchBarVisible(false);
     console.log("clicked");
@@ -26,7 +25,7 @@ function Navbar() {
         uid: res.user.uid,
         name:res.user.displayName,
         email:res.user.email,
-        channelURL:res.user.photoURL,  
+        channelPic:res.user.photoURL,  
         subscribers:0,   
         Time: new Date(),   
        }
@@ -42,17 +41,7 @@ function Navbar() {
     auth.onAuthStateChanged(async(user)=>{
     Setuser(user);       
     })
- },[user]);
-useEffect(()=>{
-  onSnapshot(collection(firestore, "users"), (snapshot) => {
-    setUsers(
-      snapshot.docs.map((doc) => ({
-        id: doc.id, // Correct syntax with colon after "id"
-        data: doc.data(),
-      }))
-    );
-  });
-},[]);
+ },[]);
 
   return (
     <>

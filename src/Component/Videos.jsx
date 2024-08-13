@@ -30,9 +30,6 @@ function Videos() {
        setVideos(FetchedData);
     });
   }, []);
-  useEffect(() => {
-   console.log(videos)
-  }, [videos]);
   return (
     <div className="Videos">
       {videos.map((video, i) => {

@@ -34,33 +34,28 @@ function Video({ video }) {
             src={video.Videodata.videoURL}
             poster={video.Videodata.Thumbnail}
           ></video>
-          <div className="video_detail">
-            <div id="video_detail">
-              <div>
-                <div style={{ display: "flex" }}>
-                  <img
-                    src={video.UserData.channelURL}
-                    alt="channel pic"
-                    className="channelPic"
-                  />
-                  <div>
-                    <p className="text-white videoTitle">
-                      {video.Videodata.Title}
-                    </p>
-                  </div>
-                </div>
-                <div className="channerlName">
-                  <p className="text-white " id="channerlName">
-                    {video.UserData.name}{" "}
-                    <span> Views {video.Videodata.views}</span>{" "}
-                    <span>{video.Time}</span>
-                  </p>
-                </div>
-              </div>
+           </Link>
+           <div className="video_bottom">
+                        <div className="video_bttom_left">
+                          <img
+                            src={video.UserData.channelPic}
+                            alt={video.UserData.name}
+                          />
+                          <div className="video_title_and_channelName">
+                            <h3 id="video_title" className="title">
+                              {video.Videodata.Title}
+                            </h3>
+                            <div>
+                              <p>
+                                {video.UserData.name} 
+                                {" "} {video.Videodata.views} Views
+                              </p>
+                            </div>
+                          </div>
+                        </div>
               <BsThreeDotsVertical className="videomenu" />
-            </div>
           </div>
-        </Link>
+         
       </div>
     </>
   );

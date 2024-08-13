@@ -8,7 +8,7 @@ import Library from "./Component/Library";
 import MainPage from "./Component/MainPage";
 import Footer from "./Component/Footer";
 import Navbar from "./Component/Navbar";
-import {AuthProvider} from "./Context/ContextProvider";
+import { VideoProvider } from "./Context/ContextProvider";
 import VideoPage from "./Component/VideoPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 let router = createBrowserRouter([
@@ -32,7 +32,7 @@ let router = createBrowserRouter([
       <>
         <Navbar />
         <VideoPage/>
-      </>
+       </>
     ),
   },
 ]);

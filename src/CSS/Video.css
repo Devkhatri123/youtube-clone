@@ -18,47 +18,14 @@
   video[poster] {
     object-fit: cover;
   }
-  .mute_icon {
-    width: 52px;
+  .video_bottom{
     color: white;
-    border-radius: 10px;
-    padding: 11px;
-    display: flex;
-    justify-content: end;
-    visibility: visible;
   }
-  .controls > .mute_icon > svg {
-    z-index: 10;
-    visibility: visible;
-  }
-  #video_detail {
-    display: flex;
-    padding: 3px 0 0 8px;
-    /* height: 22px; */
-    justify-content: space-between;
-  }
+
   .video_detail {
     margin-bottom: 13px;
     margin-top: 1px;
     margin-left: 0px;
-  }
-  .channelPic {
-    width: 39px;
-    border-radius: 50%;
-    height: 36px;
-  }
-  .videoTitle {
-    margin-left: 8px;
-    /* text-align: justify; */
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    max-height: 2.5em;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    line-height: 1.25;
-    text-overflow: ellipsis;
-    font-size: 0.8em;
-    /* width: 238px; */
   }
   .videomenu {
     color: white;
@@ -68,11 +35,8 @@
   .channerlName {
     display: flex;
     margin-left: 47px;
-    /* margin-top: 6px; */
   }
   #channerlName {
-    /* text-align: justify; */
-    /* width: 84%; */
     margin-top: -5px;
     margin-left: -2px;
     opacity: 0.6;
@@ -83,5 +47,8 @@
     font-size: 0.8em;
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+  .video_title_and_channelName{
+    font-size: 0.7em;
   }
 }

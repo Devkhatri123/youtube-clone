@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdUpload } from "react-icons/md";
 import { RiMenu2Fill } from "react-icons/ri";
 import { MdOutlineComment } from "react-icons/md";
@@ -9,6 +9,7 @@ import { IoMdClose } from "react-icons/io";
 import { FaFileImage } from "react-icons/fa";
 import Library from "./Library";
 import {
+  getBlob,
   getDownloadURL,
   ref,
   uploadBytesResumable,
@@ -18,6 +19,7 @@ import { v4 } from "uuid";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 function UploadVideo() {
   let [Video, setVideo] = useState("");
+  let imgRef = useRef();
   let [openComponent, setopenComponent] = useState(false);
   let [Thumbnail, setThumbnail] = useState("");
   let [videoTitle, setvideoTitle] = useState("");
@@ -27,6 +29,7 @@ function UploadVideo() {
   let CommentMode = sessionStorage.getItem("commentMode");
   let [videouploadProgress, setvideouploadProgress] = useState(0);
   let [ThumbNailUploadProgress,setThumbNailUploadProgress] = useState(0);
+  let [ImageDimensions,setImageDimensions] = useState({});
   const inputRef = useRef(null);
   let [videoFile, setvideoFile] = useState("");
   let [thumbnailFile, setthumbnailFile] = useState("");
@@ -60,8 +63,24 @@ function UploadVideo() {
       alert("First Select Video");
     }
   };
-
+useEffect(()=>{
+  if(Thumbnail !== ""){
+    const img = new Image();
+    img.src = Thumbnail;
+    img.onload=()=>{
+      setImageDimensions({
+        width:img.width,
+        height:img.height
+      })
+    }
+  }
+},[Thumbnail])
   const uploadVideo = async () => {
+    console.log(ImageDimensions)
+    if(ImageDimensions.width > 1400 && ImageDimensions.height > 760){
+         alert("Image width should be 320 px or less than 320px and image height should be 560 or less than 560px");
+         return;
+    }
     const videopRef = ref(storage, `Videos/${v4()}`);
     const ThumbNailRef = ref(storage, `Thumbnail/${v4()}`);
 
@@ -97,6 +116,8 @@ function UploadVideo() {
       description:description,
       videoURL:videoURL,
       Thumbnail:thumbnailURL,
+      likes:0,
+      dislikes:0,
       views:0,
       createdBy:auth.currentUser.uid,
     }
@@ -168,6 +189,7 @@ return (
             <img
               src={Thumbnail}
               alt={Thumbnail}
+              ref={imgRef}
               onClick={() => PicPickerRef.current.click()}
             />
           ) : (
