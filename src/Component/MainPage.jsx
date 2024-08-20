@@ -7,7 +7,6 @@ function MainPage() {
   return (
     <>
     <Videos/>
-    <Body/>
   </>
   )
 }

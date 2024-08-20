@@ -8,7 +8,9 @@ import SearchBar from "./SearchBar";
 import { auth,firestore } from "../firebase/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc,setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router";
 function Navbar() {
+  const navigate = useNavigate();
   let [IsSearchBarVisible, setIsSearchBarVisible] = useState(true);
   let [user,Setuser] = useState(null);
   const HandleSeachToggle = () => {
@@ -52,7 +54,7 @@ function Navbar() {
           <div className="header">
             <div className="left_side">
               <IoMdMenu id="menu" />
-              <img src={youtubeImage} alt="logo" id="logo" />
+              <img src={youtubeImage} alt="logo" id="logo" onClick={()=>navigate("/")}/>
             </div>
             <div className="center"></div>
             <div className="right_side">

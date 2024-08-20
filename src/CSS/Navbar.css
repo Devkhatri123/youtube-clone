@@ -80,4 +80,42 @@
     color: white;
     font-size: 20px;
   }
-
+.search_Results{
+  position: absolute;
+  top: 50px;
+  z-index: 5;
+  background-color: #212121;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+.search_result{
+  color: white;
+  border-bottom: 1px solid #ccc;
+  /* display: flex;
+  align-items: center;
+  justify-content: space-between; */
+  padding: 0.6em;
+}
+.search_result > a{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.search_result > a > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  max-height: 2.5em;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  width: 82%;
+  /* //padding-left: 12px; */
+}
+.search_result > svg {
+  width: 20px;
+  height: 20px;
+}

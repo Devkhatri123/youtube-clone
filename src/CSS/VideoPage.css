@@ -41,7 +41,7 @@
     font-weight: bolder;
 }
 .video_top_controls > svg {
-  z-index: 3;
+  z-index: 1;
 }
 .details{
     color: white;
@@ -100,7 +100,9 @@
     margin-right: 0.6rem;
 }
 
-
+.comments_turnedOff_message{
+  padding: 23px 20px 20px 14px;
+}
 
 /*checking*/
 
@@ -226,11 +228,13 @@
     margin: 6px 0;
  }
  .video_title_and_channelName{
-  /* margin-top: 4px; */
   font-size: 0.8rem;
   position: relative;
   top: 3px;
-  height: 46px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
  }
  .menu{
     font-size: 23px;
@@ -260,4 +264,12 @@
 
 .progressBar:hover{
   cursor: pointer;
+}
+.middle_controls,.below_controls {
+  display: none;
+}
+.video_section:hover {
+  .middle_controls,.below_controls{
+    display: flex;
+  }
 }

@@ -15,7 +15,7 @@ function Videos() {
   //   console.log(color);
   // };
   useEffect(() => {
-    onSnapshot(collection(firestore, "videos"), async (snapshot) => {
+   onSnapshot(collection(firestore, "videos"), async (snapshot) => {
       const FetchedData = await Promise.all(
       snapshot.docs.map(async (Doc) => {
           const userRef = doc(firestore, "users", Doc.data().createdBy);
@@ -29,6 +29,7 @@ function Videos() {
        );
        setVideos(FetchedData);
     });
+   
   }, []);
   return (
     <div className="Videos">

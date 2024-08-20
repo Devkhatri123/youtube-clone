@@ -19,10 +19,10 @@ function Footer() {
         <IoMdHome />
         <p>Home</p>
       </Link>
-      <a href="#">
+      <Link to={"/shortVideo"}>
         <SiYoutubeshorts />
         <p>Shorts</p>
-      </a>
+        </Link>
       {user ? (
         <a href="#">
           <MdOutlineSubscriptions />

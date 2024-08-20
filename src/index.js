@@ -10,6 +10,7 @@ import Footer from "./Component/Footer";
 import Navbar from "./Component/Navbar";
 import { VideoProvider } from "./Context/ContextProvider";
 import VideoPage from "./Component/VideoPage";
+import ShortVideos from "./Component/ShortVideos";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 let router = createBrowserRouter([
   {
@@ -32,6 +33,14 @@ let router = createBrowserRouter([
       <>
         <Navbar />
         <VideoPage/>
+       </>
+    ),
+  },
+  {
+    path: "/shortVideo",
+    element: (
+      <>
+        <ShortVideos/>
        </>
     ),
   },

@@ -16,16 +16,16 @@
   font-size: 0.7em;
 }
 .left > svg {
-  font-size: 22px;
+  font-size: 1.2em;
 }
 .left > h4 {
   font-weight: 700;
 }
 ::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
 }
-.videoThumbnail > img {
-  width: 156px;
+.videoThumbnail > a img {
+  width: 9.5em;
   border-radius: 10px;
 }
 #watchedVideoTitle {
@@ -64,15 +64,18 @@
   width: 87%;
 }
 .videoThumbnail {
-  width: 162px;
+  width: 9em;
 }
 .watched_Videos {
   display: flex;
   overflow-x: scroll;
-  gap: 3px;
+  gap: 0.5em;
   margin: 15px 0px 0px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 30px;
+}
+.watched_video{
+  width: min-content;
 }
 .watched_Videos:first-child {
   margin-left: -50px;
@@ -165,13 +168,13 @@
 }
 .thumbnail_picker_div{
   border: 1px dotted rgba(255, 255, 255, 0.1);
-    width: 91px;
-    display: flex;
-    justify-content: center;
-    padding: 2px;
-    margin-bottom: 11px;
-    margin-top: 11px;
-    margin-left: 11px;
+  width: 76px;
+  display: flex;
+  justify-content: center;
+  padding: 0.7em;
+  margin-bottom: 11px;
+  margin-top: 11px;
+  margin-left: 11px;
 }
 .thumbnail_picker_div svg {
   font-size: 21px;

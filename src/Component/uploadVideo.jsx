@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { MdUpload } from "react-icons/md";
 import { RiMenu2Fill } from "react-icons/ri";
 import { MdOutlineComment } from "react-icons/md";
@@ -9,17 +9,20 @@ import { IoMdClose } from "react-icons/io";
 import { FaFileImage } from "react-icons/fa";
 import Library from "./Library";
 import {
-  getBlob,
   getDownloadURL,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
 import { auth, firestore, storage } from "../firebase/firebase";
 import { v4 } from "uuid";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import VideoPlayer from "./VideoPlayer";
+import { useNavigate } from "react-router";
 function UploadVideo() {
+  const navigate = useNavigate();
   let [Video, setVideo] = useState("");
   let imgRef = useRef();
+  const videoRef = useRef();
   let [openComponent, setopenComponent] = useState(false);
   let [Thumbnail, setThumbnail] = useState("");
   let [videoTitle, setvideoTitle] = useState("");
@@ -28,12 +31,10 @@ function UploadVideo() {
   let description = sessionStorage.getItem("Description");
   let CommentMode = sessionStorage.getItem("commentMode");
   let [videouploadProgress, setvideouploadProgress] = useState(0);
-  let [ThumbNailUploadProgress,setThumbNailUploadProgress] = useState(0);
   let [ImageDimensions,setImageDimensions] = useState({});
   const inputRef = useRef(null);
   let [videoFile, setvideoFile] = useState("");
   let [thumbnailFile, setthumbnailFile] = useState("");
-  let [array, setarray] = useState([]);
   const PicPickerRef = useRef(null);
   const HandleFileChange = (e) => {
     console.log(e.target.files);
@@ -54,6 +55,9 @@ function UploadVideo() {
       setcloseUploadPage(true);
     }
   };
+  useEffect(()=>{
+    console.log(Video);
+},[Video])
   const HandleThumbNailChange = (e) => {
     console.log(e.target.files);
     if (Video !== "") {
@@ -76,7 +80,14 @@ useEffect(()=>{
   }
 },[Thumbnail])
   const uploadVideo = async () => {
-    console.log(ImageDimensions)
+    let videoLength = videoRef.current.firstChild.children.currentVideo.duration;
+    let videoType = null;
+    const seconds = Math.floor(videoLength % 60);
+    const minutes = Math.floor(videoLength / 60) % 60;
+    const hours = Math.floor(videoLength / 3600);
+    console.log(minutes + ":" + seconds + ":" + hours);
+    if(minutes >= 1 ) videoType = false
+    else if(minutes === 1 || seconds <= 60) videoType = true;
     if(ImageDimensions.width > 1400 && ImageDimensions.height > 760){
          alert("Image width should be 320 px or less than 320px and image height should be 560 or less than 560px");
          return;
@@ -95,17 +106,15 @@ useEffect(()=>{
         console.log(error);
       },
     );
-    const ThumbNailuploadTask = uploadBytesResumable(ThumbNailRef, thumbnailFile);
+    const ThumbNailuploadTask =  uploadBytesResumable(ThumbNailRef, thumbnailFile);
     ThumbNailuploadTask.on("state_changed",(snapShot)=>{
-      let ThumbNailProgress = Math.round((snapShot.bytesTransferred / snapShot.totalBytes) * 100);
-      setThumbNailUploadProgress(ThumbNailProgress);
-      
+      Math.round((snapShot.bytesTransferred / snapShot.totalBytes) * 100);
     },(error)=>{
          console.log(error);
     },
     
   )
-  Promise.all([uploadVideoTask,ThumbNailuploadTask]).then(async()=>{
+  await Promise.all([uploadVideoTask,ThumbNailuploadTask]).then(async()=>{
     const videoId = v4();
     console.log("video and thumbnail uploaded...");
     const videoURL = await getDownloadURL(uploadVideoTask.snapshot.ref);
@@ -119,42 +128,50 @@ useEffect(()=>{
       likes:0,
       dislikes:0,
       views:0,
+      shortVideo:videoType,
       createdBy:auth.currentUser.uid,
     }
     await setDoc(docRef,data);
     console.log("Document Created Successfully");
     await addDoc(collection(firestore,`users/${auth.currentUser.uid}/createdVideos`),{
       videoUrl:videoId,
-    });
+    }).then(()=>{
+      navigate("/");
+    })
    })
- 
+  
 };
 
-return (
-  closeUploadPage ? (
+return closeUploadPage ? (
     <Library />
   ) : (
+    openComponent === false ? (
+    !commentMode ? (
     <div className="uploadVideo">
-      <p className='text-white'>{videouploadProgress}%</p>
+    
       <IoMdClose className="close_page_icon" onClick={closePage} />
-      {Video !== "" ? (
-        <div className="Preview_video">
-          <video src={Video} controls poster={Thumbnail ? Thumbnail : null} />
-        </div>
-      ) : (
-        <div className="video_upload_top_section">
-          <input
+      <input
             type="file"
             accept="video/*"
             onChange={HandleFileChange}
             ref={inputRef}
             hidden
           />
-          <div className="uploadIcon_wrapper">
-            <MdUpload onClick={() => inputRef.current.click()} />
+      {Video !== "" ? (
+        <div className="Preview_video">
+          {/* <video src={Video} controls poster={Thumbnail ? Thumbnail : null} /> */}
+         <div ref={videoRef}><VideoPlayer src={Video} poster={Thumbnail} id="videplayer"/></div> 
+        {videouploadProgress > 0 ? <button className="select_file" onClick={() => inputRef.current.click()} disabled>Select File</button>:<button className="select_file" onClick={() => inputRef.current.click()}>Select File</button>}  
+          <div className="uploadVideoProgress"><p className='text-white' style={{width:videouploadProgress + '%'}}></p></div>
+        </div>
+      ) : (
+        <div className="video_upload_top_section" >
+         
+          <div className="uploadIcon_wrapper" onClick={() => inputRef.current.click()}>
+            <MdUpload/>
           </div>
           <p>Select Video to upload</p>
-          <button className="select_file">Select File</button>
+          <button className="select_file" onClick={() => inputRef.current.click()}>Select File</button>
         </div>
       )}
       <div className="input_title_section">
@@ -179,7 +196,7 @@ return (
               : "Use the vw unit when sizing the text. 10vw will set the size to 10% of the viewport width."}
           </p>
         </div>
-        {openComponent ? <Description /> : ""}
+        {/* {openComponent ? <Description /> : null} */}
       </div>
       <div className="video_thumbnail">
         <h5>Thumbnail</h5>
@@ -212,14 +229,21 @@ return (
         {commentMode ? <CommentType /> : null}
       </div>
       <div className="btn_div">
-        <button className="select_file" onClick={uploadVideo}>
+        {videouploadProgress > 0? <button className="select_file" onClick={uploadVideo} disabled>
+          Uploding Video...
+        </button>:  <button className="select_file" onClick={uploadVideo}>
           Upload Video
-        </button>
+        </button>}
+       
       </div>
     </div>
+    ) : (
+      <CommentType/>
+    )
+    ) : (
+      <Description/>
+     )
   )
-);
-
 }
 
 export default UploadVideo;

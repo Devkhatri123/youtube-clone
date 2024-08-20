@@ -9,7 +9,9 @@ function CommentType() {
     const HandleRadioBtnValue = (e) => {
         sessionStorage.setItem("commentMode",e.target.value);
     }
-  return (
+  return OpenuploadPage ? (
+    <UploadVideo/>
+  ):(
     <div className='comment_Type'>
         <h3>Comment Mode</h3>
         <div>
@@ -19,7 +21,6 @@ function CommentType() {
       <input type="radio" name='commentType' id='off' value="Off" onClick={HandleRadioBtnValue}/><label htmlFor="Off">Off</label>
       </div>
       <button onClick={showComp}>Next</button>
-      {OpenuploadPage ? <UploadVideo/>:null}
     </div>
   )
 }

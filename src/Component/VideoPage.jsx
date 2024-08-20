@@ -34,31 +34,19 @@ import { VscUnmute } from "react-icons/vsc";
 import { MdSkipPrevious } from "react-icons/md";
 import "../CSS/VideoPage.css";
 import { Link } from "react-router-dom";
+import VideoPlayer from "./VideoPlayer";
 function VideoPage() {
   const params = useParams();
-  const videoRef = useRef();
-  const parentProgressBarRef = useRef();
-  const ProgressBarWidth = useRef();
   let [Video, Setvideo] = useState();
   let [error,seterror] = useState(false);
   let [errorMessage,seterrorMessage] = useState()
    let [NoneFilteredVideos, setNoneFilteredVideos] = useState([]);
   let [FilteredVideos, setFilteredVideos] = useState([]);
-  let [seconds, setseconds] = useState(0);
-  let [minutes, setminutes] = useState(0);
-  let [hours, sethours] = useState(0);
   let [user, setUser] = useState();
   let [Loading, setLoading] = useState(true);
-  let [isMute,setisMute] = useState(false);
-  let [isPaused, setisPaused] = useState(true);
   let [isLiked, setisLiked] = useState(false);
-  let [Duration, setDuration] = useState(0);
-  let [Progress, setProgress] = useState(0);
   let [isSubscribed,setisSubscribed] = useState(false);
-  let [reloadVideo,setreloadVideo] = useState(false);
-  let [TotalVideoSeconds, setTotalVideoSeconds] = useState(0);
-  let [TotalVideoMinutes, setTotalVideoMinutes] = useState(0);
-  let [TotalVideoHours, setTotalVideoHours] = useState(0);
+
   // Fetching current Video on which user clicked on
   const FetchVideo = async () => {
     try {
@@ -67,18 +55,9 @@ function VideoPage() {
       onSnapshot(VideoRef,async(videDoc)=>{
       if (videDoc.exists()) {
         Setvideo(videDoc.data());
-        videoRef.current.muted = true;
-        videoRef.current.autoplay = true;
-        setisMute(true)
-        setisPaused(false);
-      await videoRef.current.play().then((Res)=>{
-          console.log(Res)
-         }).catch((error)=>{
-          console.log(error)
-         })
         const userRef = doc(firestore, "users", videDoc.data().createdBy);
         //const User = await getDoc(userRef);
-    onSnapshot(userRef,(userDoc)=>{
+       onSnapshot(userRef,(userDoc)=>{
         if (userDoc.exists()) {
           setUser(userDoc.data());
         }
@@ -119,10 +98,6 @@ function VideoPage() {
       return params.id !== video.id;
     });
     setFilteredVideos(filteredVideos);
-    // setTotalVideoHours(0);
-    // setTotalVideoMinutes(0);
-    // setTotalVideoSeconds(0);
-    // setProgress(0);
   }, [params.id,NoneFilteredVideos]);
   // Adding A documnet in subcollection named Watched Video in collection of users to store  current user  watched Videos
   
@@ -160,51 +135,9 @@ useEffect(()=>{
       console.log(error);
     }
   };
-
-  addwatchedVideo();
+ addwatchedVideo();
 },[Video,params.id,user]);
-  const TotalTime = (e) => {
-    const duration = e.target.duration;
-    setDuration(Math.floor(e.target.duration));
-    setTotalVideoSeconds(Math.floor(duration % 60));
-    setTotalVideoMinutes(Math.floor(duration / 60) % 60);
-    setTotalVideoHours(Math.floor(duration / 3600));
-  };
-  const HandlePlayPause = () => {
-    setisPaused(!isPaused);
-    if (isPaused) videoRef.current.play();
-    else videoRef.current.pause();
-  };
-  // Showing Current Video Time and video Progress Increasing Progress bar width
-  const HandlProgress = (e) => {
-    const duration = e.target.currentTime;
-    setProgress(Math.floor((e.target.currentTime / e.target.duration) * 100));
-    setseconds(Math.floor(duration % 60));
-    setminutes(Math.floor(duration / 60) % 60);
-    sethours(Math.floor(duration / 3600));
-    ProgressBarWidth.current.style.width = Progress + "%";
-    if(Progress < 100 && duration === e.target.duration){
-      ProgressBarWidth.current.style.width = Progress+ 1 + "%";
-      setProgress(100);
-    }
-    if(duration === e.target.duration) {
-      setisPaused(true);
-     setreloadVideo(true);
-    }else{
-      setreloadVideo(false);
-    }
-  };
-  const HandleFullScreen = () => {
-    videoRef.current.requestFullscreen();
-  };
-  const GetValue = (event) => {
-    const progress =
-      (event.clientX / parentProgressBarRef.current.offsetWidth) * 100;
-      setProgress(progress);
-      ProgressBarWidth.current.style.width = progress + "%";
-    const newTime = progress * (Duration / 100);
-    videoRef.current.currentTime = newTime;
-  };
+
   const makeSubscribe = async() => {
     if(auth.currentUser){
     const docRef = doc(collection(firestore,`users/${auth.currentUser.uid}/subscribedChannel`),user.uid);
@@ -292,20 +225,7 @@ useEffect(()=>{
     console.log("Views decreased by 1 in video document");
     setisLiked(false);
    }
-   const HandleMuteUnmute = () => {
-    if(videoRef.current.muted){
-      videoRef.current.muted = false;
-      setisMute(false);
-    }else{
-    videoRef.current.muted = true;
-    setisMute(true);
-    }
-    console.log( videoRef.current.muted);
-   }
-   const ReloadVideo = () => {
-    setisPaused(false);
-    videoRef.current.play();
-   }
+ 
   return (
     <div>
       {Loading ? (
@@ -315,64 +235,7 @@ useEffect(()=>{
       ) : (
         <>
           <div className="video_page">
-            <div className="video_section">
-              <div className="video_top_controls">
-                <MdClosedCaptionOff />
-                {isMute ? <IoVolumeMuteSharp onClick={HandleMuteUnmute}/>:<VscUnmute  onClick={HandleMuteUnmute}/>}
-              </div>
-              <video
-                src={Video?.videoURL}
-                poster={Video?.Thumbnail}
-                onLoadedData={TotalTime}
-                onTimeUpdate={HandlProgress}
-                ref={videoRef}
-              />
-              <div className="middle_controls">
-                <div>
-                  <MdSkipPrevious />
-                  {reloadVideo?(
-                      <IoReloadOutline onClick={ReloadVideo}/>
-                  ):(
-                    isPaused ? <IoMdPlay onClick={HandlePlayPause} />:<MdPause onClick={HandlePlayPause} />
-                  )}
-                  {/* {isPaused ? (
-                    <IoMdPlay onClick={HandlePlayPause} />
-                  ) : (
-                    <MdPause onClick={HandlePlayPause} />
-                  )} */}
-                  <MdSkipNext />
-                </div>
-              </div>
-              <div className="below_controls">
-                <div>
-                  <p>
-                    <span>
-                      {minutes + ":" + seconds.toString().padStart(2, 0)}
-                    </span>{" "}
-                    /{" "}
-                    <span>
-                      {TotalVideoHours !== 0
-                        ? TotalVideoHours +
-                          ":" +
-                          TotalVideoMinutes +
-                          ":" +
-                          TotalVideoSeconds.toString().padStart(2, 0)
-                        : TotalVideoMinutes +
-                          ":" +
-                          TotalVideoSeconds.toString().padStart(2, 0)}
-                    </span>
-                  </p>
-                  <RxEnterFullScreen onClick={HandleFullScreen} />
-                </div>
-                <div
-                  className="progressBar"
-                  onMouseDown={GetValue}
-                  ref={parentProgressBarRef}
-                >
-                  <span id="progressBar_width" ref={ProgressBarWidth}></span>
-                </div>
-              </div>
-            </div>
+            <VideoPlayer/>
             <div className="details">
               <h3 id="video_title">{Video?.Title}</h3>
               <div className="show_views">
@@ -415,6 +278,8 @@ useEffect(()=>{
                 </div>
               </div>
               <div className="comments">
+              {Video?.Comments == "On"?(
+                <>
                 <div className="comments_top">
                   <p>
                     Comments <span>1.6K</span>
@@ -424,6 +289,10 @@ useEffect(()=>{
                   <img src={user?.channelPic} alt={user?.name} />
                   <span>Kon reel dek kar aya hai 😂😂</span>
                 </div>
+                </>
+              ) : (
+                 <p className="comments_turnedOff_message">Comments are Turned Off for this video</p>
+              )}
               </div>
             </div>
             <div className="Next_videos">

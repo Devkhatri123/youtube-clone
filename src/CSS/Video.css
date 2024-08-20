@@ -12,10 +12,10 @@
     font-size: 40px;
     visibility: visible;
   }
-  video {
+  .video {
     width: 100%;
   }
-  video[poster] {
+  .video[poster] {
     object-fit: cover;
   }
   .video_bottom{

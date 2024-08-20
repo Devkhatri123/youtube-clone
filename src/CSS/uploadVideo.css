@@ -36,9 +36,11 @@
     background: white;
     color: black;
     padding: 1.6vw 5vw;
-    margin-top: 12px;
+    margin: 12px auto;
     border-radius: 37px;
     font-weight: 500;
+    display: flex;
+
   }
   .video_upload_top_section > p {
     font-size: 0.9em;
@@ -93,6 +95,8 @@
     top: 0;
     background: black;
     display: flex;
+    color: white;
+    z-index: 2;
   }
   .description_page > svg {
     position: absolute;
@@ -108,12 +112,14 @@
     display: flex;
     flex-direction: column;
     background: #1f1f1f;
-     /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
+    /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
     position: absolute;
     min-height: 100vh;
     width: 100%;
     padding: 24px;
     top: 0;
+    z-index: 1;
+    color: white;
   }
   .comment_Type > div {
     margin-bottom: 13px;
@@ -136,5 +142,18 @@
     bottom: 0;
     left: 0;
     right: 0; */
+  }
+  .uploadVideoProgress{
+  background-color: #34393d;
+  padding: 4px;
+  border-radius: 7px;
+  /* margin-left: 10px !important; */
+  margin: 0 5px 10px 5px;
+  font-size: 9px;
+  }
+  .uploadVideoProgress > p {
+    background: red;
+    /* width: 0; */
+    border-radius: 7px;
   }
 }

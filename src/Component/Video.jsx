@@ -4,27 +4,7 @@ import { Link } from "react-router-dom";
 import "../CSS/Video.css";
 import { BsThreeDotsVertical } from "react-icons/bs";
 function Video({ video }) {
-  console.log(video);
-  //   const videoRef = useRef();
-  //   const [isPlaying, setIsPlaying] = useState(false);
-  //   const [isMute, setisMute] = useState(false);
-
-  //   const handlePlay = () => {
-  //     videoRef.current.play().catch((error) => {
-  //       console.error("Error attempting to play video:", error);
-  //     });
-  //     setIsPlaying(true);
-  //     console.log(videoRef.current.muted);
-  //   };
-
-  //   const handlePause = () => {
-  //     videoRef.current.pause();
-  //     setIsPlaying(false);
-  //     console.log(videoRef.current.muted);
-  //   };
-  //  const HandleMute = (e) => {
-  //   setisMute(!isMute);
-  //  }
+ 
 
   return (
     <>
