@@ -31,7 +31,6 @@ function ShortVideos() {
   const Progressref = useRef();
   const navigate = useNavigate();
   const params = useParams();
-  const [showComment,setshowComment] = useState(false);
   const [windowHeight,setwindowHeight] = useState(window.innerHeight);
  const containerRef = useRef();
  const currentState = useContext(CurrentState);

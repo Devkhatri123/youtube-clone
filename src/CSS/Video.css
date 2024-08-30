@@ -9,6 +9,9 @@
 #short-video-section{
   margin: 0 0.7em;
 }
+.short-videos{
+  overflow: auto;
+}
 .shelf-header{
   display: flex;
   align-items: center;
