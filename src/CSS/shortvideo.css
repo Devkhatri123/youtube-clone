@@ -1,8 +1,8 @@
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
+  scroll-snap-type: y mandatory;
 }
 body {
-  scroll-snap-type: y mandatory;
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
@@ -17,10 +17,11 @@ body {
   font-weight: bolder;
   font-size: 2rem;
 }
+
 #shortvideo {
   width: 100%;
   height: 100vh;
-  object-fit: fill;
+  object-fit: cover;
 }
 .short_video_container {
   position: relative;
@@ -30,6 +31,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 }
 .scroll {
   transition: 2s ease-in;
@@ -77,14 +80,14 @@ body {
 
 .short_controls {
   position: absolute;
-  right: 10px;
-  top: 0;
-  bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 15px;
-  z-index: 10;
+    right: 10px;
+    /* top: 0; */
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    z-index: 10;
 }
 
 .control {
@@ -116,10 +119,9 @@ body {
 }
 
 /* Media Queries for Small Screens */
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 512px) {
   .short_details {
-    /* left: 10px; * */
-    bottom: 13px;
+    bottom: 0px;
     width: calc(100% - 50px);
     width: 100%;
   }
@@ -197,10 +199,10 @@ body {
     padding: 0;
     border-radius: 9px;
     /* width: 100%; */
-    margin: 0 5px;
+    /* margin: 0 5px; */
   }
 }
-@media screen and (min-width: 550px) {
+@media screen and (min-width: 512px) {
   .shortVideos_container {
     font-size: calc(15px + 6 * ((100vw - 320px) / 680));
   }
@@ -210,5 +212,9 @@ body {
   .short_details {
     bottom: 0;
     font-size: 0.8em;
+    left: 9px;
+  }
+  .short_title {
+    margin: 10px 0px 8px 5px;
   }
 }

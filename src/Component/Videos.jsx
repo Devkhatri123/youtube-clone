@@ -1,43 +1,48 @@
 import { React, useEffect, useState } from "react";
-import Video from "./Video";
-import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { auth, firestore } from "../firebase/firebase";
-function Videos() {
-  let [videos, setVideos] = useState([]);
-  
-  // const randomcolor = () => {
-  //   let hexNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F"];
-  //   let hexColor = "#";
-  //   for (let i = 0; i < 6; i++) {
-  //     hexColor += hexNumbers[Math.floor(Math.random() * hexNumbers.length)];
-  //     setcolor(hexColor);
-  //   }
-  //   console.log(color);
-  // };
-  useEffect(() => {
-   onSnapshot(collection(firestore, "videos"), async (snapshot) => {
-      const FetchedData = await Promise.all(
-      snapshot.docs.map(async (Doc) => {
-          const userRef = doc(firestore, "users", Doc.data().createdBy);
-          const docSnap = await getDoc(userRef);
-          return {
-            id: Doc.id,
-            Videodata: Doc.data(),
-            UserData: docSnap.data(),
-          };
-        })
-       );
-       setVideos(FetchedData);
-    });
-   
-  }, []);
+import { Link, useParams } from "react-router-dom";
+import "../CSS/Video.css"
+import Smallscreencomponent from "./Smallscreencomponent";
+import MediumScreenComponent from "./MediumScreenComponent";
+function Videos(props) {
+  console.log(props)
+  // const [Videos,setVideos] = useState([])
+  const [ThumbnailWidth,setThumbNailWidth] = useState(window.innerWidth)
+  const [ThumbnailHeight,setThumbnailHeight] = useState(window.innerWidth * (9/16));
+  const [screenWidth,setscreenWidth] = useState(window.innerWidth);
+  const [FullLengthVideos,setFullLengthVideos] =useState([]);
+  const [ShortVideos,SetShortVideos] = useState([]);
+const params = useParams()
+  useEffect(()=>{
+    setFullLengthVideos(props.video?.filter((FullLengthVideo)=>{
+      if(params.id){
+      return !FullLengthVideo.Videodata.shortVideo && params.id !== FullLengthVideo.id;
+      }else{
+        return !FullLengthVideo.Videodata.shortVideo
+      }
+     }))
+  SetShortVideos(props.video?.filter((shortVideo)=>{
+    return shortVideo.Videodata.shortVideo === true
+  }))
+  },[props]);
+  useEffect(()=>{
+    setThumbNailWidth(window.innerWidth);
+    setThumbnailHeight(ThumbnailWidth * (9/16));
+    const updateVideoSize = () => {
+      setThumbNailWidth(window.innerWidth);
+      setThumbnailHeight(ThumbnailWidth * (9/16));
+      console.log("width : " + ThumbnailWidth);
+      console.log("height : " + ThumbnailHeight);
+      setscreenWidth(window.innerWidth)
+    }
+    window.addEventListener("resize",updateVideoSize)
+    return ()=>{
+      window.removeEventListener("resize",updateVideoSize)
+    }
+},[ThumbnailHeight,ThumbnailWidth]);
   return (
-    <div className="Videos">
-      {videos.map((video, i) => {
-        return <Video video={video} key={i}/>;
-      })}
-    </div>
+    <>
+      {screenWidth < 587 ? <Smallscreencomponent FullLengthVideos={FullLengthVideos} ShortVideos={ShortVideos}/>:<MediumScreenComponent FullLengthVideos={FullLengthVideos} ShortVideos={ShortVideos}/>}
+   </>
   );
 }
-
 export default Videos;

@@ -138,16 +138,11 @@
   .btn_div{
     display: flex;
     justify-content: center;
-    /* position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0; */
-  }
+}
   .uploadVideoProgress{
   background-color: #34393d;
-  padding: 4px;
+  /* padding: 4px; */
   border-radius: 7px;
-  /* margin-left: 10px !important; */
   margin: 0 5px 10px 5px;
   font-size: 9px;
   }
@@ -155,5 +150,6 @@
     background: red;
     /* width: 0; */
     border-radius: 7px;
+    padding: 2px;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import "../CSS/uploadVideo.css";
 import UploadVideo from "./uploadVideo";
@@ -8,8 +8,11 @@ function Description() {
   const setDescription = (e) => {
     setvideoDescription(e.target.value);
     sessionStorage.setItem("Description", videoDescription);
-    console.log(videoDescription);
   };
+  useEffect(()=>{
+    sessionStorage.setItem("Description", videoDescription);
+    console.log(videoDescription);
+  },[videoDescription]);
   return OpenuploadPage ? (
     <UploadVideo />
   ) : (

@@ -14,17 +14,18 @@ function SearchBar() {
   const [FilteredVideoArray,setFilteredVideoArray] = useState([])
   const HideMobileSearchBar = () => {
     setHideSearchBar(false);
+    document.body.style.overflow='visible';
   };
   const HandleSearch = (e) => {
     Setsearch(e.target.value);
   // eslint-disable-next-line array-callback-return
   setFilteredVideoArray(videoAray.filter((array)=>{
-      for(let i = 0; i < array.data.Title.length && i < array.data.description.length; i++){
-      return array.data.Title.includes(search[i]) || array.data.description.includes(search[i]);
-      }
+    console.log(array);
+      return array.data?.Title?.toLowerCase()?.includes(search.toLowerCase()) || array.data?.description?.toLowerCase()?.includes(search.toLowerCase());
      })
     )
   }
+
   useEffect(()=>{
     onSnapshot(collection(firestore,"videos"),(docs)=>{
       setvideoArray(
@@ -41,10 +42,8 @@ function SearchBar() {
     if(e.code === "Enter"){
       Setsearch(e.target.value);
       setFilteredVideoArray(videoAray.filter((array)=>{
-        for(let i = 0; i < array.data.Title.length && i < array.data.description.length; i++){
-       return array.data.Title.includes(search[i]) || array.data.description.includes(search[i]);
-        }
-       })
+        return array.data.Title.includes(search) || array.data.description.includes(search);
+      })
       )
 
        //setvideoArray(FilteredDoc);

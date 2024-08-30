@@ -30,6 +30,8 @@ function VideoPlayer(props) {
   let [seconds, setseconds] = useState(0);
   let [minutes, setminutes] = useState(0);
   let [hours, sethours] = useState(0);
+  const [videoWidth,setvideoWidth] = useState();
+  const [videoHeight,setvideoHeight] = useState();
   let [Video, Setvideo] = useState(null);
   const FetchVideo = async () => {
     try {
@@ -52,9 +54,54 @@ function VideoPlayer(props) {
   useEffect(()=>{
     setProgress(0);
      FetchVideo();
+     videoRef.current.play().then((res)=>{
+      videoRef.current.muted = false;
+      setisMute(false);
+     }).catch(()=>{
+      videoRef.current.muted = true;
+      setisMute(true);
+     }).finally(()=>{
+      videoRef.current.play();
+     });
+     setisPaused(!isPaused);
    },[params.id])
 
+   useEffect(()=>{
+    const currentVideo = videoRef.current;
+    const videoSection = document.getElementsByClassName("video_section");
+    console.log(videoSection);
+    if(window.innerWidth < 507){
+    setvideoWidth(window.innerWidth);
+    setvideoHeight(videoWidth * (9/16));
+    }else{
+      setvideoWidth(window.innerWidth - 171);
+      setvideoHeight(videoWidth * (9/16));
+      currentVideo.style.margin = '0 auto';
+    }
+     const updateVideoSize = () => {
+      if (currentVideo) {
+        if(window.innerWidth < 507){
+          setvideoWidth(window.innerWidth);
+          setvideoHeight(videoWidth * (9/16));
+        }else if (window.innerWidth >= 507){
+        setvideoWidth(window.innerWidth - 171);
+        setvideoHeight(videoWidth * (9/16));
+        currentVideo.style.margin = '0 auto';
+        }
+        setvideoWidth(window.innerWidth - 171);
+        console.log("height : " + videoHeight);
+        console.log("width : " + videoWidth);
+      }
+    
+    }
+     window.addEventListener('resize', updateVideoSize);
 
+    return () => {
+      window.removeEventListener('resize', updateVideoSize);
+      // setvideoWidth(0);
+      // setvideoHeight(0);
+    };
+   },[videoWidth,videoHeight])
 
   const TotalTime = (e) => {
     const duration = e.target.duration;
@@ -113,18 +160,17 @@ function VideoPlayer(props) {
     videoRef.current.play();
    }
    const checkVideoHeight = (event) => {
-    videoRef.current.style.width = "unset";
-     videoRef.current.style.height = "unset";
-     videoRef.current.style.objectFit = "unset"; 
+    // videoRef.current.style.width = "unset";
+    //  videoRef.current.style.height = "unset";
+    //  videoRef.current.style.objectFit = "unset"; 
     const video = document.getElementById("currentVideo");
+    video.addEventListener('playing',()=>{
     console.log("Width:", video.videoWidth);
     console.log("Height:", video.videoHeight);
      if(video.videoHeight > 720) {
       console.log("Height is greater than threeshold...");
-         videoRef.current.style.width = 100 + "%";
-         videoRef.current.style.height = 400 + "px";
-         videoRef.current.style.objectFit = "contain"; 
      }
+    })
    }
   return (
     <div className="video_section">
@@ -140,7 +186,7 @@ function VideoPlayer(props) {
                 ref={videoRef}
                 onLoadedMetadata={checkVideoHeight}
                 id="currentVideo"
-                className={props.src}
+                style={{width:videoWidth,height:videoHeight}}
               />:<video
               src={Video?.videoURL}
               poster={Video?.Thumbnail}
@@ -149,6 +195,10 @@ function VideoPlayer(props) {
               ref={videoRef}
               onLoadedMetadata={checkVideoHeight}
               id="currentVideo"
+             style={{width:videoWidth,height:videoHeight}}
+              // width={videoWidth}
+              // height={videoHeight}
+             
             />}
            
               <div className="middle_controls">

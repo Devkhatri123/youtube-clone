@@ -1,8 +1,9 @@
 .header {
   border-bottom: 1px solid white;
-  position: sticky;
-    top: 0;
-    z-index: 1;
+  /* position: fixed; */
+  /* top: 0; */
+  z-index: 1;
+  width: 100%;
 }
 
   .header {
@@ -55,6 +56,8 @@
     justify-content: space-between;
     background: #212121;
     padding: 0.7em;
+    position: fixed;
+    z-index: 2;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 2px -2px;
   }
   .search_container > svg {
@@ -68,6 +71,7 @@
     width: 100%;
     border-radius: 46px;
     padding: 0.3em 0.2em 0.4em 0.6em;
+     outline:none;
     color: rgb(241, 241, 241);
   }
   .right_search_icon{
@@ -81,13 +85,14 @@
     font-size: 20px;
   }
 .search_Results{
-  position: absolute;
-  top: 50px;
+  position: fixed;
+  top:54px;
   z-index: 5;
   background-color: #212121;
   width: 100%;
   left: 0;
   right: 0;
+  height: 100%;
 }
 .search_result{
   color: white;

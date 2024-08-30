@@ -3,26 +3,69 @@ import { IoMdHome } from "react-icons/io";
 import { SiYoutubeshorts } from "react-icons/si";
 import { MdOutlineSubscriptions } from "react-icons/md";
 import { MdLibraryAdd } from "react-icons/md";
-import { auth } from "../firebase/firebase";
+import { auth,firestore } from "../firebase/firebase";
 import "../CSS/Footer.css";
 import { Link } from "react-router-dom";
+import { collection,doc,onSnapshot,getDoc } from "firebase/firestore";
 function Footer() {
   let [user, Setuser] = useState(null);
+  let [ShortVideos,setShortVideos] = useState([]);
+  const [Loading,setLoading] = useState(false);
+  const [FilteredShortVideos,setFilteredShortVideos] = useState([]);
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       Setuser(user);
     });
   }, []);
+
+  useEffect(() => {
+    try{
+      setLoading(true);
+    onSnapshot(collection(firestore, "videos"), async (snapshot) => {
+       const FetchedData = await Promise.all(
+       snapshot.docs.map(async (Doc) => {
+           const userRef = doc(firestore, "users", Doc.data().createdBy);
+           const docSnap = await getDoc(userRef);
+           return {
+             id: Doc.id,
+             Videodata: Doc.data(),
+             UserData: docSnap.data(),
+           };
+         })
+        );
+        setShortVideos(FetchedData);
+     });
+    }catch(error){
+      console.log(error);
+    }finally {
+      setLoading(false);
+    }
+   }, []);
+   useEffect(()=>{
+   setFilteredShortVideos(ShortVideos.filter((shortVideo)=>{
+     return shortVideo.Videodata.shortVideo === true;
+}));
+  },[ShortVideos]);
+  useEffect(()=>{
+    if(!Loading){
+    console.log(FilteredShortVideos)
+    }else{
+      console.log('Loading...')
+    }
+  },[FilteredShortVideos,Loading])
   return (
     <div className="footer">
       <Link to="/">
         <IoMdHome />
         <p>Home</p>
       </Link>
-      <Link to={"/shortVideo"}>
+    {!Loading ?  (<Link to={`/short/${FilteredShortVideos[0]?.id}`}>
         <SiYoutubeshorts />
         <p>Shorts</p>
-        </Link>
+        </Link>):<Link to={"/"}>
+        <SiYoutubeshorts />
+        <p>Shorts</p>
+        </Link>} 
       {user ? (
         <a href="#">
           <MdOutlineSubscriptions />

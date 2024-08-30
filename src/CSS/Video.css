@@ -1,3 +1,77 @@
+.short-video-shelf{
+  display: flex;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  margin-left: 7px;
+  margin-right: 10px;
+  width: 100%;
+}
+#short-video-section{
+  margin: 0 0.7em;
+}
+.shelf-header{
+  display: flex;
+  align-items: center;
+  margin: 15px 0 6px 14px;
+}
+.shelf-header img {
+  height: 1.6em;
+}
+.short-video {   
+width: 148px;
+/* height: 248px; */
+border-radius: 8px;
+margin-left: 6px;
+}
+#short-video{
+  min-width: 133px;
+  max-width: 148px;
+  height: 212px;
+}
+.short-video-section{
+  height: 263px;
+}
+#short-video video{
+  height: 210px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.short-video-detail{
+  /* position: absolute;
+  bottom: 5%; */
+  color: white;
+  /* width: 32%; */
+  transform: translate(4px, -65px);
+}
+.shelf-header h4 {
+  margin-left: 6px;
+  color: white;
+  font-weight: 900;
+  font-size: 1.2em;
+}
+.short-video-title{
+  width: 98%;
+  /* margin-bottom: 4px; */
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: 0.9em;
+  line-height: 1.2rem;
+  font-weight: 400;
+  overflow: hidden;
+  /* display: block; */
+  max-height: 6rem;
+  -webkit-line-clamp: 3;
+  display: box;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+.views{
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
 @media screen and (max-width: 586px) {
   .Videos {
     padding-bottom: 42px;
@@ -50,5 +124,74 @@
   }
   .video_title_and_channelName{
     font-size: 0.7em;
+  }
+  .video_title_and_channelName > div > p {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    max-height: 3em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #video_title{
+    font-family: "Roboto";
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-height: 2.5em;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+  }
+ 
+}
+@media screen and (min-width:587px) {
+  .videos{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    margin: 16px 16px 0px 16px;
+  }
+  .video_bottom{
+    height: unset !important;
+    color: white;
+    align-items: center !important;
+    margin: 6px 7px 10px 0px !important;
+  }
+ 
+  #video{
+    margin: 0 5px 14px 5px;
+  }
+  #video_title{
+    color: white;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-height: 2.5em;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+  }
+  .video_title_and_channelName p {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    max-height: 3em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: white;
+  }
+  #thumbnail_container{
+    padding-top: 56.25%;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  #thumbnail_container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }

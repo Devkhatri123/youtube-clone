@@ -8,7 +8,7 @@ import Library from "./Component/Library";
 import MainPage from "./Component/MainPage";
 import Footer from "./Component/Footer";
 import Navbar from "./Component/Navbar";
-import { VideoProvider } from "./Context/ContextProvider";
+import  StateProvider  from "./Context/HidevideoinfoCard";
 import VideoPage from "./Component/VideoPage";
 import ShortVideos from "./Component/ShortVideos";
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -32,15 +32,19 @@ let router = createBrowserRouter([
     element: (
       <>
         <Navbar />
+        <StateProvider>
         <VideoPage/>
+        </StateProvider>
        </>
     ),
   },
   {
-    path: "/shortVideo",
+    path: "/short/:id",
     element: (
       <>
+       <StateProvider>
         <ShortVideos/>
+        </StateProvider>
        </>
     ),
   },

@@ -8,11 +8,15 @@ function WatchedVideo({ video }) {
     thumbNail.forEach((ImagesCollection)=>{
      const img =  ImagesCollection.getElementsByTagName('img');
      img[0].addEventListener('load',()=>{
-      if(img[0].height < 74){
+      if(img[0].height < 74 || img[0].height > 74){
         img[0].style.height = 80+"px";
+        img[0].style.objectFit="fill";
       }
-      console.log(img[0].naturalHeight)
-     })
+      console.log(img[0].height)
+     });
+     return () => {
+      img[0].removeEventListener('load',{})
+     }
     })
   },[]);
   return (

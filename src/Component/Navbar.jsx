@@ -7,7 +7,7 @@ import "../CSS/Navbar.css";
 import SearchBar from "./SearchBar";
 import { auth,firestore } from "../firebase/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc,setDoc } from "firebase/firestore";
+import { doc,getDoc,setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router";
 function Navbar() {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ function Navbar() {
   let [user,Setuser] = useState(null);
   const HandleSeachToggle = () => {
     setIsSearchBarVisible(false);
+    document.body.style.overflow='hidden';
     console.log("clicked");
   };
   const SignUpWithGoogle = async() => {
@@ -31,9 +32,11 @@ function Navbar() {
         subscribers:0,   
         Time: new Date(),   
        }
+       const GetUserDoc = await getDoc(docRef);
+       if(!GetUserDoc.exists()){
        await setDoc(docRef,data)
        console.log("Document Created Successfully");
-       
+       }
       })
       .catch((error) => {
         console.log(error);

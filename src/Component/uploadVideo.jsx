@@ -161,7 +161,7 @@ return closeUploadPage ? (
         <div className="Preview_video">
           {/* <video src={Video} controls poster={Thumbnail ? Thumbnail : null} /> */}
          <div ref={videoRef}><VideoPlayer src={Video} poster={Thumbnail} id="videplayer"/></div> 
-        {videouploadProgress > 0 ? <button className="select_file" onClick={() => inputRef.current.click()} disabled>Select File</button>:<button className="select_file" onClick={() => inputRef.current.click()}>Select File</button>}  
+        {videouploadProgress > 0 ? <button className="select_file" onClick={() => inputRef.current.click()} disabled style={{opacity: "0.3"}}>Select File</button>:<button className="select_file" onClick={() => inputRef.current.click()}>Select File</button>}  
           <div className="uploadVideoProgress"><p className='text-white' style={{width:videouploadProgress + '%'}}></p></div>
         </div>
       ) : (
@@ -229,7 +229,7 @@ return closeUploadPage ? (
         {commentMode ? <CommentType /> : null}
       </div>
       <div className="btn_div">
-        {videouploadProgress > 0? <button className="select_file" onClick={uploadVideo} disabled>
+        {videouploadProgress > 0? <button className="select_file"  disabled style={{opacity: "0.3"}}>
           Uploding Video...
         </button>:  <button className="select_file" onClick={uploadVideo}>
           Upload Video
