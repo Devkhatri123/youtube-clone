@@ -148,18 +148,15 @@ margin-left: 6px;
 @media screen and (min-width:587px) {
   .videos{
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    margin: 16px 16px 0px 16px;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 16px 8px 0px 8px;
+    column-gap: 17px;
   }
   .video_bottom{
     height: unset !important;
     color: white;
     align-items: center !important;
     margin: 6px 7px 10px 0px !important;
-  }
- 
-  #video{
-    margin: 0 5px 14px 5px;
   }
   #video_title{
     color: white;
