@@ -58,7 +58,7 @@ import { Navbarcontext } from '../Context/NavbarContext';
               v: searchTerm,
           },{replace:true}).toString()
       });
-    setsearchedVideos([])
+    // setsearchedVideos([])
        }
      }
     const SignUpWithGoogle = async() => {
