@@ -1,6 +1,5 @@
 import React,{useState,useEffect} from 'react'
 import { MdClosedCaptionOff } from "react-icons/md";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdPause } from "react-icons/md";
 import { IoMdPlay } from "react-icons/io";
 import { MdSkipNext } from "react-icons/md";
@@ -9,6 +8,7 @@ import { VscUnmute } from "react-icons/vsc";
 import { MdSkipPrevious } from "react-icons/md";
 import { IoReloadOutline } from "react-icons/io5";
 import { RxEnterFullScreen } from "react-icons/rx";
+import { MdOutlineFullscreenExit } from "react-icons/md";
 import { useRef } from 'react';
 import "../CSS/VideoPage.css";
 import { onSnapshot,doc } from 'firebase/firestore';
@@ -24,6 +24,7 @@ function VideoPlayer(props) {
   let [TotalVideoMinutes, setTotalVideoMinutes] = useState(0);
   let [TotalVideoHours, setTotalVideoHours] = useState(0);
   let [isMute,setisMute] = useState(false);
+  const [FullScreenWidth,setFullScreenWidth] = useState();
   let [isPaused, setisPaused] = useState(true);
   let [Duration, setDuration] = useState(0);
   let [Progress, setProgress] = useState(0);
@@ -33,7 +34,12 @@ function VideoPlayer(props) {
   const [videoWidth,setvideoWidth] = useState();
   const [videoHeight,setvideoHeight] = useState();
   let [Video, Setvideo] = useState(null);
+  let [Loading, setLoading] = useState(true);
+  const [Fullscreen,setFullscreen] = useState(false);
+  const [Error,SetError] = useState(false);
+  const [ErrorMessage,SetErrorMessage] = useState('');
   const FetchVideo = async () => {
+    setLoading(true);
     try {
         if(params.id){
       const VideoRef = doc(firestore, "videos", params.id);
@@ -46,51 +52,74 @@ function VideoPlayer(props) {
 }
     } catch (error) {
       console.log(error);
+      SetError(true);
+      SetErrorMessage(error.message);
     } finally {
-        console.log("Fetching finished");
-        console.log(Video)
+        setLoading(false)
     }
   };
   useEffect(()=>{
     setProgress(0);
-     FetchVideo();
-     videoRef.current.play().then((res)=>{
+    const myRange = document.getElementById("myRange");
+    myRange.value = 0;
+    //  ProgressBarWidth.current.value = 0;
+   FetchVideo()
+    videoRef.current?.addEventListener("loadeddata",()=>{
+    if(videoRef.current?.readyState >= 3){
+      videoRef.current.play();
       videoRef.current.muted = false;
       setisMute(false);
-     }).catch(()=>{
-      videoRef.current.muted = true;
-      setisMute(true);
-     }).finally(()=>{
-      videoRef.current.play();
-     });
-     setisPaused(!isPaused);
+      setisPaused(false);
+    }
+   })
    },[params.id])
 
    useEffect(()=>{
     const currentVideo = videoRef.current;
-    const videoSection = document.getElementsByClassName("video_section");
-    console.log(videoSection);
+    if(currentVideo){
     if(window.innerWidth < 507){
-    setvideoWidth(window.innerWidth);
-    setvideoHeight(videoWidth * (9/16));
-    }else{
-      setvideoWidth(window.innerWidth - 171);
+      setvideoWidth(window.innerWidth);
       setvideoHeight(videoWidth * (9/16));
-      currentVideo.style.margin = '0 auto';
+    }else if (window.innerWidth >= 507 && window.innerWidth < 990){
+    setvideoWidth(window.innerWidth - 171);
+    setvideoHeight(videoWidth * (9/16));
+    currentVideo.style.margin = '0 auto';
+    }else if (window.innerWidth >= 990 && window.innerWidth <= 1115){
+      setvideoWidth(640);     
+       setvideoHeight(360);
+       currentVideo.style.margin = 'unset';
+    }else if (window.innerWidth > 1115 && window.innerWidth <= 1745){
+      setvideoWidth(window.innerWidth - 474);     
+      currentVideo.style.margin = 'unset';
+      setvideoHeight(videoWidth * 0.5625);
+    }else {
+      setvideoWidth(1225);     
+      setvideoHeight(688);
     }
+    setFullScreenWidth(window.innerWidth)
      const updateVideoSize = () => {
+      setFullScreenWidth(window.innerWidth)
       if (currentVideo) {
         if(window.innerWidth < 507){
           setvideoWidth(window.innerWidth);
           setvideoHeight(videoWidth * (9/16));
-        }else if (window.innerWidth >= 507){
+        }else if (window.innerWidth >= 507 && window.innerWidth < 990){
         setvideoWidth(window.innerWidth - 171);
         setvideoHeight(videoWidth * (9/16));
         currentVideo.style.margin = '0 auto';
+        }else if (window.innerWidth >= 990 && window.innerWidth <= 1115){
+          setvideoWidth(640);
+           setvideoHeight(360);
+           currentVideo.style.margin = 'unset';
+        }else if (window.innerWidth > 1115 && window.innerWidth <= 1745){
+          setvideoWidth(window.innerWidth - 474);         
+          currentVideo.style.margin = 'unset';
+          setvideoHeight(videoWidth * 0.5625);
+        }else {
+          setvideoWidth(1225);         
+          setvideoHeight(688);
         }
-        setvideoWidth(window.innerWidth - 171);
-        console.log("height : " + videoHeight);
-        console.log("width : " + videoWidth);
+        // setvideoWidth(window.innerWidth - 171);
       }
     
     }
@@ -101,6 +130,7 @@ function VideoPlayer(props) {
       // setvideoWidth(0);
       // setvideoHeight(0);
     };
+  }
    },[videoWidth,videoHeight])
 
   const TotalTime = (e) => {
@@ -122,9 +152,9 @@ function VideoPlayer(props) {
     setseconds(Math.floor(duration % 60));
     setminutes(Math.floor(duration / 60) % 60);
     sethours(Math.floor(duration / 3600));
-    ProgressBarWidth.current.style.width = Progress + "%";
+    ProgressBarWidth.current.value = Progress;
     if(Progress < 100 && duration === e.target.duration){
-      ProgressBarWidth.current.style.width = Progress+ 1 + "%";
+      ProgressBarWidth.current.value = Progress + 1;
       setProgress(100);
     }
     if(duration === e.target.duration) {
@@ -135,17 +165,22 @@ function VideoPlayer(props) {
     }
   };
   const HandleFullScreen = () => {
-    videoRef.current.requestFullscreen();
-  };
-  const GetValue = (event) => {
-    const progress =
-      (event.clientX / parentProgressBarRef.current.offsetWidth) * 100;
-      setProgress(progress);
-      ProgressBarWidth.current.style.width = progress + "%";
-    const newTime = progress * (Duration / 100);
-    videoRef.current.currentTime = newTime;
-  };
-
+  const wrapper = document.getElementById("wrapper");
+  const currentVideo = document.getElementById("currentVideo");
+      wrapper.requestFullscreen();
+      setFullscreen(true);
+    wrapper.style.display="flex";
+    wrapper.style.flexDirection="column";
+    wrapper.style.justifyContent="center";
+    currentVideo.style.width = "-webkit-fill-available !important";
+    currentVideo.style.height = "unset !important";
+    currentVideo.style.borderRadius="0 !important";
+   };
+ 
+ 
+  const ChangeVideoDuration = (e) => {
+     videoRef.current.currentTime = e.target.value * (videoRef.current.duration / 100);
+  }
   const HandleMuteUnmute = () => {
     if(videoRef.current.muted){
       videoRef.current.muted = false;
@@ -159,48 +194,48 @@ function VideoPlayer(props) {
     setisPaused(false);
     videoRef.current.play();
    }
-   const checkVideoHeight = (event) => {
-    // videoRef.current.style.width = "unset";
-    //  videoRef.current.style.height = "unset";
-    //  videoRef.current.style.objectFit = "unset"; 
-    const video = document.getElementById("currentVideo");
-    video.addEventListener('playing',()=>{
-    console.log("Width:", video.videoWidth);
-    console.log("Height:", video.videoHeight);
-     if(video.videoHeight > 720) {
-      console.log("Height is greater than threeshold...");
-     }
-    })
+   const ExitFullscreen = () => {
+    const wrapper = document.getElementById("wrapper");
+    const currentVideo = document.getElementById("currentVideo");
+    document.exitFullscreen();
+    setFullscreen(false);
+    wrapper.style.display="unset";
+    wrapper.style.flexDirection="unset";
+    wrapper.style.justifyContent="unset";
+    currentVideo.style.width = videoWidth;
+    currentVideo.style.height = videoHeight;
+    currentVideo.style.borderRadius="12px";
    }
-  return (
-    <div className="video_section">
+  return  (
+    <div className="video_section" style={window.innerWidth>1040 && !props.src ?{width:videoWidth}:null}>
               <div className="video_top_controls">
                 <MdClosedCaptionOff />
                 {isMute ? <IoVolumeMuteSharp onClick={HandleMuteUnmute}/>:<VscUnmute  onClick={HandleMuteUnmute}/>}
               </div>
+             <div  id='wrapper'>
               {props.src ? <video
                 src={props.src}
                 poster={props.poster?props.poster:null}
                 onLoadedData={TotalTime}
                 onTimeUpdate={HandlProgress}
                 ref={videoRef}
-                onLoadedMetadata={checkVideoHeight}
                 id="currentVideo"
-                style={{width:videoWidth,height:videoHeight}}
-              />:<video
+                // style={{width:videoWidth,height:videoHeight}}
+              />:
+              <div className='videoContainer'>
+              <video
               src={Video?.videoURL}
               poster={Video?.Thumbnail}
               onLoadedData={TotalTime}
               onTimeUpdate={HandlProgress}
+              
               ref={videoRef}
-              onLoadedMetadata={checkVideoHeight}
               id="currentVideo"
-             style={{width:videoWidth,height:videoHeight}}
-              // width={videoWidth}
-              // height={videoHeight}
-             
-            />}
-           
+              controls = {false}
+             style={!Fullscreen ? {width:videoWidth,height:videoHeight}:null}
+            />
+           </div>
+           }
               <div className="middle_controls">
                 <div>
                   <MdSkipPrevious />
@@ -213,7 +248,8 @@ function VideoPlayer(props) {
                 </div>
               </div>
               <div className="below_controls">
-                <div>
+            <div className='small-screen-videoplayer-below_controls'>
+              <div style={{display:"flex",alignItems:"center",width:"100%",justifyContent:"space-between"}}>
                   <p>
                     <span>
                       {minutes + ":" + seconds.toString().padStart(2, 0)}
@@ -232,16 +268,32 @@ function VideoPlayer(props) {
                     </span>
                   </p>
                   <RxEnterFullScreen onClick={HandleFullScreen} />
+                  </div>
+                  <input type="range" min={0} max={100} ref={ProgressBarWidth}  style={{width:"100%"}} onChange={ChangeVideoDuration} id='myRange'/>
                 </div>
-                <div
-                  className="progressBar"
-                  onMouseDown={GetValue}
-                  ref={parentProgressBarRef}
-                >
-                  <span id="progressBar_width" ref={ProgressBarWidth}></span>
                 </div>
-              </div>
-            </div>
+        <div className="large-screen-video-below-controls"  style={{bottom:"-22px"}}>
+        
+                <input type="range" min={0} max={100} ref={ProgressBarWidth} style={{width:"100%"}} onChange={ChangeVideoDuration} id='myRange'/>
+                <div className='bottom-toggle-buttons'>
+               
+                  <div className='bottom-toggle-buttons-left'>
+                    { isPaused ? <IoMdPlay onClick={HandlePlayPause} />:<MdPause onClick={HandlePlayPause} />}
+                    <MdSkipNext />
+                    {isMute ? <IoVolumeMuteSharp onClick={HandleMuteUnmute}/>:<VscUnmute  onClick={HandleMuteUnmute}/>}
+                  <p style={{width:"110px",textAlign:"center"}}>
+                      <span>{minutes + ":" + seconds.toString().padStart(2, 0)}</span>{" "} /{" "}
+                      <span>{TotalVideoHours !== 0 ? TotalVideoHours +":" + TotalVideoMinutes +":" +TotalVideoSeconds.toString().padStart(2, 0): TotalVideoMinutes +":" +TotalVideoSeconds.toString().padStart(2, 0)}</span>
+                   </p>
+                   </div>
+                   <div className='bottom-toggle-buttons-right'>
+                    <MdClosedCaptionOff/>
+                  {!Fullscreen ? <RxEnterFullScreen onClick={HandleFullScreen} />:<MdOutlineFullscreenExit onClick={ExitFullscreen}/>}
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
   )
 }
 

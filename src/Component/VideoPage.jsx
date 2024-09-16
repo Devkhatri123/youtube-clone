@@ -14,12 +14,9 @@ function VideoPage() {
   const params = useParams();
   
   return (
-    <>
-    <VideoPlayer/>
-    {!currentState.showDescription ? (
+    <div className="greaterthan-2000px-screen-div">
     <VideoInfoCard/>
-    ):<DescriptionPage/>}
-       </>
+       </div>
 
    )
 }

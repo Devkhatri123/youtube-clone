@@ -2,22 +2,23 @@ import React, { useContext, useEffect, useState } from 'react'
 import { RxCross1 } from "react-icons/rx";
 import "../CSS/VideoPage.css"
 import VideoInfoCard from './VideoInfoCard';
-import { CurrentState } from '../Context/HidevideoinfoCard';
 import { useParams } from 'react-router';
 import { doc,onSnapshot } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
+import { CurrentState } from '../Context/HidevideoinfoCard';
 function DescriptionPage(props) {
   const [showDescription,setshowDescription] = useState(true);
   const [Video, Setvideo] = useState();
   const [user, setUser] = useState();
   const [showFullText,setshowFullText] = useState(false);
+  const currentState = useContext(CurrentState)
   const params = useParams();
   const HandleCurrentComponent = () => {
-    setshowDescription(false);
+    currentState.setDescription(false)
    // document.body.style.overflowY = "scroll";
   }
   useEffect(()=>{
-   if(showDescription){
+   if(currentState.Description){
     const FetchVideo = async () => {
       try {
         const VideoRef = doc(firestore, "videos", params.id);
@@ -42,10 +43,26 @@ function DescriptionPage(props) {
     FetchVideo();
    }
   },[params.id,showDescription]);
-  
+  useEffect(()=>{
+     console.log(Video)
+  },[Video])
+  const urlify = (text) => {
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+     if(url.includes("youtube")){
+      return `<div style="display:flex;align-items:center;background-color: rgba(255, 255, 255, 0.102);width: fit-content;border-radius: 12px;padding: 0px 7px;"><img src="https://www.gstatic.com/youtube/img/watch/yt_favicon.png" style="height:13px">•<a href=${url}>${url}</a></div>`
+     }else if (url.toLowerCase().includes("facebook")){
+         return `<div style="display:flex;align-items:center;background-color: rgba(255, 255, 255, 0.102);width: fit-content;border-radius: 12px;padding: 0px 7px;"><img src="https://www.gstatic.com/youtube/img/watch/social_media/facebook_1x.png" style="height:13px">•<a href=${url}>${url}</a></div>`
+      }else if (url.toLowerCase().includes("instagram")){
+        return `<div style="display:flex;align-items:center;background-color: rgba(255, 255, 255, 0.102);width: fit-content;border-radius: 12px;padding: 0px 7px;"><img src="https://www.gstatic.com/youtube/img/watch/social_media/instagram_1x.png" style="height:13px">•<a href=${url}>${url}</a></div>`
+     }else{
+      return `<div style="display:flex;align-items:center;background-color: rgba(255, 255, 255, 0.102);width: fit-content;border-radius: 12px;padding: 0px 7px;"><a href=${url}>${url}</a></div>`
+     }
+    })
+  }
   return (
     <>
-      {showDescription ? (
+      {currentState.Description && (
         <div id='description_page'>
           <div className="description_top">
             <h3>Description</h3>
@@ -76,12 +93,14 @@ function DescriptionPage(props) {
               </div>
             </div>
             <div className="main-description">
-             
-               {Video?.description.length > 120 ? (
-               // <div>{Video.description.substring(0,100)+`...`}</div>
-                 <div onClick={()=>setshowFullText(!showFullText)}>{showFullText?Video.description:Video.description.substring(0,100)+`...`} </div>
-               ):(Video?.description)}
-             
+            <div onClick={()=>setshowFullText(!showFullText)} style={{overflow:"auto"}} dangerouslySetInnerHTML={{__html:  
+            Video?.description.length > 0 ? (
+                  Video?.description.length > 160 ? (
+                    showFullText?urlify(Video.description):urlify(Video.description.substring(0,160))+`...`):(urlify(Video.description))):("no text")
+               }}
+                  >
+                
+                 </div>
             </div>
             <div className="creator-channel">
                 <img src={user?.channelURL} alt="" />
@@ -92,8 +111,6 @@ function DescriptionPage(props) {
               </div>
           </div>
         </div>
-      ) : (
-        <VideoInfoCard />
       )}
     </>
   );

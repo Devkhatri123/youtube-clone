@@ -1,0 +1,42 @@
+.mini-sidebar{
+    color: white;
+    position: fixed;
+    top: 71px;
+    width: 75px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+}
+.mini-sidebar div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 64px;
+}
+.mini-sidebar div svg {
+    font-size:17px;
+}
+.mini-sidebar div p {
+    max-width: 100%;
+    display: block;
+    max-height: 1.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.7em;
+    font-weight: 400;
+    line-height: 1.4rem;
+    text-align: center;
+}
+@media screen and (min-width:990px) {
+    .mini-sidebar{
+        display: flex;
+    }
+}
+@media screen and (max-width:990px) {
+    .mini-sidebar{
+        display: none;
+    }
+}

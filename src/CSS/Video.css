@@ -1,3 +1,9 @@
+.video_bttom_left {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+}
 .short-video-shelf{
   display: flex;
   overflow-x: scroll;
@@ -74,10 +80,12 @@ margin-left: 6px;
   font-size: 0.8em;
   font-weight: 500;
 }
-
+/* Small ScreenS CSS */
 @media screen and (max-width: 586px) {
-  .Videos {
-    padding-bottom: 42px;
+  .videos {
+    position: relative;
+    top: 48px;
+    /* margin-bottom: 30px; */
   }
   .controls {
     position: absolute;
@@ -89,6 +97,17 @@ margin-left: 6px;
     font-size: 40px;
     visibility: visible;
   }
+  .short-videos {
+    overflow: auto;
+    position: relative;
+    top: 30px;
+}
+  .short-video-section {
+    height: 265px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
   .video {
     width: 100%;
   }
@@ -126,7 +145,11 @@ margin-left: 6px;
     overflow: hidden;
   }
   .video_title_and_channelName{
-    font-size: 0.7em;
+    font-size: 0.9em;
+    height: 36px;
+  }
+  .video_bottom{
+    align-items: center;
   }
   .video_title_and_channelName > div > p {
     -webkit-box-orient: vertical;
@@ -148,12 +171,24 @@ margin-left: 6px;
   }
  
 }
-@media screen and (min-width:587px) {
+@media screen and (min-width:587px){
+  .video_bttom_left{
+    align-items: unset;
+  }
+  .video_bttom_left img {
+    height: 30px;
+    width: 30px;
+  }
+}
+/* Medium Screens CSS */
+@media screen and (min-width:587px) and (max-width:874px){
   .videos{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    margin: 16px 8px 0px 8px;
+    margin: 16px 14px 30px 14px;
     column-gap: 17px;
+    position: relative;
+    top: 40px;
   }
   .video_bottom{
     height: unset !important;
@@ -193,5 +228,75 @@ margin-left: 6px;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+ 
+}
+/* Large Screens CSS */
+@media  screen and (min-width:874px) {
+  .videos {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        margin: 16px 8px 22px 8px;
+        column-gap: 17px;
+        position: relative;
+        top: 56px;
+  }
+  .video_bottom{
+    height: unset !important;
+    color: white;
+    align-items: center !important;
+    margin: 6px 7px 10px 0px !important;
+  }
+  #video-views{
+    font-size: 13px;
+  }
+  #video_title{
+    font-size: 13px;
+    color: white;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-height: 2.5em;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+  }
+  .video_title_and_channelName p {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    max-height: 3em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: white;
+    font-size: 13px;
+  }
+  #thumbnail_container{
+    padding-top: 56.25%;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  #thumbnail_container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+ 
+}
+@media screen and (min-width:990px) {
+  .large-screen-main-videoPage{
+    width: 93%;
+    margin: 0 0 0 72px;
+    position: relative;
+    top: 40px;
+  }
+  .videos{
+    position: relative;
+    top: 9px;
   }
 }

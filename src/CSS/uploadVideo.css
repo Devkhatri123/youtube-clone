@@ -1,4 +1,4 @@
-@media screen and (max-width: 874px) {
+
   .uploadVideo {
     background: #282828;
     min-height: 100vh;
@@ -151,5 +151,122 @@
     /* width: 0; */
     border-radius: 7px;
     padding: 2px;
+  }
+@media screen and (min-width:990px) {
+  .uploadVideo{
+    top: 73px;
+  }
+  .uploadIcon_wrapper{
+    padding: 2vw;
+  }
+  .select_file{
+    padding: 1vw 3vw;
+  }
+  .large-screen-upload-video{
+        color: white;
+        margin: 50px auto;
+        /* min-width: 589px; */
+        background: #282828;
+        border-radius: 25px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        min-height: 450px;
+        display: flex;
+        max-width: 838px;
+  }
+  .uploadvideo-inner{
+    width: 100%;
+  }
+  .uploadvideo-inner-top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 12px;
+    border-bottom: 1px solid;
+    font-size: 20px;
+  }
+  .uploadvideo-inner-top h3{
+    font-weight: bold;
+  }
+  .uploadvideo-inner-center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 398px;
+  }
+  .uploadvideo-inner-center div {
+    width: 7.5em;
+    height: 7em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #1f1f1f;
+    border-radius: 50%;
+  }
+  .uploadvideo-inner-center div svg {
+    font-size: 3.5em;
+  }
+  .inner-set-video{
+    grid-template-columns: 1.5fr 1fr;
+    display: grid;
+    padding: 40px 21px;
+    /* align-items: center; */
+  }
+  .set-video-left{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
+  .set-video-left h2 {
+    white-space: normal;
+    overflow: initial;
+    text-overflow: clip;
+    font-family: "YouTube Sans", "Roboto", "Arial", sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 32px;
+    margin-bottom: 13px;
+  }
+  .set-video-left input {
+    margin-bottom: 23px;
+    border-radius: 8px;
+    padding: 20px 8px;
+    border: 3px solid ;
+    background: #282828;
+  }
+  .set-video-left div {
+    width: 147px;
+    height: 82px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border: 1px dotted;
+  }
+  .set-video-left div svg {
+    font-size: 25px;
+  }
+  .set-video-left div span {
+    color: #9b9b9b;
+  }
+  /* .set-video-right{
+    height: 324px;
+  } */
+  .set-video-right .video_section .large-screen-video-below-controls{
+    width: 95%;
+  }
+  .set-video-bottom{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px;
+  }
+  .set-video-bottom button {
+    background: #fff;
+    color: black;
+    padding: 9px 8px;
+    border-radius: 28px;
+    font-weight: 600;
   }
 }

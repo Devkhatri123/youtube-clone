@@ -46,13 +46,7 @@ function Footer() {
      return shortVideo.Videodata.shortVideo === true;
 }));
   },[ShortVideos]);
-  useEffect(()=>{
-    if(!Loading){
-    console.log(FilteredShortVideos)
-    }else{
-      console.log('Loading...')
-    }
-  },[FilteredShortVideos,Loading])
+ 
   return (
     <div className="footer">
       <Link to="/">
@@ -73,8 +67,17 @@ function Footer() {
         </a>
       ) : null}
       <Link to="/Library">
+      {!user?(
+        <>
         <MdLibraryAdd />
         <p>Library</p>
+        </>
+      ):
+       <>
+      <img src={user.photoURL} alt="user-pic" style={{height:"20px",width:"20px",borderRadius:"50%"}}/>
+      <p>You</p>
+      </>
+}
       </Link>
     </div>
   );

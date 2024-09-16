@@ -9,6 +9,7 @@ import { CgPlayList } from "react-icons/cg";
 import { FiClock } from "react-icons/fi";
 import { auth } from '../firebase/firebase';
 import NotSignedIn from './NotSignedIn';
+import UploadvideoProvider from '../Context/UploadVideoContext';
 function Library() {
     let [isUploadVideoEnabled,setisUploadVideoEnabled] = useState(false);
     let [user,Setuser] = useState(null);
@@ -23,7 +24,9 @@ function Library() {
     }, []);
     return (
       isUploadVideoEnabled ? (
+        <UploadvideoProvider>
         <UploadVideo />
+        </UploadvideoProvider>
       ) : (
         user ? (
           <div className='library'>

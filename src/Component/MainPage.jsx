@@ -22,9 +22,6 @@ function MainPage() {
        setVideos(FetchedData);
    })
   }, []);
-  useEffect(()=>{
-console.log(videos)
-  },[videos])
   return (
     <>{
       videos && <Videos video={videos} />

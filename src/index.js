@@ -5,22 +5,40 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Library from "./Component/Library";
-import MainPage from "./Component/MainPage";
 import Footer from "./Component/Footer";
 import Navbar from "./Component/Navbar";
 import  StateProvider  from "./Context/HidevideoinfoCard";
 import VideoPage from "./Component/VideoPage";
 import ShortVideos from "./Component/ShortVideos";
+import LargeScreenSideBar from "./Component/LargeScreenSideBar";
+import UploadvideoProvider from "./Context/UploadVideoContext";
+import LargeScreenUploadVideo from "./Component/LargeScreenUploadVideo";
+import MainPage from "./Component/MainPage";
+import MiniSideBar from "./Component/MiniSideBar";
+import SearchResults from "./Component/SearchResults";
+import NavbarStateProvider from "./Context/NavbarContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
-let router = createBrowserRouter([
+
+let router = createBrowserRouter(
+  [
   {
     path: "/",
-    element: <><Navbar/><MainPage /><Footer/></>,
+    element: <>
+    <StateProvider>
+      
+    <Navbar/>
+    <MainPage />
+    <Footer/>
+    <MiniSideBar/>
+    <LargeScreenSideBar/>
+    </StateProvider>
+    </>,
   },
   {
     path: "/Library",
     element: (
       <>
+      {/* <App/> */}
         <Navbar />
         <Library />
         <Footer />
@@ -31,9 +49,10 @@ let router = createBrowserRouter([
     path: "/watch/:id",
     element: (
       <>
+      <StateProvider>
         <Navbar />
-        <StateProvider>
         <VideoPage/>
+        <LargeScreenSideBar/>
         </StateProvider>
        </>
     ),
@@ -46,6 +65,27 @@ let router = createBrowserRouter([
         <ShortVideos/>
         </StateProvider>
        </>
+    ),
+  },
+  {
+    path: "/uploadVideo",
+    element: (
+      <>
+    <UploadvideoProvider>
+      <LargeScreenUploadVideo/>
+      </UploadvideoProvider>
+       </>
+    ),
+  },
+  {
+    path: `/results/?`,
+    element: (
+      <>
+      <NavbarStateProvider>
+        <Navbar/>
+     <SearchResults/>
+      </NavbarStateProvider>
+   </>
     ),
   },
 ]);

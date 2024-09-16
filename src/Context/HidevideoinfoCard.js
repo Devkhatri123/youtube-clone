@@ -1,9 +1,13 @@
 import { createContext, useState } from "react";
 export const CurrentState = createContext();
  const StateProvider = ({ children }) => {
-    const [videoShowMessages,setShowvideoMessages] = useState(false);
-    const [shortvideoShowMessages,setshortvideoShowMessages] = useState(false)
-   return<CurrentState.Provider value={{videoShowMessages,setShowvideoMessages,shortvideoShowMessages,setshortvideoShowMessages}}>{children}</CurrentState.Provider>
-   
+    const [Description,setDescription] = useState(false);
+    const [shortvideoShowMessages,setshortvideoShowMessages] = useState(false);
+    const [LargeSideBar,setLargeSideBar] = useState(false);
+   return(
+   <CurrentState.Provider value={{Description,setDescription,shortvideoShowMessages,setshortvideoShowMessages,LargeSideBar,setLargeSideBar}}>
+      {children}
+      </CurrentState.Provider>
+   )
 }
 export default StateProvider;

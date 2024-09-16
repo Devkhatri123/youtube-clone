@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router';
 import { auth } from '../firebase/firebase';
 import Comment from "../Component/Comment"
 import { CurrentState } from '../Context/HidevideoinfoCard';
+import { Swipe } from '@mui/icons-material';
 function ShortVideos() {
   let [Index,setIndex] = useState(0);
   const [user,SetUser] = useState(null)
@@ -71,15 +72,18 @@ useEffect(()=>{
   if(window.innerWidth < 684){
     setvideoWidth(window.innerWidth);
     setvideoHeight(videoWidth * (16/9));
+    }else if (window.innerWidth >= 990){
+      setvideoWidth(window.innerWidth);
     }
      const updateVideoSize = () => {
       if(window.innerWidth < 684){
           setvideoWidth(window.innerWidth);
           setvideoHeight(videoWidth * (16/9));
-      }
+      } else if (window.innerWidth >= 990){
+        setvideoWidth(window.innerWidth); }
     }
      window.addEventListener('resize', updateVideoSize);
-     return ()=>{ window.addEventListener('resize', updateVideoSize);}
+     return ()=>{ window.removeEventListener('resize', updateVideoSize);}
 },[videoWidth,videoHeight])
   useEffect(()=>{
      window.onresize = ()=>{
@@ -143,111 +147,54 @@ useEffect(()=>{
       ProgressWidth.style.width = Progress + '%';
   }
 
-  useEffect(() => {
-    if(FilteredShortVideos){
-    const short_video_container = document.querySelectorAll(".short_video_container");
-    let currentContainer = short_video_container[Index];
-    if (currentContainer) {
-      let video = currentContainer.getElementsByTagName('video').shortvideo;
-      video.autoplay = true;
-      video.play();
-      video.muted = false;
-      video.loop = true;
-  
-      let touchStart = 0;
-      let touchEnd = 0;
-  
-      const handleTouchStart = (e) => {
-        touchStart = e.targetTouches[0].clientY;
-      };
-  
-      const handleTouchMove = (e) => {
-        touchEnd = e.targetTouches[0].clientY;
-
-      };
-  
-      const handleTouchEnd = () => {
-        if(touchStart === 0 || touchEnd === 0){return};
-        const distance = touchStart - touchEnd;
-        if(distance > currentContainer.clientHeight / 2){
-          
-          const observer = new IntersectionObserver((entries)=>{
-            console.log(entries)
-            entries.forEach((Entry)=>{
-              if(Entry.intersectionRatio === 1){
-               
-                if(FilteredShortVideos[Index + 1]){
-                  setIndex(Index + 1);
-                navigate(`/short/${FilteredShortVideos[Index + 1]?.id}`);
-                }
-              }else{
-                console.log("Next Element is not tvisible");
-              }
-            })
-          },{threshold:1})
-          if (short_video_container[Index + 1]) {
-            observer.observe(short_video_container[Index + 1]);
-            video = currentContainer.getElementsByTagName('video')[0];
-            video.pause();
-        }
-      }
-     else if(distance <= -currentContainer.clientHeight / 2){
-      const observer = new IntersectionObserver((entries)=>{
-        entries.forEach((Entry)=>{
-          if(Entry.isIntersecting){
-            if(FilteredShortVideos[Index - 1]){
-              setIndex(Index - 1);
-            navigate(`/short/${FilteredShortVideos[Index - 1]?.id}`);
-            }
-          }else{
-            console.log("Next Element is not tvisible");
-          }
-        })
-      },{threshold:1})
-        if (short_video_container[Index - 1]) {
-          observer.observe(short_video_container[Index - 1]);
-          video = currentContainer.getElementsByTagName('video')[0];
-          video.pause();
-      }
-    }
-        touchStart = 0;
-        touchEnd = 0;
-      
-      };
-  
-      currentContainer.addEventListener("touchstart", handleTouchStart, false);
-      currentContainer.addEventListener("touchmove", handleTouchMove, false);
-      currentContainer.addEventListener("touchend", handleTouchEnd, false);
-  
-      return () => {
-        // Cleanup event listeners
-        currentContainer.removeEventListener("touchstart", handleTouchStart);
-        currentContainer.removeEventListener("touchmove", handleTouchMove);
-        currentContainer.removeEventListener("touchend", handleTouchEnd);
-      };
-    }
-  }
-  },[Index,FilteredShortVideos])
+ useEffect(()=>{
+  const Videoscontainer = containerRef.current
+  console.log(Videoscontainer);
+  if (!Videoscontainer) {
+   console.error("Container not found");
+   return;
+ }
+ if(Videoscontainer !== undefined){
+  const handleScroll = () => {
+    const videos = Videoscontainer.querySelectorAll('.short_video_container');
+   console.log(videos)
+  videos.forEach((video)=>{
+   console.log(video)
+   const rect = video.getBoundingClientRect();
+   console.log(rect)
+   if(rect.top >= 0 && rect.top < window.innerHeight / 2){
+    const id = video.dataset.id;
+    console.log(id)
+    window.history.replaceState(null, null, `/short/${id}`);
+   }
+  })
+ }
+ Videoscontainer.addEventListener("scroll",handleScroll);
+ }
+//  return () => {
+//   videos?.removeEventListener("scroll",handleScroll);
+//  }
+ },[FilteredShortVideos])
 
 
   return Loading ? (
     <p className="text-white">Loading...</p>
   ) : (
-  <div className='shortVideos_container' ref={containerRef} >
+  <div className='shortVideos_container' ref={containerRef} id='shortVideoscontainer'>
    <Link to={"/"}>
     <IoIosArrowRoundBack className='back_icon'/>
     </Link>
      {FilteredShortVideos.map((shortvideo,index)=>{
-    return <div className="short_video_container" key={index} style={currentState.shortvideoShowMessages ?{height:windowHeight+"px",position:"unset"}:{height:windowHeight+"px",position:"relative"}} id={index}>
+    return <div className="short_video_container" key={index} style={currentState.shortvideoShowMessages ?{height:windowHeight+"px",position:"unset"}:{height:windowHeight+"px",position:"relative"}}  data-id={shortvideo.id}>
      <video src={shortvideo.Videodata.videoURL} muted id="shortvideo" data-video={index} className={shortvideo.id}
-    onClick={HandlePause} onTimeUpdate={HandleProgress} 
+    onClick={HandlePause} onTimeUpdate={HandleProgress} data-id={params.id}
     style={{width:videoWidth}}
   />
   
   { Ispause && dataSet === index ? <div className="middle_control"><IoMdPlay/></div>:null}
-    <div className='short_details' style={currentState.shortvideoShowMessages ? {zIndex:"0"}:{zIndex:"10"}}>
+    <div className='short_details' style={currentState.shortvideoShowMessages ? {zIndex:"0",position:"unset"}:{zIndex:"10",position:"absolute"}}>
       <div className='short_channel'>
-          <img src={shortvideo.UserData.channelPic} alt="" />
+          <img src={shortvideo.UserData.channelURL} alt="" />
           <p>{shortvideo.UserData.name}</p>
       </div>
       <div className="short_title">
@@ -257,7 +204,7 @@ useEffect(()=>{
                 <span id="short_progressBar_width" ref={Progressref}></span>
               </div>
     </div>
-    <div className="short_controls" style={currentState.shortvideoShowMessages ? {zIndex:"0"}:{zIndex:"10"}}>
+    <div className="short_controls" id='shortcontrols' style={currentState.shortvideoShowMessages ? {zIndex:"0",position:"unset"}:{zIndex:"10",position:"absolute"}}>
       <div className="like control" >
       { LikeShort  ? <BiSolidLike /> : <SlLike onClick={()=>HandleLike(shortvideo.id)}/>} 
           <p>{shortvideo.Videodata.likes}</p>
@@ -270,12 +217,12 @@ useEffect(()=>{
         <MdOutlineMessage/>
         <p>3520</p>
       </div>
-      {currentState.shortvideoShowMessages === true ? <Comment video={shortvideo.Videodata} user={shortvideo.UserData} videoId={params.id}/>:null}
+      {currentState.shortvideoShowMessages === true ?<div className='shortVivdeoComment'> <Comment video={shortvideo.Videodata} user={shortvideo.UserData} videoId={params.id}/></div>:null}
       <div className="menu control">
         <BsThreeDots/>
       </div>
       <div className="channel control">
-      <img src={shortvideo.UserData.channelPic} alt="" style={{width: "45px",borderRadius:"10px"}}/>
+      <img src={shortvideo.UserData.channelURL} alt="" style={{width: "45px",borderRadius:"10px"}}/>
       </div>
     </div>
     </div>
@@ -284,4 +231,4 @@ useEffect(()=>{
 ) 
   
  }
-export default ShortVideos
+ export default ShortVideos

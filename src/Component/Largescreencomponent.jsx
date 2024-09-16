@@ -2,42 +2,20 @@ import React,{useState,useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import shortsIcon from "../Pics/Youtube_shorts_icon.webp";
-import { FiClock } from "react-icons/fi";
-import { TiThumbsUp } from "react-icons/ti";
-import { GoThumbsdown } from "react-icons/go";
-import { IoMdClose } from "react-icons/io";
-import "../CSS/HomeScreen.css"
-function Smallscreencomponent(props) {
-  console.log(props)
-  const [ThumbnailHeight,setThumbnailHeight] = useState();
-  const [ThumbnailWidth,setThumbNailWidth] = useState();
-  const [bottomLayout,setbottomLayout] = useState(false);
-  useEffect(()=>{
-    if(window.innerWidth <= 600){
-      setThumbNailWidth(window.innerWidth);
-      setThumbnailHeight(ThumbnailWidth * (9/16));
-      }
-    const updateVideoSize = () => {
-      if(window.innerWidth <= 600){
-      setThumbNailWidth(window.innerWidth);
-      setThumbnailHeight(ThumbnailWidth * (9/16));
-      }
-    }
-    window.addEventListener("resize",updateVideoSize)
-    return ()=>{
-      window.removeEventListener("resize",updateVideoSize)
-    }
-},[ThumbnailHeight,ThumbnailWidth]);
+import "../CSS/Video.css"
+function Largescreencomponent(props) {
+   
   return (
-    <div>
+    <div className='large-screen-main-videoPage'>
     <div className='videos'>
-  {props.FullLengthVideos && props.FullLengthVideos.slice(0,1).map((FullLengthVideo,index)=>{
+  {props.FullLengthVideos && props.FullLengthVideos.slice(0,6).map((FullLengthVideo,index)=>{
       return  <div id="video" key={index}>
       <Link to={`/watch/${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
-      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={{height:ThumbnailHeight, width:ThumbnailWidth}}/>
+      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video"/>
       </div>
          </Link>
+        
          <div className="video_bottom">
                       <div className="video_bttom_left">
                         <img
@@ -48,38 +26,23 @@ function Smallscreencomponent(props) {
                           <h3 id="video_title" className="title">
                             {FullLengthVideo.Videodata?.Title}
                           </h3>
-                          <div>
-                            <p>
+                          <div className='channelnameandviews'>
+                            <p id='channelName'>
                               {FullLengthVideo.UserData?.name} 
-                              {" "} {FullLengthVideo.Videodata?.views} Views
                             </p>
+                            <p id='video-views'>{FullLengthVideo.Videodata?.views} Views</p>
                           </div>
                         </div>
                       </div>
-                      <div onClick={()=>{setbottomLayout(true);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
+                     
+            <BsThreeDotsVertical className="videomenu" />
         </div>
-        {bottomLayout && (
-        <div id="video-bottom-layout">
-            <div onClick={()=>setbottomLayout(false)}><IoMdClose/> <span>Close Page</span></div> 
-          <div className="watch-later">
-             <FiClock/>
-             <p>Watch Later</p>
-          </div>
-          <div className="Like-video">
-           <TiThumbsUp/>
-           <p>Like Video</p>
-          </div>
-          <div className="DisLike-video">
-           <GoThumbsdown/>
-           <p>DisLike Video</p>
-          </div>
-        </div>
-        )}
         </div>
     })}
     </div>
     {props.ShortVideos.length > 0 && (
-    <div class="short-videos">
+    <div className="short-videos">
+      
      <div className="short-video-section">
         <div className="shelf-header">
            <img src={shortsIcon} alt="shorts-icon" />
@@ -89,14 +52,14 @@ function Smallscreencomponent(props) {
        {props.ShortVideos && props.ShortVideos.map((shortvideo,index)=>{
           return <div className="short-video" key={index}>
           <div id="short-video">
-            
+            <Link to={`/short/${shortvideo?.id}`}>
             <video src={shortvideo.Videodata.videoURL} ></video>
             <div className="short-video-detail">
             <div className="short-video-title">{shortvideo.Videodata.Title}</div>
             <div className="views">{shortvideo.Videodata.views} Views</div>
             </div>
+            </Link>
             </div>
-            
           </div>
        })}
        </div>
@@ -104,11 +67,11 @@ function Smallscreencomponent(props) {
     </div>
       )}
     <div className="videos">
-       {props.FullLengthVideos && props.FullLengthVideos.slice(1).map((FullLengthVideo,index)=>{
+       {props.FullLengthVideos && props.FullLengthVideos.slice(6).map((FullLengthVideo,index)=>{
       return  <div id="video" key={index}>
       <Link to={`/watch/${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
-      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={{height:ThumbnailHeight, width:ThumbnailWidth}}/>
+      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video"/>
       </div>
          </Link>
          <div className="video_bottom">
@@ -129,25 +92,8 @@ function Smallscreencomponent(props) {
                           </div>
                         </div>
                       </div>
-            <div onClick={()=>{setbottomLayout(true);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
+            <BsThreeDotsVertical className="videomenu" />
         </div>
-        {bottomLayout && (
-        <div id="video-bottom-layout">
-         <div onClick={()=>setbottomLayout(false)}><IoMdClose/> <span>Close Page</span></div> 
-          <div className="watch-later">
-             <FiClock/>
-             <p>Watch Later</p>
-          </div>
-          <div className="Like-video">
-           <TiThumbsUp/>
-           <p>Like Video</p>
-          </div>
-          <div className="DisLike-video">
-           <GoThumbsdown/>
-           <p>DisLike Video</p>
-          </div>
-        </div>
-        )}
         </div>
     })}
     </div>
@@ -155,4 +101,4 @@ function Smallscreencomponent(props) {
   )
 }
 
-export default Smallscreencomponent
+export default Largescreencomponent
