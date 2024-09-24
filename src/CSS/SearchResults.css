@@ -21,18 +21,21 @@
         margin-top: 51px;
     }
     .SearchedVideos .videos #video a #thumbnail_container{
-        width: 200px;
+        width: 340px;
         height: 93px;
     }
     .SearchedVideos .videos #video a #thumbnail_container img {
         border-radius: 12px;
+        width: unset;
+        height: unset;
     }
     .SearchedVideos .videos #video .video_bottom{
-        align-items: center;
+        align-items: baseline !important;
         padding: 0px 0 0 14px;
         width: 100%;
     }
     .SearchedVideos .videos #video .video_bottom .video_bttom_left{
         flex-direction: column-reverse;
     }
+    
 }

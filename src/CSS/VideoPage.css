@@ -3,8 +3,10 @@
     color: white;
 }
 
-#myRange{
-  accent-color: red;
+#wrapper:fullscreen:hover {
+ .large-screen-video-below-controls{
+  display: block;
+ }
 }
 p{
   text-align: justify;
@@ -118,9 +120,14 @@ video {
   right: 0;
   z-index: 2;
   color: white;
-  padding: 20px 17px;
+  padding: 26px 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  font-size: 1.1rem;
 }
 #video-bottom-layout div {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1em;
@@ -225,9 +232,8 @@ video {
   }
  #message_page{
   background-color: #0f0f0f;
-  position: fixed;
-  left: 0;
-  /* top: 0%; */
+  /* position: fixed;
+  left: 0; */
   width: 100%;
   height: 100%;
   z-index: 2;
@@ -412,10 +418,18 @@ video {
 .Next_videos div>.short-video-section{
   display: none;
  }
+ @media screen and (max-width:990px) {
+  .fullVideoPage{
+    margin-top: 57px;
+  }
+  .video_top_controls{
+    margin: 20px 10px 0px 0;
+  }
+ }
 @media screen and (min-width:587px) and (max-width:990px) {
   .Next_videos div>.videos{
     display: block;
-    margin-top: -30px;
+    /* margin-top: -30px; */
   }
   .Next_videos div>.videos>#video{
     display: flex;
@@ -441,9 +455,6 @@ video {
     flex-direction: column-reverse;
     align-items: baseline;
     gap: 0;
-   }
-   #message_page{
-    position: fixed;
    }
    .message-body{
     position: unset;
@@ -561,9 +572,10 @@ video {
     right: 256px;
     top: 65px;
     left: 0;
-    overflow-y: scroll;
-    width: 61%;
-    margin-left: 60px;
+    /* overflow-y: scroll; */
+    /* width: 61%; */
+    margin-left: 110px;
+    overflow: visible;
   }
   .Next_videos {
     position: fixed;
@@ -574,6 +586,49 @@ video {
     top: -22px;
     overflow-y: auto;
     /* margin-right: 12px; */
+}
+.shareModal{
+  position: absolute;
+  z-index: 1;
+  background: #212121 !important;
+  flex-direction: column;
+  align-items: unset !important;
+  /* left: 0; */
+  height: 350px;
+  width: 500px;
+  right: 0;
+  top: 0;
+  margin: 50px auto;
+  padding: 33px !important;
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
+}
+#url{
+  margin-top: 52px;
+  width: 100%;
+  display: flex;
+  background: black;
+  padding: 11px;
+  justify-content: space-between;
+}
+#url input {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  background-color: unset;
+  width: 79%;
+  font-size: 0.9rem;
+}
+#url button {
+  background: #3ea6ff;
+  padding: 6px 13px;
+  border-radius: 48px;
+  color: black;
+  font-size: 1rem;
+}
+.modalHeader div h2 {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 900;
 }
 .channelnameandviews{
   display: flex;
@@ -789,6 +844,40 @@ video {
   padding: 0;
   border-radius: 0;
   height: 2em;
+}
+#myRange{
+  z-index: 9999;
+  position: relative;
+  bottom: 15.5px;
+  left: 0px;
+  width: 100%;
+  accent-color: #ff0000;
+  height: 4px;
+}
+#myRange::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  background: #ff0000;
+  cursor: pointer;
+  border-radius: 50%;
+}
+#myRange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px; 
+  background: #ff0000;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+#myRange::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: #ff0000;
+  cursor: pointer;
+  border-radius: 50%;
 }
 }
 @media screen and (min-width:990px) and (max-width:1115px) {

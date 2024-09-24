@@ -25,13 +25,14 @@ function SmallScreenVideoInfoCard(props) {
     let [isLiked, setisLiked] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
     const makeSubscribe = async() => {
+      try{
         if(props.CurrentUser){
         const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/subscribedChannel`),props.user.uid);
         const channelDocRef = doc(collection(firestore,`users`),props.user.uid);
         const data = {
           name:props.user.name,
           email:props.user.email,
-          channePic:props.user.channelURL,
+          channepic:props.user.channelPic,
           userId:props.user.uid
         }
         await setDoc(docRef,data);
@@ -44,6 +45,9 @@ function SmallScreenVideoInfoCard(props) {
       }else{
         alert("You are not signedIn");
       }
+    }catch(Error){
+      console.log(Error);
+    }
       }
       // Showing user that has he subscribed or not in every render
       useEffect(()=>{
@@ -117,6 +121,7 @@ function SmallScreenVideoInfoCard(props) {
       }
        }
        useEffect(()=>{
+        if(props.CurrentUser){
        const checkCurrentWatchedVideo = async () => {
       const videoDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/watchedVideos`),props.videoId);
       const videoDoc = await getDoc(videoDocRef);
@@ -127,12 +132,13 @@ function SmallScreenVideoInfoCard(props) {
         }
         await setDoc(videoDocRef,data);
         await updateDoc(videoCollection,{
-          views:props.Video.views + 1
+          views:props.Video?.views + 1
         })
         console.log("Video added to watched collection");
       }
         }
         checkCurrentWatchedVideo();
+      }
        },[props.videoId,props.Video,props.CurrentUser])
   return (
     !currentState.shortvideoShowMessages ? (
@@ -175,7 +181,7 @@ function SmallScreenVideoInfoCard(props) {
                 </div>
               </div>
               {/* {currentState.shortvideoShowMessages ? <Comment video={Video} user={user} videoId={params.id}/>:null} */}
-              <div className="comments" onClick={()=>currentState.setshortvideoShowMessages(true)}>
+              <div className="comments" onClick={()=>{currentState.setshortvideoShowMessages(true);document.body.style.overflow="hidden"}}>
               {props.Video?.comments === "On"?(
                 <>
                 {props.Video?.Comments ? (

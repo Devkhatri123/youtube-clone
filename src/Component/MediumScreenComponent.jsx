@@ -9,7 +9,7 @@ function MediumScreenComponent(props) {
       <div className='videos'>
     {props.FullLengthVideos && props.FullLengthVideos.slice(0,4).map((FullLengthVideo,index)=>{
         return  <div id="video" key={index}>
-        <Link to={`/watch/${FullLengthVideo.id}`}>
+        <Link to={`/watch?v=${FullLengthVideo.id}`}>
         <div id="thumbnail_container">
         <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video"/>
         </div>
@@ -18,7 +18,7 @@ function MediumScreenComponent(props) {
            <div className="video_bottom">
                         <div className="video_bttom_left">
                           <img
-                            src={FullLengthVideo.UserData?.channelURL}
+                            src={FullLengthVideo.UserData?.channelPic}
                             alt={FullLengthVideo.UserData?.name}
                           />
                           <div className="video_title_and_channelName">
@@ -67,7 +67,7 @@ function MediumScreenComponent(props) {
       <div className="videos">
          {props.FullLengthVideos && props.FullLengthVideos.slice(4).map((FullLengthVideo,index)=>{
         return  <div id="video" key={index}>
-        <Link to={`/watch/${FullLengthVideo.id}`}>
+        <Link to={`/watch?v=${FullLengthVideo.id}`}>
         <div id="thumbnail_container">
         <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video"/>
         </div>
@@ -75,7 +75,7 @@ function MediumScreenComponent(props) {
            <div className="video_bottom">
                         <div className="video_bttom_left">
                           <img
-                            src={FullLengthVideo.UserData?.channelURL}
+                            src={FullLengthVideo.UserData?.channelPic}
                             alt={FullLengthVideo.UserData?.name}
                           />
                           <div className="video_title_and_channelName">

@@ -10,7 +10,7 @@ function WatchedVideos() {
     onSnapshot(collection(firestore,`users/${auth.currentUser.uid}/watchedVideos`),async(snanpShot)=>{
       setwatchedVideos(await Promise.all(
       snanpShot.docs.map(async(Doc)=>{
-       const VideoDocRef = doc(firestore,"videos",Doc.data().videoURL);
+       const VideoDocRef = doc(firestore,"videos",Doc.data().videoUrl);
        const getVideo = await getDoc(VideoDocRef);
        const userDocRef = doc(firestore,"users",getVideo.data()?.createdBy);
        const user = await getDoc(userDocRef);

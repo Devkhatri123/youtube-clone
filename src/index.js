@@ -17,6 +17,10 @@ import MainPage from "./Component/MainPage";
 import MiniSideBar from "./Component/MiniSideBar";
 import SearchResults from "./Component/SearchResults";
 import NavbarStateProvider from "./Context/NavbarContext";
+import Home from "./Component/Home";
+import HomepageShorts from "./Component/HomepageShorts";
+import HomePageStateProvider from "./Context/HomePageContext";
+import VideoActionProvider from "./Context/VideoContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 let router = createBrowserRouter(
@@ -25,12 +29,9 @@ let router = createBrowserRouter(
     path: "/",
     element: <>
     <StateProvider>
-      
-    <Navbar/>
+      <NavbarStateProvider>
     <MainPage />
-    <Footer/>
-    <MiniSideBar/>
-    <LargeScreenSideBar/>
+    </NavbarStateProvider>
     </StateProvider>
     </>,
   },
@@ -46,13 +47,14 @@ let router = createBrowserRouter(
     ),
   },
   {
-    path: "/watch/:id",
+    path: "/watch?",
     element: (
       <>
       <StateProvider>
         <Navbar />
+        <VideoActionProvider>
         <VideoPage/>
-        <LargeScreenSideBar/>
+        </VideoActionProvider>
         </StateProvider>
        </>
     ),
@@ -88,10 +90,32 @@ let router = createBrowserRouter(
    </>
     ),
   },
+  {
+    path: `/:id/:name/videos`,
+    element: (
+      <>
+      <Navbar/>
+      <HomePageStateProvider>
+      <Home/>
+      </HomePageStateProvider>
+   </>
+    ),
+  },
+  {
+    path: `/:id/:name/Shorts`,
+    element: (
+      <>
+      <Navbar/>
+      <HomePageStateProvider>
+      <HomepageShorts/>
+      </HomePageStateProvider>
+   </>
+    ),
+  },
 ]);
 root.render(
   <RouterProvider router={router}>
-    <App />
+    {/* <App /> */}
     </RouterProvider>
 );
 

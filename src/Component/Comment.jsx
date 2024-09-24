@@ -38,7 +38,7 @@ function Comment(props) {
       <div id='message_page'>
         <div className="message-top">
           <h3>Comments  <span style={{fontweight: "500"}}>{props.video?.NumberOfComments}</span></h3>
-          <RxCross1 onClick={()=>{currentState.setshortvideoShowMessages(false);document.body.style.overflowY="unset";setCloseMessage(true)}} />
+          <RxCross1 onClick={()=>{currentState.setshortvideoShowMessages(false);document.body.style.overflow="scroll";setCloseMessage(true)}} />
         </div>
         <div className="message-body">
          <CommentBody videoId = {props.videoId} video = {props.video}/>

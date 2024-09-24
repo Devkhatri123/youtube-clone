@@ -3,16 +3,17 @@ import DescriptionPage from './DescriptionPage';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import { useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 
 function VideoDetail() {
-    const [showDescription,setshowDescription] = useState(false);
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get('v');
     // const [Loading,setLoading] = useState(false);
     const [video,setvideo] = useState(null);
     const [user,setuser] = useState(null)
-    const params = useParams()
     useEffect(()=>{
         const GetVideo = async() => {
-            const docRef = doc(firestore,"videos",params.id);
+            const docRef = doc(firestore,"videos",videoId);
             const videoDoc = await getDoc(docRef);
             if(videoDoc.exists()){
             setvideo(videoDoc.data());
@@ -26,7 +27,7 @@ function VideoDetail() {
         }
         GetVideo()
        
-},[params.id])
+},[videoId])
 return (
     <div style={{padding: "0 0.3em"}}>
    <h3 id="video-title">{video?.Title}</h3>

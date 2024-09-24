@@ -17,7 +17,8 @@ import { useNavigate } from 'react-router';
 import { auth } from '../firebase/firebase';
 import Comment from "../Component/Comment"
 import { CurrentState } from '../Context/HidevideoinfoCard';
-import { Swipe } from '@mui/icons-material';
+import throttle from "lodash.throttle"
+
 function ShortVideos() {
   let [Index,setIndex] = useState(0);
   const [user,SetUser] = useState(null)
@@ -30,10 +31,12 @@ function ShortVideos() {
   const [videoWidth,setvideoWidth] = useState(window.innerWidth);
   const [videoHeight,setvideoHeight] = useState(window.innerWidth * (16/9));
   const Progressref = useRef();
+  const containerRef = useRef();
+  const touchStartRef = useRef(0);
+ const [videos,setvideos] = useState([]);
   const navigate = useNavigate();
   const params = useParams();
   const [windowHeight,setwindowHeight] = useState(window.innerHeight);
- const containerRef = useRef();
  const currentState = useContext(CurrentState);
    useEffect(() => {
     try{
@@ -146,36 +149,36 @@ useEffect(()=>{
       if(ProgressWidth)
       ProgressWidth.style.width = Progress + '%';
   }
+  
+  useEffect(() => {
+    const container = containerRef.current;
+   if(container){
+    // Handle scroll event
+    const handleScroll = () => {
+      const videoContainers = container.querySelectorAll('.video-container');
+      const scrollPosition = container.scrollTop;
+      console.log(scrollPosition);
+      
+      videoContainers.forEach((element, index) => {
+        const elementTop = element.offsetTop;
+        const elementHeight = element.offsetHeight;
 
- useEffect(()=>{
-  const Videoscontainer = containerRef.current
-  console.log(Videoscontainer);
-  if (!Videoscontainer) {
-   console.error("Container not found");
-   return;
- }
- if(Videoscontainer !== undefined){
-  const handleScroll = () => {
-    const videos = Videoscontainer.querySelectorAll('.short_video_container');
-   console.log(videos)
-  videos.forEach((video)=>{
-   console.log(video)
-   const rect = video.getBoundingClientRect();
-   console.log(rect)
-   if(rect.top >= 0 && rect.top < window.innerHeight / 2){
-    const id = video.dataset.id;
-    console.log(id)
-    window.history.replaceState(null, null, `/short/${id}`);
-   }
-  })
- }
- Videoscontainer.addEventListener("scroll",handleScroll);
- }
-//  return () => {
-//   videos?.removeEventListener("scroll",handleScroll);
-//  }
- },[FilteredShortVideos])
+        // If the scroll position is within the bounds of the element
+        if (scrollPosition >= elementTop && scrollPosition < elementTop + elementHeight) {
+          setIndex(index); // Update current index
+        }
+      });
+    };
 
+    container.addEventListener('scroll', handleScroll);
+
+    // Clean up event listener on component unmount
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }
+  }, [Index,FilteredShortVideos.length,containerRef]);
+  
 
   return Loading ? (
     <p className="text-white">Loading...</p>
@@ -186,7 +189,7 @@ useEffect(()=>{
     </Link>
      {FilteredShortVideos.map((shortvideo,index)=>{
     return <div className="short_video_container" key={index} style={currentState.shortvideoShowMessages ?{height:windowHeight+"px",position:"unset"}:{height:windowHeight+"px",position:"relative"}}  data-id={shortvideo.id}>
-     <video src={shortvideo.Videodata.videoURL} muted id="shortvideo" data-video={index} className={shortvideo.id}
+     <video src={shortvideo.Videodata.videoURL}  id="shortvideo" data-video={index} className={shortvideo.id}
     onClick={HandlePause} onTimeUpdate={HandleProgress} data-id={params.id}
     style={{width:videoWidth}}
   />
@@ -204,7 +207,7 @@ useEffect(()=>{
                 <span id="short_progressBar_width" ref={Progressref}></span>
               </div>
     </div>
-    <div className="short_controls" id='shortcontrols' style={currentState.shortvideoShowMessages ? {zIndex:"0",position:"unset"}:{zIndex:"10",position:"absolute"}}>
+    <div className="short_controls" id='shortcontrols' style={currentState.shortvideoShowMessages ? {zIndex:"0",position:"absolute",bottom:"unset"}:{zIndex:"10",position:"absolute"}}>
       <div className="like control" >
       { LikeShort  ? <BiSolidLike /> : <SlLike onClick={()=>HandleLike(shortvideo.id)}/>} 
           <p>{shortvideo.Videodata.likes}</p>
@@ -217,7 +220,7 @@ useEffect(()=>{
         <MdOutlineMessage/>
         <p>3520</p>
       </div>
-      {currentState.shortvideoShowMessages === true ?<div className='shortVivdeoComment'> <Comment video={shortvideo.Videodata} user={shortvideo.UserData} videoId={params.id}/></div>:null}
+      {currentState.shortvideoShowMessages === true &&<div className='shortVivdeoComment'> <Comment video={shortvideo.Videodata} user={shortvideo.UserData} videoId={params.id}/></div>}
       <div className="menu control">
         <BsThreeDots/>
       </div>

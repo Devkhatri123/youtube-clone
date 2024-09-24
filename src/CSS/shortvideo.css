@@ -31,8 +31,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  scroll-snap-align: start
 }
 .scroll {
   transition: 2s ease-in;
@@ -40,11 +39,11 @@ body {
 .shortVideos_container {
   position: relative;
   width: 100%;
-  /* height: 100vh; */
+  height: 100%;
   /* overflow-y: scroll; */
-  height: auto;  /* Or any specific height you need */
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y mandatory; /* Enables vertical snapping */
+  scroll-behavior: smooth; 
+  /* scroll-snap-type: y mandatory; */
 }
 
 .short_details {

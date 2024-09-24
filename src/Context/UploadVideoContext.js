@@ -12,7 +12,7 @@ export const Uploadvideo = createContext();
     const [ThumbnailProgress,setThumbnailProgress] = useState(0);
     
     const navigate = useNavigate();
-   const uploadVideoFunc = async(thumbnailFile,videoFile,videoTitle,description,shortivideo,user) => {
+   const uploadVideoFunc = async(thumbnailFile,videoFile,videoTitle,description,shortvideo,user) => {
     const videopRef = ref(storage, `Videos/${v4()}`);
     const ThumbNailRef = ref(storage, `Thumbnail/${v4()}`);
 
@@ -49,7 +49,7 @@ export const Uploadvideo = createContext();
       likes:0,
       dislikes:0,
       views:0,
-      shortVideo:false,
+      shortVideo:shortvideo,
       createdBy:auth.currentUser.uid,
     }
     await setDoc(docRef,data).then(async()=>{
@@ -62,9 +62,15 @@ export const Uploadvideo = createContext();
       });
       console.log("new video added in subscriber doc");
       const userDocRef = doc(firestore,`users/${Doc.data().userId}`);
+      if(user.Numberofvideos){
       await updateDoc(userDocRef,{
           Numberofvideos:user.Numberofvideos + 1,
          });
+        }else{
+          await updateDoc(userDocRef,{
+            Numberofvideos:1,
+           });
+        }
       });
     }).catch((error)=>{
       console.log(error)

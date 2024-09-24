@@ -6,6 +6,7 @@ import { MdOutlineLibraryAdd } from "react-icons/md";
 import { CurrentState } from '../Context/HidevideoinfoCard';
 import "../CSS/MiniSideBar.css";
 import "../CSS/VideoPage.css";
+import { Link } from 'react-router-dom';
 function MiniSideBar() {
 const currentState = useContext(CurrentState);
 useEffect(()=>{
@@ -26,8 +27,10 @@ useEffect(()=>{
         <p>Subscriptions</p>
       </div>
       <div className="library">
+        <Link to={"/Library"}>
         <MdOutlineLibraryAdd/>
         <p>You</p>
+        </Link>
       </div>
     </div>
   )

@@ -10,7 +10,11 @@ import LargeScreenVideoInfoCard from "./LargeScreenVideoInfoCard";
 import LargeScreenVideoPlayer from "./LargeScreenVideoPlayer";
 import MediumScreenComponent from "./MediumScreenComponent";
 import Smallscreencomponent from "./Smallscreencomponent";
+import { useSearchParams } from "react-router-dom";
+import ShareOnSocialMediaModal from "./ShareOnSocialMediaModal";
 function VideoInfoCard() {
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get('v');
   const params = useParams();
   const currentState = useContext(CurrentState);
   let [Video, Setvideo] = useState();
@@ -46,7 +50,7 @@ function VideoInfoCard() {
   const FetchVideo = async () => {
     setLoading(true);
     try {
-      const VideoRef = doc(firestore, "videos", params.id);
+      const VideoRef = doc(firestore, "videos", videoId);
       // const video = await getDoc(videoRef);
       onSnapshot(VideoRef, async (videDoc) => {
         if (videDoc.exists()) {
@@ -71,7 +75,7 @@ function VideoInfoCard() {
 
   useEffect(() => {
     FetchVideo();
-  }, [params.id]);
+  }, [videoId]);
   useEffect(() => {
     // Fetching next Videos to play
     onSnapshot(collection(firestore, "videos"), (snapShot) => {
@@ -90,7 +94,7 @@ function VideoInfoCard() {
         setNextVideos(FetchedVideos);
       });
     });
-  }, [params.id]);
+  }, [videoId]);
   useEffect(() => {
     onSnapshot(collection(firestore, "videos"), async (snapshot) => {
       const FetchedData = await Promise.all(
@@ -106,14 +110,14 @@ function VideoInfoCard() {
       );
       setvideos(FetchedData);
     });
-  }, [params.id]);
+  }, [videoId]);
   useEffect(() => {
     setFullLengthVideos(
       videos?.filter((FullLengthVideo) => {
-        if (params.id) {
+        if (videoId) {
           return (
             !FullLengthVideo.Videodata.shortVideo &&
-            params.id !== FullLengthVideo.id
+            videoId !== FullLengthVideo.id
           );
         } else {
           return !FullLengthVideo.Videodata.shortVideo;
@@ -125,7 +129,7 @@ function VideoInfoCard() {
         return shortVideo.Videodata.shortVideo === true;
       })
     );
-  }, [videos, params.id]);
+  }, [videos, videoId]);
 
   useEffect(() => {
     if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
@@ -133,7 +137,7 @@ function VideoInfoCard() {
       setnextVideosPortionWidth(window.innerWidth - 664);
       setTotalScreenWidth(0);
     } else if (window.innerWidth >= 990 && window.innerWidth < 1745) {
-      setCalculatedscreenWidth(window.innerWidth - 474);
+      setCalculatedscreenWidth(window.innerWidth - 530);
       setnextVideosPortionWidth(403);
       setTotalScreenWidth(0);
     } else if (window.innerWidth >= 1745 && window.innerWidth < 2000) {
@@ -146,10 +150,10 @@ function VideoInfoCard() {
     const updateVideoSize = () => {
       if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
         setCalculatedscreenWidth(640);
-        setTotalScreenWidth(0);
         setnextVideosPortionWidth(window.innerWidth - 664);
-      } else if (window.innerWidth >= 1115 && window.innerWidth < 1745) {
-        setCalculatedscreenWidth(window.innerWidth - 474);
+        setTotalScreenWidth(0);
+      } else if (window.innerWidth >= 990 && window.innerWidth < 1745) {
+        setCalculatedscreenWidth(window.innerWidth - 530);
         setnextVideosPortionWidth(403);
         setTotalScreenWidth(0);
       } else if (window.innerWidth >= 1745 && window.innerWidth < 2000) {
@@ -168,16 +172,16 @@ function VideoInfoCard() {
 
   return !Loading ? (
     !Error ? (
-      <div className="fullVideoPage" style={FullLengthVideos.length > 0?{ width: CalculatedscreenWidth }:null}>
+      <div className="fullVideoPage" style={FullLengthVideos.length > 0?{ width: CalculatedscreenWidth }:{width:"100%",left:"0",right:"0",margin:"0 auto",maxWidth:"821px"}}>
           <div className="videoPlayer">
-            <VideoPlayer />
+            <VideoPlayer areNextVideos={FullLengthVideos.length > 0 ? true : false} NextVideos={FullLengthVideos}/>
           </div>
           {windowWidth < 990 ? (
             <>
               <SmallScreenVideoInfoCard
                 Video={Video}
                 user={user}
-                videoId={params.id}
+                videoId={videoId}
                 CurrentUser={CurrentUser}
                 currentState={currentState}
                 NextVideos={NextVideos}
@@ -186,10 +190,11 @@ function VideoInfoCard() {
           ) : (
             <>
               <div className="large-screen-fullVideoPage">
+          
                 <LargeScreenVideoInfoCard
                   Video={Video}
                   user={user}
-                  videoId={params.id}
+                  videoId={videoId}
                   CurrentUser={CurrentUser}
                   currentState={currentState}
                 />
@@ -223,11 +228,21 @@ function VideoInfoCard() {
           color: "white",
         }}
       >
-        My Loading...
+       {ErrorMessage}
       </p>
     )
   ) : (
-    <p>{ErrorMessage}</p>
+    <p
+    style={{
+      height: "50vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "white",
+    }}
+  >
+     Loading...
+  </p>
   );
 }
 

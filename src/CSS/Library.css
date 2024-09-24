@@ -263,3 +263,11 @@
   font-size: 18px;
   font-weight: bold;
 }
+@media screen and (min-width:990px) {
+  .watched_Videos{
+    margin: 24px 0px 0px 8px;
+  }
+  .createVideo:nth-child(1){
+    display: none;
+  }
+}

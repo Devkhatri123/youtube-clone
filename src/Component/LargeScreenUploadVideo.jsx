@@ -12,7 +12,8 @@ function LargeScreenUploadVideo() {
   const inputRef = useRef();
   const imgRef = useRef();
   const videoRef = useRef();
-  const [user,setuser] = useState(null)
+  const [user,setuser] = useState(null);
+  const [currentUser,setcurrentUser] = useState(null)
   const [VideoURL,setVideoURL] = useState();
   const [videoFile,setVideoFile] = useState();
   const [thumbnailURL,setthumbnailURL] = useState();
@@ -22,11 +23,16 @@ function LargeScreenUploadVideo() {
   const [videoTitle,setvideoTitle] = useState('');
   const [description,setdescription] = useState('');
   useEffect(()=>{
+    auth.onAuthStateChanged((currentuser)=>{
+      setcurrentUser(currentuser)
+    });
     const GetUser = async() => {
-    setuser((await getDoc(doc(firestore,"users",auth.currentUser.uid))).data()); 
+      if(currentUser){
+    setuser((await getDoc(doc(firestore,"users",currentUser.uid))).data()); 
     }
+  }
     GetUser()
-},[])
+},[currentUser])
   const navigate = useNavigate();
   const HandleChange = (e) => {
  setVideoURL(URL.createObjectURL(e.target.files[0]));
@@ -43,6 +49,10 @@ function LargeScreenUploadVideo() {
    }
   },[]);
   const uploadvideo = () => {
+    if(!currentUser){
+      alert("You are not signedIn")
+      return;
+    } 
     let videoLength = videoRef.current.firstChild.firstChild.nextElementSibling.childNodes[0].duration;
 
     let shortivideo = null;

@@ -7,6 +7,7 @@ import { TiThumbsUp } from "react-icons/ti";
 import { GoThumbsdown } from "react-icons/go";
 import { IoMdClose } from "react-icons/io";
 import "../CSS/HomeScreen.css"
+import BottomLayout from './BottomLayout';
 function Smallscreencomponent(props) {
   console.log(props)
   const [ThumbnailHeight,setThumbnailHeight] = useState();
@@ -33,24 +34,26 @@ function Smallscreencomponent(props) {
     <div className='videos'>
   {props.FullLengthVideos && props.FullLengthVideos.slice(0,1).map((FullLengthVideo,index)=>{
       return  <div id="video" key={index}>
-      <Link to={`/watch/${FullLengthVideo.id}`}>
+      <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
-      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={{height:ThumbnailHeight, width:ThumbnailWidth}}/>
+      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>
       </div>
          </Link>
          <div className="video_bottom">
                       <div className="video_bttom_left">
+                      <Link to={`/${FullLengthVideo.Videodata.createdBy}/${FullLengthVideo.UserData?.name.replace(" ","")}/videos`} >
                         <img
-                          src={FullLengthVideo.UserData?.channelURL}
+                          src={FullLengthVideo.UserData?.channelPic}
                           alt={FullLengthVideo.UserData?.name}
                         />
+                        </Link>
                         <div className="video_title_and_channelName">
                           <h3 id="video_title" className="title">
                             {FullLengthVideo.Videodata?.Title}
                           </h3>
                           <div>
                             <p>
-                              {FullLengthVideo.UserData?.name} 
+                              {FullLengthVideo.UserData?.name} •
                               {" "} {FullLengthVideo.Videodata?.views} Views
                             </p>
                           </div>
@@ -59,21 +62,7 @@ function Smallscreencomponent(props) {
                       <div onClick={()=>{setbottomLayout(true);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
         </div>
         {bottomLayout && (
-        <div id="video-bottom-layout">
-            <div onClick={()=>setbottomLayout(false)}><IoMdClose/> <span>Close Page</span></div> 
-          <div className="watch-later">
-             <FiClock/>
-             <p>Watch Later</p>
-          </div>
-          <div className="Like-video">
-           <TiThumbsUp/>
-           <p>Like Video</p>
-          </div>
-          <div className="DisLike-video">
-           <GoThumbsdown/>
-           <p>DisLike Video</p>
-          </div>
-        </div>
+        <BottomLayout/>
         )}
         </div>
     })}
@@ -106,7 +95,7 @@ function Smallscreencomponent(props) {
     <div className="videos">
        {props.FullLengthVideos && props.FullLengthVideos.slice(1).map((FullLengthVideo,index)=>{
       return  <div id="video" key={index}>
-      <Link to={`/watch/${FullLengthVideo.id}`}>
+      <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={{height:ThumbnailHeight, width:ThumbnailWidth}}/>
       </div>
@@ -114,7 +103,7 @@ function Smallscreencomponent(props) {
          <div className="video_bottom">
                       <div className="video_bttom_left">
                         <img
-                          src={FullLengthVideo.UserData?.channelURL}
+                          src={FullLengthVideo.UserData?.channelPic}
                           alt={FullLengthVideo.UserData?.name}
                         />
                         <div className="video_title_and_channelName">
@@ -132,21 +121,7 @@ function Smallscreencomponent(props) {
             <div onClick={()=>{setbottomLayout(true);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
         </div>
         {bottomLayout && (
-        <div id="video-bottom-layout">
-         <div onClick={()=>setbottomLayout(false)}><IoMdClose/> <span>Close Page</span></div> 
-          <div className="watch-later">
-             <FiClock/>
-             <p>Watch Later</p>
-          </div>
-          <div className="Like-video">
-           <TiThumbsUp/>
-           <p>Like Video</p>
-          </div>
-          <div className="DisLike-video">
-           <GoThumbsdown/>
-           <p>DisLike Video</p>
-          </div>
-        </div>
+        <BottomLayout/>
         )}
         </div>
     })}

@@ -23,26 +23,29 @@ import CommentBody from './CommentBody';
 import Linkify from "linkify-react";
 import { Dangerous } from '@mui/icons-material';
 import { color } from '@mui/system';
+import ShareOnSocialMediaModal from './ShareOnSocialMediaModal';
+import { videoContext } from '../Context/VideoContext';
 function LargeScreenVideoInfoCard(props) {
-    const currentState= useContext(CurrentState);
-    let [isLiked, setisLiked] = useState(false);
-    const [showFullComment,setshowFullComment] = useState(false);
+   let [isLiked, setisLiked] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
     const [showFullText,setshowFullText] = useState(false);
-    let [Loading, setLoading] = useState(true);
+    let [Loading, setLoading] = useState(false);
     const [Error,SetError] = useState(false);
     const [ErrorMessage,SetErrorMessage] = useState('');
     const [user,setuser] = useState(null);
+    const [IsbtnDisable,setIsbtnDisable] = useState(false);
+    const [showModal,setshowModal] = useState(false);
+    const VideoContext = useContext(videoContext)
     useEffect(()=>{
     auth.onAuthStateChanged((currentuser)=>{
       setuser(currentuser);
     })
     },[])
     useEffect(()=>{
+      if(user){
      const checkCurrentWatchedVideo = async () => {
-      setLoading(true);
       try {
-    const videoDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/watchedVideos`),props.videoId);
+    const videoDocRef = doc(collection(firestore,`users/${user?.uid}/watchedVideos`),props.videoId);
     const videoDoc = await getDoc(videoDocRef);
     const videoCollection = doc(firestore,"videos",props.videoId);
     if(!videoDoc.exists()){
@@ -57,27 +60,28 @@ function LargeScreenVideoInfoCard(props) {
     }catch (error){
      SetError(true);
     SetErrorMessage(error)
-    }finally{
-      setLoading(false);
     }
   }
       checkCurrentWatchedVideo();
-    },[props.videoId,props.CurrentUser])
+}
+    },[props.videoId,user,props.Video?.views])
 
 
 
     const makeSubscribe = async() => {
+      console.log(props.user.channelPic)
         if(user){
+          setIsbtnDisable(true);
         const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/subscribedChannel`),props.user.uid);
         const channelDocRef = doc(collection(firestore,`users`),props.user.uid);
         const subscribersReference = doc(collection(firestore,`users/${props.user.uid}/subscribers`),auth.currentUser.uid);
         const data = {
           name:props.user.name,
           email:props.user.email,
-          channePic:props.user.channelURL,
+          channepic:props.user.channelPic,
           userId:props.user.uid
         }
-        await setDoc(docRef,data);
+        await setDoc(docRef,data); 
          await updateDoc(channelDocRef,{
          subscribers:props.user.subscribers +=1,
         });
@@ -85,6 +89,7 @@ function LargeScreenVideoInfoCard(props) {
           userId:auth.currentUser.uid,
         });
         setisSubscribed(true);
+        setIsbtnDisable(false);
       }else{
         alert("You are not signedIn");
       }
@@ -105,14 +110,18 @@ function LargeScreenVideoInfoCard(props) {
         checkSubscribedOrNot()
       },[props.videoId,props.user,props.CurrentUser]);
       const UnSubscribeChannel = async() => {
+        if(user){
         if(props.user){
+          setIsbtnDisable(true);
        await deleteDoc(doc(collection(firestore,`users/${props.CurrentUser?.uid}/subscribedChannel`),props.user.uid));
        const channelDocRef = doc(collection(firestore,`users`),props.user.uid);
        await updateDoc(channelDocRef,{
         subscribers:props.user.subscribers -=1,
        })
        setisSubscribed(false);
+       setIsbtnDisable(false);
         }
+      }
       }
       const doLike = async() => {
        if(props.CurrentUser){
@@ -135,8 +144,8 @@ function LargeScreenVideoInfoCard(props) {
       }
       useEffect(()=>{
         const checkLikedOrNot = async() => {
-          if(props.CurrentUser){
-          const LikedDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LikedVideos`),props.videoId);
+          if(user){
+          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/LikedVideos`),props.videoId);
           const GetLikedDoc = await getDoc(LikedDocRef);
           if(GetLikedDoc.exists()){
             setisLiked(true);
@@ -148,8 +157,9 @@ function LargeScreenVideoInfoCard(props) {
         checkLikedOrNot();
       },[props.videoId,props.user,props.CurrentUser])
       const doUnLike = async() => {
+        if(user){
           try{
-        await deleteDoc(doc(collection(firestore,`users/${props.CurrentUser?.uid}/LikedVideos`),props.videoId));
+        await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LikedVideos`),props.videoId));
         const videoDocRef = doc(firestore,"videos",props.videoId);
         await updateDoc(videoDocRef,{
           likes: props.Video.likes - 1,
@@ -158,12 +168,10 @@ function LargeScreenVideoInfoCard(props) {
       }catch(error){
         console.log("Error :" + error);
       }
+    }
        }
        
         const urlify = (text) => {
-          const sanitizedHtml = sanitize(text);
-         
-          console.log(sanitizedHtml)
           var urlRegex = /(https?:\/\/[^\s]+)/g;
           return text.replace(urlRegex, function(url) {
            if(url.includes("youtube")){
@@ -177,7 +185,7 @@ function LargeScreenVideoInfoCard(props) {
            }
           })
         }
-
+ 
   return !Error ? (
     !Loading ? (
     <div className="largescreen-videoInfoCard">
@@ -188,13 +196,13 @@ function LargeScreenVideoInfoCard(props) {
      <div className="large-screen-channel_details">
         <div className="large-screen-channel_details_left_part">
           <div className='large-screen-left-part'>
-          <img src={props.user?.channelURL} alt={props.user?.name} />
+          <img src={props.user?.channelPic} alt={props.user?.name} />
           <div style={{margin:"3px 0px 0px 5px",lineHeight: "1.1"}}>
          <span className="channeName">{props.user?.name}</span>
          <p style={{fontsize:"13px"}}>{props.user?.subscribers} subscribers</p>
          </div>
          </div>
-      {isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={UnSubscribeChannel}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe}>Subscribe</button>} 
+      {isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={UnSubscribeChannel} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
       </div>
       <div className="like_share_save_container">
         <div>
@@ -207,16 +215,20 @@ function LargeScreenVideoInfoCard(props) {
           <span>|</span>
           <BiDislike />
           </div>
-       <div>
-          <RiShareForwardLine />
+       <div onClick={()=>{VideoContext.setshowModal(true);console.log(VideoContext.showModal)}}>
+          <RiShareForwardLine/>
           <span className="share">Share</span>
         </div>
+        {VideoContext.showModal && (
+          <ShareOnSocialMediaModal/>
+          )}
         <div style={{padding: "0.3rem 0.7rem"}}>
           <PiDotsThreeBold/>
         </div>
         </div>
         </div>
         <div className="main-description">
+          <p style={{color:"gray"}}>{props.Video?.views} views</p>
               <div onClick={()=>setshowFullText(!showFullText)} style={{overflow:"auto"}} dangerouslySetInnerHTML={{__html:  props.Video?.description.length > 0 ? (
                   props.Video?.description.length > 160 ? (
                     showFullText?urlify(props.Video.description):urlify(props.Video.description.substring(0,160))+`...`):(urlify(props.Video.description.substring(0,100)))):("no text")

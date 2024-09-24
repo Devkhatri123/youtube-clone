@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { firestore } from '../firebase/firebase';
 import { Navbarcontext } from '../Context/NavbarContext';
 import Smallscreencomponent from './Smallscreencomponent';
+import MainPageLoadingScreen from './MainPageLoadingScreen';
 
 
 function SearchResults() {
@@ -13,7 +14,7 @@ function SearchResults() {
   const [FullVideos,setFullVideos] = useState([]);
   const [FullLengthVideo,setFullLengthVideos] = useState([]);
   const [shortVideos,setshortVideos] = useState([]);
-  const [samplevideo,setsamplevideo] = useState([])
+  const [Loading,setLoading] = useState(true);
   const [queryParameters] = useSearchParams();
   const searchQuery = queryParameters.get("v");
   useEffect(()=>{
@@ -22,7 +23,9 @@ function SearchResults() {
     console.log(Videos);
   },[searchQuery])
   useEffect(()=>{
+    setLoading(true);
     const getData = async() => {
+      try{
       let newVideos = [];
       for (let i in Videos) {
         const docRef = doc(firestore, `users/${Videos[i].data.createdBy}`);
@@ -33,7 +36,14 @@ function SearchResults() {
           Videodata: Videos[i].data,
         });
       }
+      // 
+      console.log(Loading)
       setFullVideos(newVideos); 
+      setLoading(false);
+      console.log("done");
+    }catch(error){
+      console.log(error)
+    }
     }
     getData()
   },[Videos]);
@@ -45,7 +55,9 @@ function SearchResults() {
   return (
     <>
     <div className='SearchedVideos'>
-    <Smallscreencomponent FullLengthVideos={FullLengthVideo} ShortVideos={shortVideos}/>
+      {!Loading ? (
+    <Smallscreencomponent FullLengthVideos={FullLengthVideo} ShortVideos={shortVideos} areSearchResult={true}/>
+      ):<MainPageLoadingScreen/>}
   </div>
     </>
   )

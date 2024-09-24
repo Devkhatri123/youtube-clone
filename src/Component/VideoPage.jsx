@@ -1,22 +1,14 @@
 /* eslint-disable array-callback-return */
-import React,{useContext, useEffect, useState} from "react";
-import VideoDetail from "./VideoDetail";
+import React from "react";
 import VideoInfoCard from "./VideoInfoCard";
-import DescriptionPage from "./DescriptionPage";
-import { auth, firestore } from "../firebase/firebase";
-import { collection,doc,getDoc,setDoc } from "firebase/firestore";
-import {CurrentState} from "../Context/HidevideoinfoCard"
-import { useParams } from "react-router";
 import "../CSS/VideoPage.css";
-import VideoPlayer from "./VideoPlayer";
+
 function VideoPage() {
-  const currentState = useContext(CurrentState);
-  const params = useParams();
   
   return (
     <div className="greaterthan-2000px-screen-div">
     <VideoInfoCard/>
-       </div>
+      </div>
 
    )
 }

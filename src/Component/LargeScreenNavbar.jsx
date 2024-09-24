@@ -18,7 +18,7 @@ import { Navbarcontext } from '../Context/NavbarContext';
   const currentState = useContext(Navbarcontext);
   const inputRef = useRef(null);
   const [searchTerm,setsearchTerm] = useState('');
-  const [Loading,setLoading] = useState(false);
+  const [Loading,setLoading] = useState(true);
   const [openNotifications,setopenNotifications] = useState(false);
   const [newVideos,setnewVideos] = useState([]);
     const navigate = useNavigate();
@@ -37,15 +37,19 @@ import { Navbarcontext } from '../Context/NavbarContext';
      if(fetchedData){
      setsearchTerm(fetchedData?.searchTerm)
      }
-     },[])
+     },[searchTerm])
     
    const HandleSearch = (e) => {
      setsearchTerm(e.target.value);
+     console.log(searchTerm)
     //  setinputData('')
      const data =  currentState.GetData(searchTerm);
-     sessionStorage.setItem("inputData",JSON.stringify({searchTerm:e.target.value,searchedVideos:data}));
+     sessionStorage.setItem("inputData",JSON.stringify({searchTerm:searchTerm,searchedVideos:data}));
      setsearchedVideos(data);
     }
+    useEffect(()=>{
+      setsearchTerm(searchTerm)
+    },[searchTerm])
     const HandleKeyDown = (e) => {
       if(e.key === "Enter"){
         e.preventDefault();
@@ -58,9 +62,14 @@ import { Navbarcontext } from '../Context/NavbarContext';
               v: searchTerm,
           },{replace:true}).toString()
       });
-    // setsearchedVideos([])
+    setsearchedVideos([])
+       }else if (e.key === "Backspace"){
+        if(searchTerm === ""){
+          setsearchedVideos([]);
+        }  
        }
      }
+     
     const SignUpWithGoogle = async() => {
       let Provider = new GoogleAuthProvider();
       await signInWithPopup(auth, Provider)
@@ -106,21 +115,30 @@ import { Navbarcontext } from '../Context/NavbarContext';
     )
     setnewVideos(newVideos)
      });
+     setLoading(false)
     }catch(error){
       console.log(error);
     }finally{
-setLoading(false);
-setopenNotifications(!openNotifications)
+    setopenNotifications(!openNotifications)
     }
   }
   useEffect(()=>{
     const GetCurentUser = async() => {
+      currentState.setError(true)
+      try{
       const userDocRef = doc(firestore,`users/${user?.uid}`);
       const userData = (await getDoc(userDocRef)).data();
       setCurrentUser(userData);
-       }
+      currentState.setError(false)
+      }catch(error){
+        currentState.setError(true)
+        console.log(error.message)
+        console.log(currentState.Error)
+      }
+    }
     GetCurentUser();
   },[user]);
+  
   return (
    <div className='large-screen-Navbar'>
     <div className='large-screennavbar-left'>
@@ -136,7 +154,7 @@ setopenNotifications(!openNotifications)
         {searchedVideos && searchedVideos.map((searchVideo,index)=>{
            return <div id="result" key={index}>
             <CiSearch/>
-         <Link to={searchVideo.data.shortVideo ? `/short/${searchVideo.id}`:`/watch/${searchVideo.id}`}>{searchVideo.data.Title}</Link>
+         <Link style={{color:"white"}} to={searchVideo.data.shortVideo ? `/short/${searchVideo.id}`:`/watch/${searchVideo.id}`}>{searchVideo.data.Title}</Link>
           </div>
         })}
         </div> 
@@ -145,14 +163,17 @@ setopenNotifications(!openNotifications)
     <div className='large-screennavbar-right'>
    <PiVideoCameraLight onClick={()=>navigate("/uploadVideo")}/>
    <IoMdNotificationsOutline  onClick={HandleToggle}/>
-    {CurrentUser?.Numberofvideos > 0 && CurrentUser?.Numberofvideos < 10 ? (
+   {CurrentUser?.Numberofvideos && (
+    CurrentUser?.Numberofvideos > 0 && CurrentUser?.Numberofvideos < 10 ? (
     <span className='notification-badge'>{CurrentUser?.Numberofvideos}</span>
-    ):<span className='notification-badge'>9+</span>}
+    ):<span className='notification-badge'>9+</span>
+  )}
    {openNotifications && (
    <div className="notifications">
     <div className='notifications-top'>
       <h4>Notifications</h4>
     </div>
+
     {!Loading ? (
     newVideos && newVideos.filter((newvideo)=>{
       return newvideo !== undefined
@@ -169,7 +190,7 @@ setopenNotifications(!openNotifications)
 ):<p>Loading...</p>}
    </div>
    )}
-   {auth.currentUser ? (
+   {user ? (
               <img src={user?.photoURL} alt="profileImg" onClick={()=>auth.signOut()}/>
             ) : (
               <FaRegUserCircle

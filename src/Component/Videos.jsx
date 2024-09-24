@@ -4,6 +4,7 @@ import "../CSS/Video.css"
 import Smallscreencomponent from "./Smallscreencomponent";
 import MediumScreenComponent from "./MediumScreenComponent";
 import Largescreencomponent from "./Largescreencomponent";
+import Navbar from "./Navbar";
 function Videos(props) {
   // const [Videos,setVideos] = useState([])
   const [ThumbnailWidth,setThumbNailWidth] = useState(window.innerWidth)

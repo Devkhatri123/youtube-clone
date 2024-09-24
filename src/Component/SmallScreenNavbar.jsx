@@ -63,7 +63,7 @@ function SmallScreenNavbar() {
           <div className="center"></div>
           <div className="right_side">
             <CiSearch id="search_logo" onClick={HandleSeachToggle} />
-            {auth.currentUser ? (
+            {user ? (
               <img src={user?.photoURL} alt="profileImg" onClick={()=>auth.signOut()}/>
             ) : (
               <FaRegUserCircle

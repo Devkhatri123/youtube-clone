@@ -1,0 +1,25 @@
+.error-page{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+}
+.error-page-content{
+    color: white;
+    text-align: center;
+}
+.error-page-content p {
+    text-align: center !important;
+}
+.error-page-content img {
+    height: 40px;
+}
+.error-page-content button {
+    background: transparent;
+    padding: 9px 13px;
+    border-radius: 25px;
+    border: 1px solid white;
+    margin-top: 11px;
+    color: #4f9cf2;
+    font-size: 13px;
+}

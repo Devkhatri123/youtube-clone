@@ -4,12 +4,10 @@ import { firestore } from "../firebase/firebase";
 export const Navbarcontext = createContext();
  const NavbarStateProvider = ({ children }) => {
     const [searchTerm,setsearchTerm] = useState('');
+    const [Error,setError] = useState(false)
     const [searchedVideos,setsearchedVideos] = useState([]);
     const [savedVideos,setsaveVideos] = useState([])
     const [videos,setVideos] = useState([]);
-    // const SetData = (searchTerm) => {
-    //  setsearchTerm(searchTerm);
-    // }
     const GetData = (searchTerm) => {
       onSnapshot(collection(firestore,"videos"),(docs)=>{
         setVideos(
@@ -47,7 +45,7 @@ export const Navbarcontext = createContext();
       return {FullLengthVideo,shortVideo}
     }
    return(
-   <Navbarcontext.Provider value={{searchedVideos,searchTerm,savedVideos,setsearchedVideos,GetData,setsaveVideos,setsearchTerm,FilteredVideos}}>
+   <Navbarcontext.Provider value={{searchedVideos,searchTerm,savedVideos,Error,setError,setsearchedVideos,GetData,setsaveVideos,setsearchTerm,FilteredVideos}}>
       {children}
       </Navbarcontext.Provider>
    )

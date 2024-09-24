@@ -6,13 +6,15 @@ import { useParams } from 'react-router';
 import { doc,onSnapshot } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import { CurrentState } from '../Context/HidevideoinfoCard';
+import { useSearchParams } from 'react-router-dom';
 function DescriptionPage(props) {
   const [showDescription,setshowDescription] = useState(true);
   const [Video, Setvideo] = useState();
   const [user, setUser] = useState();
   const [showFullText,setshowFullText] = useState(false);
   const currentState = useContext(CurrentState)
-  const params = useParams();
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get('v');
   const HandleCurrentComponent = () => {
     currentState.setDescription(false)
    // document.body.style.overflowY = "scroll";
@@ -21,7 +23,7 @@ function DescriptionPage(props) {
    if(currentState.Description){
     const FetchVideo = async () => {
       try {
-        const VideoRef = doc(firestore, "videos", params.id);
+        const VideoRef = doc(firestore, "videos", videoId);
         // const video = await getDoc(videoRef);
         onSnapshot(VideoRef,async(videDoc)=>{
         if (videDoc.exists()) {
@@ -42,10 +44,7 @@ function DescriptionPage(props) {
     };
     FetchVideo();
    }
-  },[params.id,showDescription]);
-  useEffect(()=>{
-     console.log(Video)
-  },[Video])
+  },[videoId,showDescription]);
   const urlify = (text) => {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.replace(urlRegex, function(url) {

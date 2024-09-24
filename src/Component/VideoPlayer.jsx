@@ -13,9 +13,13 @@ import { useRef } from 'react';
 import "../CSS/VideoPage.css";
 import { onSnapshot,doc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 function VideoPlayer(props) {
-  const params = useParams();
+  const LargeScreenVideoBelowControls = useRef();
+  const volumeRangeRef = useRef();
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get('v');
   const videoRef = useRef();
   const parentProgressBarRef = useRef();
   const ProgressBarWidth = useRef();
@@ -41,8 +45,8 @@ function VideoPlayer(props) {
   const FetchVideo = async () => {
     setLoading(true);
     try {
-        if(params.id){
-      const VideoRef = doc(firestore, "videos", params.id);
+        if(videoId){
+      const VideoRef = doc(firestore, "videos", videoId);
       // const video = await getDoc(videoRef);
        onSnapshot(VideoRef,async(videDoc)=>{
       if (videDoc.exists()) {
@@ -60,6 +64,7 @@ function VideoPlayer(props) {
   };
   useEffect(()=>{
     setProgress(0);
+    LargeScreenVideoBelowControls.current.style.display = "none";
     const myRange = document.getElementById("myRange");
     myRange.value = 0;
     //  ProgressBarWidth.current.value = 0;
@@ -67,12 +72,14 @@ function VideoPlayer(props) {
     videoRef.current?.addEventListener("loadeddata",()=>{
     if(videoRef.current?.readyState >= 3){
       videoRef.current.play();
+      LargeScreenVideoBelowControls.current.style.display = "block";
       videoRef.current.muted = false;
+      volumeRangeRef.current.value = (videoRef.current.volume * 100);
       setisMute(false);
       setisPaused(false);
     }
    })
-   },[params.id])
+   },[videoId])
 
    useEffect(()=>{
     const currentVideo = videoRef.current;
@@ -89,7 +96,7 @@ function VideoPlayer(props) {
        setvideoHeight(360);
        currentVideo.style.margin = 'unset';
     }else if (window.innerWidth > 1115 && window.innerWidth <= 1745){
-      setvideoWidth(window.innerWidth - 474);     
+      setvideoWidth(window.innerWidth - 530);     
       currentVideo.style.margin = 'unset';
       setvideoHeight(videoWidth * 0.5625);
     }else {
@@ -112,7 +119,7 @@ function VideoPlayer(props) {
            setvideoHeight(360);
            currentVideo.style.margin = 'unset';
         }else if (window.innerWidth > 1115 && window.innerWidth <= 1745){
-          setvideoWidth(window.innerWidth - 474);         
+          setvideoWidth(window.innerWidth - 530);         
           currentVideo.style.margin = 'unset';
           setvideoHeight(videoWidth * 0.5625);
         }else {
@@ -206,8 +213,33 @@ function VideoPlayer(props) {
     currentVideo.style.height = videoHeight;
     currentVideo.style.borderRadius="12px";
    }
+  const showVolumeRange = () => {
+    volumeRangeRef.current.style.display = "block"
+  }
+  const HideVolumeRange = () => {
+    volumeRangeRef.current.style.display = "none"
+  }
+  const changeVideoVolume = (e) => {
+    const newVolume = parseFloat((e.target.value / 100).toFixed(1));
+    videoRef.current.volume = newVolume;
+    console.log(videoRef.current.volume);
+    console.log(newVolume);
+  }
+   document.onkeydown = (e) => {
+    let second = 0;
+    if(e.key === "ArrowRight"){
+      second = 5
+      videoRef.current.currentTime += second;
+      second = 0;
+    }else if (e.key === "ArrowLeft"){
+      second = 5
+      videoRef.current.currentTime -= second;
+      second = 0;
+    }
+    console.log(e)
+   } 
   return  (
-    <div className="video_section" style={window.innerWidth>1040 && !props.src ?{width:videoWidth}:null}>
+    <div className="video_section" style={window.innerWidth>1040 && props.areNextVideos && !props.src ?{width:videoWidth}:null}>
               <div className="video_top_controls">
                 <MdClosedCaptionOff />
                 {isMute ? <IoVolumeMuteSharp onClick={HandleMuteUnmute}/>:<VscUnmute  onClick={HandleMuteUnmute}/>}
@@ -232,7 +264,7 @@ function VideoPlayer(props) {
               ref={videoRef}
               id="currentVideo"
               controls = {false}
-             style={!Fullscreen ? {width:videoWidth,height:videoHeight}:null}
+             style={!Fullscreen && props.areNextVideos ? {width:videoWidth}:null}
             />
            </div>
            }
@@ -267,27 +299,26 @@ function VideoPlayer(props) {
                           TotalVideoSeconds.toString().padStart(2, 0)}
                     </span>
                   </p>
-                  <RxEnterFullScreen onClick={HandleFullScreen} />
+                  {!Fullscreen ? <RxEnterFullScreen onClick={HandleFullScreen} />:<MdOutlineFullscreenExit onClick={ExitFullscreen}/>}
                   </div>
                   <input type="range" min={0} max={100} ref={ProgressBarWidth}  style={{width:"100%"}} onChange={ChangeVideoDuration} id='myRange'/>
                 </div>
                 </div>
-        <div className="large-screen-video-below-controls"  style={{bottom:"-22px"}}>
+        <div className="large-screen-video-below-controls"  style={{bottom:"-22px"}} ref={LargeScreenVideoBelowControls}>
         
-                <input type="range" min={0} max={100} ref={ProgressBarWidth} style={{width:"100%"}} onChange={ChangeVideoDuration} id='myRange'/>
+                <input type="range" min={0} max={100} value={Progress} ref={ProgressBarWidth} style={{width:"100%"}} onChange={ChangeVideoDuration} id='myRange' step={1}/>
                 <div className='bottom-toggle-buttons'>
                
-                  <div className='bottom-toggle-buttons-left'>
+                  <div className='bottom-toggle-buttons-left' onMouseLeave={HideVolumeRange}>
                     { isPaused ? <IoMdPlay onClick={HandlePlayPause} />:<MdPause onClick={HandlePlayPause} />}
-                    <MdSkipNext />
-                    {isMute ? <IoVolumeMuteSharp onClick={HandleMuteUnmute}/>:<VscUnmute  onClick={HandleMuteUnmute}/>}
+                    {isMute ? <IoVolumeMuteSharp onClick={HandleMuteUnmute} onMouseEnter={showVolumeRange} />:<VscUnmute  onClick={HandleMuteUnmute} onMouseEnter={showVolumeRange} />}
+                      <input type="range" name="" id="volume-range" min={0} max={100} step={1} ref={volumeRangeRef} style={{display:"none"}} onChange={changeVideoVolume}/>
                   <p style={{width:"110px",textAlign:"center"}}>
                       <span>{minutes + ":" + seconds.toString().padStart(2, 0)}</span>{" "} /{" "}
                       <span>{TotalVideoHours !== 0 ? TotalVideoHours +":" + TotalVideoMinutes +":" +TotalVideoSeconds.toString().padStart(2, 0): TotalVideoMinutes +":" +TotalVideoSeconds.toString().padStart(2, 0)}</span>
                    </p>
                    </div>
                    <div className='bottom-toggle-buttons-right'>
-                    <MdClosedCaptionOff/>
                   {!Fullscreen ? <RxEnterFullScreen onClick={HandleFullScreen} />:<MdOutlineFullscreenExit onClick={ExitFullscreen}/>}
                   </div>
                   </div>
