@@ -236,12 +236,13 @@ margin-left: 6px;
 /* Large Screens CSS */
 @media  screen and (min-width:874px) {
   .videos {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        margin: 16px 8px 22px 8px;
-        column-gap: 17px;
-        position: relative;
-        top: 56px;
+    display: flex;
+    flex-wrap: wrap; /* Allows videos to wrap onto new lines when the screen is small */
+    justify-content: space-between; /* Ensures even distribution of videos in a row */
+    gap: 16px; /* Space between videos */
+    padding: 10px; 
+    position: relative;
+    top: 56px;
   }
   .video_bottom{
     height: unset !important;
@@ -316,6 +317,7 @@ margin-left: 6px;
   appearance: none;
   background: #4c4c4c;
   padding: 0px;
+  accent-color: #ff0000;
 }
 
 #previewVideo_time:hover{
@@ -325,7 +327,7 @@ input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance: none;
   width: 5px;
   height: 5px;
-  background: #ff0000;
+  background: ##ff0000;
   cursor: pointer;
   border-radius: 50%;
   z-index: 9999;
@@ -354,7 +356,7 @@ input[type="range"]::-moz-range-thumb {
 }
 @media screen and (min-width:990px) {
   .large-screen-main-videoPage{
-    width: 93%;
+    /* width: 93%; */
     margin: 0 0 0 72px;
     position: relative;
     top: 40px;
@@ -363,4 +365,5 @@ input[type="range"]::-moz-range-thumb {
     position: relative;
     top: 9px;
   }
+ 
 }

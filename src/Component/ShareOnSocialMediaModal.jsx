@@ -6,7 +6,7 @@ import { WhatsappShare } from 'react-share-kit';
 import { RedditShare } from 'react-share-kit';
 import { PinterestShare } from 'react-share-kit';
 import "../CSS/VideoPage.css"
-function ShareOnSocialMediaModal() {
+function ShareOnSocialMediaModal(props) {
     const videocontext = useContext(videoContext)
   return videocontext.showModal && (
     <div className='shareModal'>
@@ -58,7 +58,7 @@ function ShareOnSocialMediaModal() {
    />
       </div>
       <div id="url">
-        <input type="text" disabled value={window.location.href}/>
+        <input type="text" disabled value={!props? window.location.href: `http://localhost:3000/watch?v=${props.URL}`}/>
         <button>Copy</button>
       </div>
     </div>

@@ -5,29 +5,41 @@ import { MdOutlineMessage } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { auth, firestore } from '../firebase/firebase';
 import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { useParams, useSearchParams } from 'react-router-dom';
 function CommentBody(props) {
-    const [user,setUser] = useState(null);
+  console.log(props.videoId)
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get('v');
+   const [user,setUser] = useState(null);
     const [Message,setMessage] = useState('');
     const [showFullComment,setshowFullComment] = useState(false);
     const [Comments,setComments] = useState([]);
+    const [CommentsLoading,setCommentLoading] = useState(true);
     useEffect(()=>{
         auth.onAuthStateChanged((curretnUser)=>{
            setUser(curretnUser);
         })
       },[]);
-      useEffect(()=>{
-          console.log(user)
-      },[user])
       const HandleText = (e) => {
         setMessage(e.target.value)
       }
     useEffect(()=>{
-        onSnapshot(doc(firestore,"videos",props.videoId),async(snapShot)=>{
+      const GetComments = () => {
+        setCommentLoading(true);
+        try{
+        onSnapshot(doc(firestore,"videos",videoId || props.videoId),async(snapShot)=>{
           if(snapShot.exists()){
            setComments(await snapShot.data().Comments);
           }
-         })
-        },[]);
+         });
+        }catch(error){
+          console.log(error);
+        }finally {
+          setCommentLoading(false);
+        }
+        }
+        GetComments();
+        },[videoId,props.videoId]);
         const SendMessage  = async(e) => {
             if(e.key === "Enter"){
               if(user){
@@ -42,23 +54,16 @@ function CommentBody(props) {
               const GetDoc =  await getDoc(videoDocRef);
               if(GetDoc.exists()){
                 const CurrentvideoData = GetDoc.data();
-                console.log(CurrentvideoData);
-                if(CurrentvideoData.hasOwnProperty('Comments')){
-                 console.log("Object Has property");
+                if(CurrentvideoData.Comments){
                 await updateDoc (videoDocRef,{
-                  Comments: [MessageContent,...props.video.Comments],
-                  NumberOfComments:props.video.NumberOfComments + 1,
+                  Comments: [MessageContent,...CurrentvideoData.Comments],
+                  NumberOfComments:CurrentvideoData.NumberOfComments + 1,
                  })
-                 console.log("Comment Added in Array");
-                 console.log(GetDoc.data());
                 }else{
-                  console.log("Object Hasn't property")
                  await updateDoc(videoDocRef,{
                     Comments : [MessageContent],
                     NumberOfComments:1,
                   })
-                  console.log("Comment Added");
-                  console.log(GetDoc.data());
                 }
               }
           
@@ -74,7 +79,8 @@ function CommentBody(props) {
             <input type="text" id='message'placeholder='Send Your Message Here' value={Message} onChange={HandleText} onKeyDown={SendMessage}/>
           </div>
           <div className='Comments'>
-          {Comments ? Comments?.map((comment,index)=>{
+            {!CommentsLoading ? (
+          Comments ? Comments?.map((comment,index)=>{
            return <div id="comment" key={index}>
               <div className="commentChannelPic"><img src={comment.userPic} alt={comment.name} /></div>
               <div className="comment-right-section">
@@ -98,7 +104,8 @@ function CommentBody(props) {
               </div>
             </div>
            
-          }):<p style={{display:"flex",justifycontent: "center",alignItems:"center",height:"50vh",justifyContent: "center"}}>No Comments Till Now</p>} 
+          }):<p style={{display:"flex",justifycontent: "center",alignItems:"center",height:"50vh",justifyContent: "center"}}>No Comments Till Now</p>
+        ):<p style={{display:"flex",justifycontent: "center",alignItems:"center",height:"50vh",justifyContent: "center"}}>Loading...</p>}
         </div>
         </div>
     </>

@@ -55,10 +55,6 @@ function MainPage() {
 GetVideos();
 
   }, []);
-  useEffect(()=>{
-    console.log(videos)
-    console.log(Error)
-  },[videos])
   return (
     <> {Loading ? (
       <MainPageLoadingScreen />
@@ -71,7 +67,7 @@ GetVideos();
           <>
             <Videos video={videos} />
             <Footer />
-            <MiniSideBar />
+            <MiniSideBar NonFilteredVideos = {videos}/>
             <LargeScreenSideBar />
           </>
         )}

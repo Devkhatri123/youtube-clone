@@ -30,7 +30,9 @@ let router = createBrowserRouter(
     element: <>
     <StateProvider>
       <NavbarStateProvider>
+      <VideoActionProvider>
     <MainPage />
+    </VideoActionProvider>
     </NavbarStateProvider>
     </StateProvider>
     </>,
@@ -110,6 +112,13 @@ let router = createBrowserRouter(
       <HomepageShorts/>
       </HomePageStateProvider>
    </>
+    ),
+  },
+  {
+    path: `/playlist/?`,
+    element: (
+      <>
+    </>
     ),
   },
 ]);

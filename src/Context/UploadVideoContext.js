@@ -12,7 +12,8 @@ export const Uploadvideo = createContext();
     const [ThumbnailProgress,setThumbnailProgress] = useState(0);
     
     const navigate = useNavigate();
-   const uploadVideoFunc = async(thumbnailFile,videoFile,videoTitle,description,shortvideo,user) => {
+   const uploadVideoFunc = async(thumbnailFile,videoFile,videoTitle,description,shortvideo,user,Comments) => {
+    console.log("Comments" + "   " + Comments);
     const videopRef = ref(storage, `Videos/${v4()}`);
     const ThumbNailRef = ref(storage, `Thumbnail/${v4()}`);
 
@@ -50,6 +51,7 @@ export const Uploadvideo = createContext();
       dislikes:0,
       views:0,
       shortVideo:shortvideo,
+      comments:Comments,
       createdBy:auth.currentUser.uid,
     }
     await setDoc(docRef,data).then(async()=>{
@@ -62,15 +64,18 @@ export const Uploadvideo = createContext();
       });
       console.log("new video added in subscriber doc");
       const userDocRef = doc(firestore,`users/${Doc.data().userId}`);
-      if(user.Numberofvideos){
+      const subscriber = await getDoc(userDocRef);
+      console.log("Numberofvideos" + "   " + subscriber.data().Numberofvideos);
+      if(subscriber.data().Numberofvideos){
       await updateDoc(userDocRef,{
-          Numberofvideos:user.Numberofvideos + 1,
+          Numberofvideos:subscriber.data().Numberofvideos + 1,
          });
         }else{
           await updateDoc(userDocRef,{
             Numberofvideos:1,
            });
         }
+        console.log("Numberofvideos" + "   " + subscriber.data().Numberofvideos);
       });
     }).catch((error)=>{
       console.log(error)

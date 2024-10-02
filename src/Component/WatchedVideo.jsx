@@ -30,9 +30,9 @@ function WatchedVideo({ video }) {
         <p className="text-white " id="watchedVideoTitle">
           {video.videoData.Title}
         </p>
-        <p id="watchedVideoChannelName"> {video.userData.name}</p>
+        <p id="watchedVideoChannelName"> {video.userData.name}</p> 
         <p id="WatchedVideo_views_publishedTime">
-          Views {video.videoData.views} M 
+          Views {video.videoData.views} •
         </p>
       </div>
     </div>

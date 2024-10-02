@@ -163,15 +163,16 @@
     padding: 1vw 3vw;
   }
   .large-screen-upload-video{
-        color: white;
-        margin: 50px auto;
-        /* min-width: 589px; */
-        background: #282828;
-        border-radius: 25px;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        min-height: 450px;
-        display: flex;
-        max-width: 838px;
+    color: white;
+    margin: 50px auto;
+    /* min-width: 589px; */
+    background: #282828;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    max-height: 500px;
+    display: flex;
+    max-width: 838px;
+    overflow-y: scroll;
   }
   .uploadvideo-inner{
     width: 100%;

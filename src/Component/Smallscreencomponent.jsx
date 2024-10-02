@@ -67,7 +67,7 @@ function Smallscreencomponent(props) {
         </div>
     })}
     </div>
-    {props.ShortVideos.length > 0 && (
+    {props.ShortVideos && (
     <div class="short-videos">
      <div className="short-video-section">
         <div className="shelf-header">
@@ -118,7 +118,7 @@ function Smallscreencomponent(props) {
                           </div>
                         </div>
                       </div>
-            <div onClick={()=>{setbottomLayout(true);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
+            <div onClick={()=>{setbottomLayout(!bottomLayout);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
         </div>
         {bottomLayout && (
         <BottomLayout/>

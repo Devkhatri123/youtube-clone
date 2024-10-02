@@ -80,6 +80,32 @@
     font-size: 0.8em;
     font-weight: 500;
 }
+#video-bottom-layout{
+    border-radius: 12px;
+    background-color: #212121;
+    display: block;
+    overflow: hidden;
+    position: fixed;
+    margin: 0 8px 24px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    color: white;
+    padding: 26px 17px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    font-size: 1.1rem;
+  }
+  #video-bottom-layout div {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-top: 8px;
+    font-size: 1.1em;
+  }
 @media screen and (max-width:587px) {
     .videos {
         position: relative;
@@ -106,21 +132,16 @@
     .videos:last-child{
         margin-bottom: 47px;
     }
-}
-@media screen and (min-width: 587px) and (max-width: 874px) {
-    .videos {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        margin: 16px 14px 30px 14px;
-        column-gap: 17px;
-        position: relative;
-        top: 40px;
+    .share-video{
+        display: none;
     }
-    #thumbnail_container {
-        padding-top: 56.25%;
-        position: relative;
-        width: 100%;
-        overflow: hidden;
+}
+@media screen and (min-width:587px) {
+    #video-bottom-layout{
+        max-width: 236px;
+        overflow: scroll;
+        padding: 8px 18px;
+        max-height: 269px;
     }
     #thumbnail_container img {
         position: absolute;
@@ -129,6 +150,39 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 12px;
+    }
+    .channelnameandviews{
+        display: flex;
+        gap: 8px;
+    }
+    .video_title_and_channelName p{
+        color: #aaa;
+    }
+}
+@media screen and (min-width: 587px) and (max-width: 990px) {
+    .videos {
+        column-gap: 17px;
+        position: relative;
+        /* top: 40px; */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        column-gap: 23px;
+    }
+    #video{
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: calc(50% - 16px);
+    max-width: calc(50% - 16px);
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    }
+    #thumbnail_container {
+        padding-top: 56.25%;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
     }
     .video_bottom {
         height: unset !important;
@@ -153,25 +207,62 @@
         max-height: 3em;
         text-overflow: ellipsis;
         overflow: hidden;
-        color: white;
     }
 }
 @media screen and (min-width: 990px) {
     .videos {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        margin: 0px 14px 30px 14px;
-        column-gap: 17px;
+        display: flex;
+        flex-wrap: wrap; /* Allows videos to wrap onto new lines when the screen is small */
+        justify-content: flex-start; /* Ensures even distribution of videos in a row */
+        gap: 16px; /* Space between videos */
+        padding: 10px; 
         position: relative;
         top: 40px;
     }
-    #thumbnail_container img {
-        position: absolute;
-        top: 0;
-        left: 0;
+    #video {
+        flex: 1 1 calc(33.33% - 16px); /* 20% width minus space for the gap */
+        max-width: calc(33.33% - 16px); /* Ensures no video exceeds this width */
+        aspect-ratio: 16 / 9; /* Maintains 16:9 aspect ratio */
+      }
+    
+    #video-bottom-layout{
+        background: #282828;
+        padding: 10px 17px;
+        font-size: 1rem;
+        min-height: max-content;
+    }
+    #video-bottom-layout .close-layout{
+        display: none;
+    }
+    .share-video{
+        display: block;
+    }
+    #video-bottom-layout div {
+        gap: 0.6em;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 12px;
+    }
+    #video-bottom-layout div :hover{
+        background-color: #535353;
+        cursor: pointer;
+    }
+    #video-bottom-layout div svg {
+        font-size: 1.1rem;
+    }
+    #video-bottom-layout div p {
+        font-size: 1.1rem;
+        width:100%
+    }
+
+}
+@media screen and (min-width:1407px) {
+    #video {
+        flex: 1 1 calc(25% - 17px); /* 20% width minus space for the gap */
+        max-width: calc(25% - 17px); 
+    }
+}
+@media screen and (min-width:1734px) {
+    #video {
+        flex: 1 1 calc(20% - 17px); /* 20% width minus space for the gap */
+        max-width: calc(20% - 17px); 
     }
 }

@@ -19,8 +19,8 @@ function Footer() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     try{
-      setLoading(true);
     onSnapshot(collection(firestore, "videos"), async (snapshot) => {
        const FetchedData = await Promise.all(
        snapshot.docs.map(async (Doc) => {

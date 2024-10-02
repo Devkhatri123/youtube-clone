@@ -13,17 +13,26 @@ import { BiSolidDislike } from "react-icons/bi";
 import { IoIosShareAlt } from "react-icons/io";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa6";
 import { IoReloadOutline } from "react-icons/io5";
 import { FaRegFlag } from "react-icons/fa6";
 import { FaFlag } from "react-icons/fa6";
 import "../CSS/VideoPage.css";
-import { Link } from "react-router-dom";
-import { firestore } from '../firebase/firebase';
+import { Link, useSearchParams } from "react-router-dom";
+import { auth, firestore } from '../firebase/firebase';
 function SmallScreenVideoInfoCard(props) {
     const currentState= useContext(CurrentState);
     let [isLiked, setisLiked] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
+    let [savedVideo,setsavedVideo] = useState(false);
+    const [LoggedInUser,setLoggedInUser] = useState(null);
+    const [queryParameters] = useSearchParams();
+  const searchQuery = queryParameters.get("v");
+    useEffect(()=>{
+      auth.onAuthStateChanged((currentuser)=>{
+        setLoggedInUser(currentuser);
+      })
+    },[])
     const makeSubscribe = async() => {
       try{
         if(props.CurrentUser){
@@ -121,9 +130,9 @@ function SmallScreenVideoInfoCard(props) {
       }
        }
        useEffect(()=>{
-        if(props.CurrentUser){
+        if(LoggedInUser){
        const checkCurrentWatchedVideo = async () => {
-      const videoDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/watchedVideos`),props.videoId);
+      const videoDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/watchedVideos`),props.videoId);
       const videoDoc = await getDoc(videoDocRef);
       const videoCollection = doc(firestore,"videos",props.videoId);
       if(!videoDoc.exists()){
@@ -134,12 +143,40 @@ function SmallScreenVideoInfoCard(props) {
         await updateDoc(videoCollection,{
           views:props.Video?.views + 1
         })
-        console.log("Video added to watched collection");
       }
         }
+      
         checkCurrentWatchedVideo();
+        console.log(searchQuery)
       }
-       },[props.videoId,props.Video,props.CurrentUser])
+       },[props.videoId,props.Video,LoggedInUser,searchQuery]);
+       useEffect(()=>{
+        const getWatchlaterVideo = async() => {
+        if(LoggedInUser){
+          const LikedDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/Watchlater`),searchQuery);
+          const GetLikedDoc = await getDoc(LikedDocRef);
+          if(GetLikedDoc.exists()){
+            setsavedVideo(true);
+          }else{
+            setsavedVideo(false);
+          }
+        }
+      }
+        getWatchlaterVideo();
+       },[LoggedInUser,searchQuery])
+       const watchLater = async() => {
+         if(LoggedInUser){
+          const watchlaterDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/Watchlater`),props.videoId);
+          const watchlaterDoc = await getDoc(watchlaterDocRef);
+          if(!watchlaterDoc.exists()){
+            await setDoc(watchlaterDocRef,{videoURL:props.videoId});
+            setsavedVideo(true);
+          }else{
+            await deleteDoc(doc(collection(firestore,`users/${LoggedInUser?.uid}/Watchlater`),props.videoId))
+            setsavedVideo(false);
+          }
+         }
+       }
   return (
     !currentState.shortvideoShowMessages ? (
     !currentState.Description ? (
@@ -150,7 +187,7 @@ function SmallScreenVideoInfoCard(props) {
          
              <div className="channel_details">
                 <div className="channel_details_left_part">
-                  <img src={props.user?.channelURL} alt={props.user?.name} />
+                  <img src={props.user?.channelPic} alt={props.user?.name} />
                  <span className="channeName">{props.user?.name}</span>
                   <span>{props.user?.subscribers}</span>
                 </div>
@@ -171,8 +208,8 @@ function SmallScreenVideoInfoCard(props) {
                   <RiShareForwardLine />
                   <span className="share">Share</span>
                 </div>
-                <div>
-                  <FaRegBookmark />
+                <div onClick={watchLater}>
+                {!savedVideo ? <FaRegBookmark /> : <FaBookmark/>}
                   <span className="save">Save</span>
                 </div>
                 <div>
@@ -188,7 +225,7 @@ function SmallScreenVideoInfoCard(props) {
                   <>
                 <div className="comments_top">
                   <p>
-                    Comments <span>{props.Video?.NumberOfComments}</span>
+                    Comments <span style={{color: "#aaa"}}>{props.Video?.NumberOfComments}</span>
                   </p>
                 </div>
                 

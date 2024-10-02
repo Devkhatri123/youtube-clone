@@ -132,7 +132,7 @@
     display: none;
   }
 }
-@media  screen and (min-width:587px) {
+@media  screen and (min-width:587px) and (max-width:990px) {
   .search_Results{
     z-index: 3;
     position: unset;
@@ -140,7 +140,6 @@
 
   }
   .search_container > input {
-      min-width: 97% !important;
       position: absolute;
   
   }
@@ -148,9 +147,17 @@
     min-width: 36px;
   }
   .search_container{
-    padding: 9px 18px;
+    padding: 9px 9px;
     flex-direction: column;
     align-items: baseline;
+  }
+  .search_container > svg{
+    z-index: 2;
+  }
+  .search_container > input{
+    min-width: unset;
+    width: 93%;
+    margin-left: 32px;
   }
 }
 @media  screen and (min-width:990px) {

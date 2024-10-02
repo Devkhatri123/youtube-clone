@@ -32,9 +32,9 @@ function ShortVideos() {
   const [videoHeight,setvideoHeight] = useState(window.innerWidth * (16/9));
   const Progressref = useRef();
   const containerRef = useRef();
-  const touchStartRef = useRef(0);
- const [videos,setvideos] = useState([]);
-  const navigate = useNavigate();
+  const touchStartRef = useRef(0); // To store the initial touch position
+  const touchEndRef = useRef(0);
+ const navigate = useNavigate();
   const params = useParams();
   const [windowHeight,setwindowHeight] = useState(window.innerHeight);
  const currentState = useContext(CurrentState);
@@ -72,18 +72,25 @@ function ShortVideos() {
   })
 },[]);
 useEffect(()=>{
-  if(window.innerWidth < 684){
+  if(window.innerWidth <= 700){
     setvideoWidth(window.innerWidth);
-    setvideoHeight(videoWidth * (16/9));
-    }else if (window.innerWidth >= 990){
-      setvideoWidth(window.innerWidth);
-    }
+    // setvideoHeight(videoWidth * (16/9));
+    }else if (window.innerWidth > 512 && window.innerWidth <= 1000){
+      setvideoWidth(300);
+     }else if (window.innerWidth > 990){
+      setvideoWidth(330);
+      // setvideoHeight(555);
+     }
      const updateVideoSize = () => {
-      if(window.innerWidth < 684){
-          setvideoWidth(window.innerWidth);
-          setvideoHeight(videoWidth * (16/9));
-      } else if (window.innerWidth >= 990){
-        setvideoWidth(window.innerWidth); }
+      if(window.innerWidth <= 700){
+        setvideoWidth(window.innerWidth);
+        // setvideoHeight(videoWidth * (16/9));
+        }else if (window.innerWidth > 512 && window.innerWidth <= 990){
+          setvideoWidth(300);
+         }else if (window.innerWidth > 990){
+          setvideoWidth(330);
+          // setvideoHeight(555);
+         }
     }
      window.addEventListener('resize', updateVideoSize);
      return ()=>{ window.removeEventListener('resize', updateVideoSize);}
@@ -101,7 +108,6 @@ useEffect(()=>{
     const getLikedDoc = await getDoc(docRef);
     if(getLikedDoc.exists()){
       setLikeShort(true);
-      console.log(getLikedDoc.id)
     }else{setLikeShort(false)}
   }
    } 
@@ -149,56 +155,98 @@ useEffect(()=>{
       if(ProgressWidth)
       ProgressWidth.style.width = Progress + '%';
   }
-  
-  useEffect(() => {
-    const container = containerRef.current;
-   if(container){
-    // Handle scroll event
-    const handleScroll = () => {
-      const videoContainers = container.querySelectorAll('.video-container');
-      const scrollPosition = container.scrollTop;
-      console.log(scrollPosition);
-      
-      videoContainers.forEach((element, index) => {
-        const elementTop = element.offsetTop;
-        const elementHeight = element.offsetHeight;
+  const handleTouchStart = (e) => {
+    // Capture the initial Y position when touch starts
+    touchStartRef.current = e.touches[0].clientY;
+  };
 
-        // If the scroll position is within the bounds of the element
-        if (scrollPosition >= elementTop && scrollPosition < elementTop + elementHeight) {
-          setIndex(index); // Update current index
-        }
-      });
+  const handleTouchEnd = (e) => {
+    // Capture the final Y position when touch ends
+    touchEndRef.current = e.changedTouches[0].clientY;
+    handleSwipeGesture();
+  };
+
+  const handleSwipeGesture = () => {
+    if(!touchEndRef.current || !touchStartRef.current) return;
+    const swipeDistance = touchStartRef.current - touchEndRef.current;
+    console.log(swipeDistance)
+    const swipeThreshold = 100; // Minimum distance to qualify as a swipe
+    let currentVideo = document.querySelectorAll(".short_video_container");
+    if (swipeDistance > swipeThreshold) {
+      if (Index < FilteredShortVideos.length - 1) {
+        GotoNextVideo()
+      }
+    } else if (swipeDistance < -swipeThreshold) {
+      // Swipe Down - Go to the previous video
+      if (Index > 0 && Index < FilteredShortVideos.length) {
+        GotoPreviousVideo()
+      }
     };
-
-    container.addEventListener('scroll', handleScroll);
-
-    // Clean up event listener on component unmount
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-    };
+    if(currentVideo.style){
+      currentVideo.style.scrollSnapAlign = 'unset'; 
+    touchEndRef.current = touchStartRef.current = 0;
+    }
+  };
+ const GotoNextVideo = () => {
+  console.log(Index)
+  let currentVideo = document.querySelectorAll(".short_video_container")[Index];
+  currentVideo.getElementsByTagName('video').shortvideo.pause();
+  console.log( currentVideo.nextElementSibling);
+  currentVideo.nextElementSibling.style.scrollSnapAlign = 'start';
+  currentVideo.nextElementSibling.scrollIntoView({ behavior: 'smooth' });
+  navigate(`/short/${currentVideo.nextElementSibling.getElementsByTagName('video').shortvideo.dataset.video}`)
+  setIndex(Index + 1);
+  currentVideo.style.scrollSnapAlign = 'unset'; 
+}
+ const GotoPreviousVideo = () => {
+  let currentVideo = document.querySelectorAll(".short_video_container")[Index];
+  currentVideo.getElementsByTagName('video').shortvideo.pause();
+  setIndex(Index - 1);
+  currentVideo = document.querySelectorAll(".short_video_container")[Index];
+  currentVideo.previousElementSibling.style.scrollSnapAlign = 'end';
+  currentVideo.previousElementSibling.scrollIntoView({ behavior: 'smooth' });
+  navigate(`/short/${currentVideo.previousElementSibling.getElementsByTagName('video').shortvideo.dataset.video}`)
+ }
+ useEffect(()=>{
+  window.addEventListener("keydown",(e)=>{
+    if(e.key === "ArrowDown" || e.keyCode === 40){
+      GotoNextVideo();
+    }
+  console.log(e)
+  })
+  return () => {
+    window.removeEventListener('keydown',{})
   }
-  }, [Index,FilteredShortVideos.length,containerRef]);
-  
-
+ },[Index])
+useEffect(()=>{
+   let currentVideo = document.querySelectorAll(".short_video_container")[Index];
+    if(currentVideo){
+    currentVideo.getElementsByTagName('video').shortvideo.play();
+    }
+},[Index,FilteredShortVideos])
   return Loading ? (
     <p className="text-white">Loading...</p>
   ) : (
-  <div className='shortVideos_container' ref={containerRef} id='shortVideoscontainer'>
+  <div className='shortVideos_container' ref={containerRef} id='shortVideoscontainer'
+  onTouchStart={!currentState.shortvideoShowMessages ? handleTouchStart:null}
+  onTouchEnd={!currentState.shortvideoShowMessages ? handleTouchEnd : null}
+  >
    <Link to={"/"}>
     <IoIosArrowRoundBack className='back_icon'/>
     </Link>
      {FilteredShortVideos.map((shortvideo,index)=>{
     return <div className="short_video_container" key={index} style={currentState.shortvideoShowMessages ?{height:windowHeight+"px",position:"unset"}:{height:windowHeight+"px",position:"relative"}}  data-id={shortvideo.id}>
-     <video src={shortvideo.Videodata.videoURL}  id="shortvideo" data-video={index} className={shortvideo.id}
+     <video src={shortvideo.Videodata.videoURL}  id="shortvideo" data-video={shortvideo.id}
     onClick={HandlePause} onTimeUpdate={HandleProgress} data-id={params.id}
-    style={{width:videoWidth}}
+    style={{width:videoWidth,height:videoHeight}}
   />
   
   { Ispause && dataSet === index ? <div className="middle_control"><IoMdPlay/></div>:null}
-    <div className='short_details' style={currentState.shortvideoShowMessages ? {zIndex:"0",position:"unset"}:{zIndex:"10",position:"absolute"}}>
+    <div className='short_details' style={currentState.shortvideoShowMessages ? {zIndex:"0"}:{zIndex:"10",position:"absolute"}}>
       <div className='short_channel'>
-          <img src={shortvideo.UserData.channelURL} alt="" />
+          <img src={shortvideo.UserData.channelPic} alt="" />
           <p>{shortvideo.UserData.name}</p>
+          <button>subscribe</button>
       </div>
       <div className="short_title">
           <p>{shortvideo.Videodata.Title}</p>
@@ -209,7 +257,7 @@ useEffect(()=>{
     </div>
     <div className="short_controls" id='shortcontrols' style={currentState.shortvideoShowMessages ? {zIndex:"0",position:"absolute",bottom:"unset"}:{zIndex:"10",position:"absolute"}}>
       <div className="like control" >
-      { LikeShort  ? <BiSolidLike /> : <SlLike onClick={()=>HandleLike(shortvideo.id)}/>} 
+      { LikeShort  ? <BiSolidLike /> : <BiLike onClick={()=>HandleLike(shortvideo.id)}/>} 
           <p>{shortvideo.Videodata.likes}</p>
       </div>
       <div className="dislike control">
@@ -225,7 +273,7 @@ useEffect(()=>{
         <BsThreeDots/>
       </div>
       <div className="channel control">
-      <img src={shortvideo.UserData.channelURL} alt="" style={{width: "45px",borderRadius:"10px"}}/>
+      <img src={shortvideo.UserData.channelPic} alt="" style={{width: "45px",borderRadius:"10px"}}/>
       </div>
     </div>
     </div>

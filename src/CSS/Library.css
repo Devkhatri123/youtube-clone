@@ -40,6 +40,7 @@
   font-weight: normal;
   /* opacity: 0.6; */
   color: white;
+  text-align: start;
   width: 100%;
 }
 #watchedVideoChannelName,
@@ -69,7 +70,7 @@
 .watched_Videos {
   display: flex;
   overflow-x: scroll;
-  gap: 0.5em;
+  /* gap: 0.5em; */
   margin: 15px 0px 0px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 30px;
@@ -99,6 +100,9 @@
 }
 .createVideo > a > p {
   margin-left: 30px;
+}
+.Shelf{
+  display: none;
 }
 /*Not SignedIn Component CSS*/
 .top {
@@ -264,10 +268,86 @@
   font-weight: bold;
 }
 @media screen and (min-width:990px) {
+  .libraryPage{
+    max-width: 850px;
+    margin: 73px auto 0 auto !important;
+  }
   .watched_Videos{
     margin: 24px 0px 0px 8px;
   }
-  .createVideo:nth-child(1){
+  .createVideo{
     display: none;
+  }
+  .Shelf-header{
+    display: flex;
+    justify-content: space-between;
+  }
+  .Shelf-header h3 {
+    font-weight: 700;
+    font-size: 19px;
+  }
+  .Shelf-header a {
+    color: white;
+    border: 1px solid;
+    border-radius: 17px;
+    padding: 3px 12px;
+  }
+  .Shelf{
+    display: block;
+    margin-top: 20px;
+    height: 226px;
+  }
+  #contents{
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    overflow-x: scroll;
+  }
+  #contents #video{
+    min-width: calc(24.9% - 6px);
+  }
+  #contents #video a #thumbnail_container{
+    border-radius: 7px;
+  }
+  #contents #video a #thumbnail_container video {
+    position: absolute;
+    top: 0;
+  }
+  .forwardIcon{
+    background: #212121;
+    padding: 10px;
+    border-radius: 50%;
+    width: 34px;
+    transform: translate(832px, -141px);
+    cursor: pointer;
+  }
+  .backwardIcon{
+    background: #212121;
+    padding: 10px;
+    border-radius: 50%;
+    bottom: -57px;
+    width: 34px;
+    transform: translate(-18px, -147px);
+    cursor: pointer;
+  }
+  .watched_video {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: calc(33.33% - 16px);
+    /* max-width: calc(33.33% - 16px); */
+    aspect-ratio: 16 / 9;
+    min-width: calc(24.9% - 16px);
+  }
+  .watched_video .videoThumbnail{
+    width: unset;
+  }
+  .watched_video .videoThumbnail a img {
+  height: unset !important;
+  width: unset;
+  }
+  .watched_VideosforwardIcon{
+    transform: translate(820px, 36px);
+    height: max-content;
+    position: absolute;
   }
 }

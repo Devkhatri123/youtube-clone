@@ -1,14 +1,14 @@
 import { createContext, useState,useEffect } from "react";
 import {doc,getDocs,collection,getDoc} from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
+import { auth, firestore } from "../firebase/firebase";
 export const HomeContext = createContext();
  const HomePageStateProvider = ({ children }) => {
     const [user,setuser] = useState(null);
-    const [AllshortVideos,setAllshortVideos] = useState([]);
     const [Allvideos,setAllvideos] = useState([]);
     const [Loading,setLoading] = useState(true);
     const [Error,setError] = useState('');
-        const createdVideos = [];
+    const createdVideos = [];
+
     const GetchannelData = async(id) => {
         setLoading(true);
               try{
@@ -33,6 +33,7 @@ export const HomeContext = createContext();
               setError(error.message)
             }
     }
+    
   return(
    <HomeContext.Provider value={{Loading,Error,Allvideos,user,GetchannelData}}>
       {children}

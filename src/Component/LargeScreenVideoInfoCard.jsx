@@ -34,7 +34,6 @@ function LargeScreenVideoInfoCard(props) {
     const [ErrorMessage,SetErrorMessage] = useState('');
     const [user,setuser] = useState(null);
     const [IsbtnDisable,setIsbtnDisable] = useState(false);
-    const [showModal,setshowModal] = useState(false);
     const VideoContext = useContext(videoContext)
     useEffect(()=>{
     auth.onAuthStateChanged((currentuser)=>{
@@ -189,6 +188,7 @@ function LargeScreenVideoInfoCard(props) {
   return !Error ? (
     !Loading ? (
     <div className="largescreen-videoInfoCard">
+      
     <div>
     <h3 id="video-title" >{props.Video?.Title}</h3>
     </div>

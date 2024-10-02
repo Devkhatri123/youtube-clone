@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import VideoPlayer from "./VideoPlayer";
-import { useParams } from "react-router";
 import { firestore, auth } from "../firebase/firebase";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import "../CSS/VideoPage.css";
 import { CurrentState } from "../Context/HidevideoinfoCard";
 import SmallScreenVideoInfoCard from "./SmallScreenVideoInfoCard";
 import LargeScreenVideoInfoCard from "./LargeScreenVideoInfoCard";
-import LargeScreenVideoPlayer from "./LargeScreenVideoPlayer";
-import MediumScreenComponent from "./MediumScreenComponent";
-import Smallscreencomponent from "./Smallscreencomponent";
 import { useSearchParams } from "react-router-dom";
-import ShareOnSocialMediaModal from "./ShareOnSocialMediaModal";
+import VideoPageLoadingScreen from "./VideoPageLoadingScreen";
+import NextVideosLoadingComponent from "./NextVideosLoadingComponent";
+import Largescreencomponent from "./Largescreencomponent";
+import Smallscreencomponent from "./Smallscreencomponent";
 function VideoInfoCard() {
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get('v');
-  const params = useParams();
+  const [NextVideosLoading,setNextVideosLoading] = useState(true);
   const currentState = useContext(CurrentState);
   let [Video, Setvideo] = useState();
   let [NextVideos, setNextVideos] = useState([]);
@@ -28,9 +27,9 @@ function VideoInfoCard() {
   const [windowWidth, setwindowWidth] = useState(window.innerWidth);
   const [FullLengthVideos, setFullLengthVideos] = useState([]);
   const [ShortVideos, SetShortVideos] = useState([]);
-  const [CalculatedscreenWidth, setCalculatedscreenWidth] = useState();
-  const [TotalScreenWidth, setTotalScreenWidth] = useState(0);
-  const [nextVideosPortionWidth, setnextVideosPortionWidth] = useState();
+  const [CalculatedscreenWidth, setCalculatedscreenWidth] = useState(null);
+  const [TotalScreenWidth, setTotalScreenWidth] = useState(null);
+  const [nextVideosPortionWidth, setnextVideosPortionWidth] = useState(null);
   useEffect(() => {
     setwindowWidth(window.innerWidth);
     const updateVideoSize = () => {
@@ -64,19 +63,20 @@ function VideoInfoCard() {
           });
         }
       });
+      setLoading(false);
     } catch (error) {
       console.log(error);
       SetError(true);
       SetErrorMessage(error.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   useEffect(() => {
     FetchVideo();
   }, [videoId]);
   useEffect(() => {
+    setNextVideosLoading(true);
+    try{
     // Fetching next Videos to play
     onSnapshot(collection(firestore, "videos"), (snapShot) => {
       const FetchedVideos = Promise.all(
@@ -94,6 +94,10 @@ function VideoInfoCard() {
         setNextVideos(FetchedVideos);
       });
     });
+    setNextVideosLoading(false);
+  }catch(error){
+    console.log(error);
+  }
   }, [videoId]);
   useEffect(() => {
     onSnapshot(collection(firestore, "videos"), async (snapshot) => {
@@ -132,33 +136,67 @@ function VideoInfoCard() {
   }, [videos, videoId]);
 
   useEffect(() => {
+    const videoPlayer = document.getElementById("videoPlayer");
+    const video = document.createElement('video');
+    video.src = Video?.videoURL;
+    video.addEventListener("loadeddata",()=>{
+      console.log("Testing videoHeight : " + video.videoHeight);
     if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
-      setCalculatedscreenWidth(640);
-      setnextVideosPortionWidth(window.innerWidth - 664);
+      if(video.videoHeight > 720 && video.videoHeight < 1080){
+        setCalculatedscreenWidth(window.innerWidth - 474);
+        videoPlayer.style.height = CalculatedscreenWidth / 2  + "px";
+        setnextVideosPortionWidth(466);
+       }else{
+       setCalculatedscreenWidth(640);
+       setnextVideosPortionWidth(window.innerWidth - 664);
+      }
       setTotalScreenWidth(0);
-    } else if (window.innerWidth >= 990 && window.innerWidth < 1745) {
-      setCalculatedscreenWidth(window.innerWidth - 530);
+    } else if (window.innerWidth > 1115 && window.innerWidth <= 1754) {
+      setCalculatedscreenWidth(window.innerWidth - 474);
+      if(video.videoHeight > 720 && video.videoHeight < 1080){
+        videoPlayer.style.height = CalculatedscreenWidth / 2  + "px";
+      }
       setnextVideosPortionWidth(403);
       setTotalScreenWidth(0);
-    } else if (window.innerWidth >= 1745 && window.innerWidth < 2000) {
+    } else if (window.innerWidth > 1754 && window.innerWidth < 2000) {
+      if(video.videoHeight > 720 && video.videoHeight < 1080){
+        setCalculatedscreenWidth(1280);
+        setnextVideosPortionWidth(415);
+      }else{
       setCalculatedscreenWidth(1225);
       setnextVideosPortionWidth(window.innerWidth - 1304);
+      }
     } else if (window.innerWidth >= 2000) {
       setCalculatedscreenWidth(1225);
       setnextVideosPortionWidth(window.innerWidth - 1558);
     }
     const updateVideoSize = () => {
       if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
-        setCalculatedscreenWidth(640);
-        setnextVideosPortionWidth(window.innerWidth - 664);
+        if(video.videoHeight > 720 && video.videoHeight < 1080){
+          setCalculatedscreenWidth(window.innerWidth - 474);
+          videoPlayer.style.height = CalculatedscreenWidth / 2  + "px";
+          setnextVideosPortionWidth(466);
+         }else{
+         setCalculatedscreenWidth(640);
+         setnextVideosPortionWidth(window.innerWidth - 664);
+         
+        }
         setTotalScreenWidth(0);
-      } else if (window.innerWidth >= 990 && window.innerWidth < 1745) {
-        setCalculatedscreenWidth(window.innerWidth - 530);
+      } else if (window.innerWidth >= 990 && window.innerWidth < 1754) {
+        setCalculatedscreenWidth(window.innerWidth - 474);
+        if(video.videoHeight > 720 && video.videoHeight < 1080){
+          videoPlayer.style.height = CalculatedscreenWidth / 2  + "px";
+        }
         setnextVideosPortionWidth(403);
         setTotalScreenWidth(0);
-      } else if (window.innerWidth >= 1745 && window.innerWidth < 2000) {
+      } else if (window.innerWidth >= 1754 && window.innerWidth < 2000) {
+        if(video.videoHeight > 720 && video.videoHeight < 1080){
+          setCalculatedscreenWidth(1280);
+          setnextVideosPortionWidth(415);
+        }else{
         setCalculatedscreenWidth(1225);
         setnextVideosPortionWidth(window.innerWidth - 1304);
+        }
       } else if (window.innerWidth >= 2000) {
         setCalculatedscreenWidth(1225);
         setnextVideosPortionWidth(window.innerWidth - 1558);
@@ -168,12 +206,13 @@ function VideoInfoCard() {
     return () => {
       window.removeEventListener("resize", updateVideoSize);
     };
-  }, [CalculatedscreenWidth, TotalScreenWidth, nextVideosPortionWidth]);
+  })
+  }, [CalculatedscreenWidth, TotalScreenWidth, nextVideosPortionWidth,Video,videoId]);
 
   return !Loading ? (
     !Error ? (
       <div className="fullVideoPage" style={FullLengthVideos.length > 0?{ width: CalculatedscreenWidth }:{width:"100%",left:"0",right:"0",margin:"0 auto",maxWidth:"821px"}}>
-          <div className="videoPlayer">
+          <div id="videoPlayer" >
             <VideoPlayer areNextVideos={FullLengthVideos.length > 0 ? true : false} NextVideos={FullLengthVideos}/>
           </div>
           {windowWidth < 990 ? (
@@ -198,20 +237,20 @@ function VideoInfoCard() {
                   CurrentUser={CurrentUser}
                   currentState={currentState}
                 />
-                 {!Loading ? (
+                 {!NextVideosLoading ? (
                     FullLengthVideos.length > 0 && (
                       <div
                         className="Next_videos"
                         style={{ width: nextVideosPortionWidth }}
                       >
-                        <MediumScreenComponent
+                        <Smallscreencomponent
                           FullLengthVideos={FullLengthVideos}
                           shortVideos={ShortVideos}
                         />
                       </div>
                     )
                   ) : (
-                    <p>Next Videos Loading...</p>
+                   <NextVideosLoadingComponent/>
                   )}
                
               </div>
@@ -232,17 +271,7 @@ function VideoInfoCard() {
       </p>
     )
   ) : (
-    <p
-    style={{
-      height: "50vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      color: "white",
-    }}
-  >
-     Loading...
-  </p>
+    <VideoPageLoadingScreen/>
   );
 }
 

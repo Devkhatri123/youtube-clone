@@ -1,4 +1,5 @@
 .SearchedVideos .videos{
+    display: grid;
     grid-template-columns: repeat(1, 1fr);
     margin: 0;
 }
@@ -18,7 +19,7 @@
         margin-top: 14px;
     }
     .SearchedVideos .short-videos{
-        margin-top: 51px;
+        margin-top: 78px;
     }
     .SearchedVideos .videos #video a #thumbnail_container{
         width: 340px;
@@ -37,5 +38,8 @@
     .SearchedVideos .videos #video .video_bottom .video_bttom_left{
         flex-direction: column-reverse;
     }
-    
+    .SearchedVideos .videos #video {
+        max-width: unset;
+        aspect-ratio: unset;
+    }
 }

@@ -1,5 +1,4 @@
 import React,{useState,useEffect, useRef, useContext} from 'react'
-import { memo } from 'react';
 import { MdMenu } from "react-icons/md";
 import youtubeImage from "../Pics/youtube.png";
 import { CiSearch } from "react-icons/ci";
@@ -32,7 +31,6 @@ import { Navbarcontext } from '../Context/NavbarContext';
         })
      },[auth]);
      useEffect(()=>{
-     console.log("Navbar is mounted");
      const fetchedData = JSON.parse(sessionStorage.getItem('inputData'))
      if(fetchedData){
      setsearchTerm(fetchedData?.searchTerm)
@@ -96,6 +94,7 @@ import { Navbarcontext } from '../Context/NavbarContext';
     };
     const HandleToggle = () =>{
       setLoading(true);
+      
      try{
     onSnapshot(collection(firestore,`users/${user?.uid}/NewVideos`) ,async (snapShot)=>{
       const newVideos = await Promise.all (
@@ -142,8 +141,8 @@ import { Navbarcontext } from '../Context/NavbarContext';
   return (
    <div className='large-screen-Navbar'>
     <div className='large-screennavbar-left'>
-        <MdMenu style={{zIndex:"9999"}}/>
-        <img src={youtubeImage} alt='logo' onClick={()=>navigate("/")}/>
+        <div onClick={()=>{currentState.setshowSidebar(!currentState.showSidebar);console.log(currentState.showSidebar)}}><MdMenu style={{zIndex:"9999"}}/></div>
+        <img src={youtubeImage} alt='logo' onClick={()=>{navigate("/");currentState.setshowSidebar(!currentState.showSidebar)}}/>
     </div>
     <div className="large-screennavbar-center">
         <input type="text" name="" id="search-term" ref={inputRef} placeholder='search here' value={searchTerm} onChange={HandleSearch} onKeyDown={HandleKeyDown}/>
@@ -179,7 +178,7 @@ import { Navbarcontext } from '../Context/NavbarContext';
       return newvideo !== undefined
     }).map((newvideo,index)=>{
     return <div className="notification" key={index}>
-     <img src={newvideo?.userData?.channelURL} alt="channelpic" style={{width:"40px",height:"40px",borderRadius:"50%"}}/>
+     <img src={newvideo?.userData?.channelPic} alt="channelpic" style={{width:"40px",height:"40px",borderRadius:"50%"}}/>
      <div style={{minWidth:"271px"}}>
       <p className='video-title'>{newvideo?.videoData?.Title}</p>
       <p>4 hours ago</p>

@@ -22,6 +22,7 @@ function LargeScreenUploadVideo() {
   const UploadVideoContext = useContext(Uploadvideo);
   const [videoTitle,setvideoTitle] = useState('');
   const [description,setdescription] = useState('');
+  const [Comments,setComments] = useState('');
   useEffect(()=>{
     auth.onAuthStateChanged((currentuser)=>{
       setcurrentUser(currentuser)
@@ -60,9 +61,12 @@ function LargeScreenUploadVideo() {
     const minutes = Math.floor(videoLength / 60) % 60;
     if(minutes >= 1 ) shortivideo  = false
     else if(minutes === 1 || seconds <= 60) shortivideo = true;
-    UploadVideoContext.uploadVideoFunc(thumbnailFile,videoFile,videoTitle,description,shortivideo,user);
+    UploadVideoContext.uploadVideoFunc(thumbnailFile,videoFile,videoTitle,description,shortivideo,user,Comments);
   }
-
+const HandleCommentMode = (e) => {
+  console.log(e.target.value)
+  setComments(e.target.value);
+}
   return (
     <div className='large-screen-upload-video'>
       <div className="uploadvideo-inner">
@@ -99,13 +103,13 @@ function LargeScreenUploadVideo() {
              }
               <input type="file" name="thumbnail" id="thumbnail" hidden ref={imgRef} onChange={HandleThumbnailChange}/>
             </div>
-            {/* <div className='large-screen-commnet-type' style={{border:"unset"}}>
+            <div className='large-screen-commnet-type' style={{border:"unset"}}>
         <h3>Comment Mode</h3>
         <div>
-      <input type="radio" name='commentType' value="on" id='on' checked={true} onChange={HandleCommentMode}/><label htmlFor="On" >On</label>
-      <input type="radio" name='commentType' id='off' value="Off" checked={false} onChange={HandleCommentMode}/><label htmlFor="Off">Off</label>
+      <input type="radio" name='commentType' value="On" id='on' onChange={HandleCommentMode}/><label htmlFor="On" >On</label>
+      <input type="radio" name='commentType' id='off' value="Off"  onChange={HandleCommentMode}/><label htmlFor="Off">Off</label>
       </div>
-    </div> */}
+    </div>
           </div>
           <div className="set-video-right">
           <div ref={videoRef}><VideoPlayer src={VideoURL} /></div>

@@ -1,10 +1,8 @@
 import { React, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "../CSS/Video.css"
 import Smallscreencomponent from "./Smallscreencomponent";
-import MediumScreenComponent from "./MediumScreenComponent";
 import Largescreencomponent from "./Largescreencomponent";
-import Navbar from "./Navbar";
 function Videos(props) {
   // const [Videos,setVideos] = useState([])
   const [ThumbnailWidth,setThumbNailWidth] = useState(window.innerWidth)
@@ -39,10 +37,8 @@ const params = useParams()
     }
 },[ThumbnailHeight,ThumbnailWidth]);
 const returnComponent = () => {
-  if(screenWidth < 587){
+  if(screenWidth <= 600){
     return <Smallscreencomponent FullLengthVideos={FullLengthVideos} ShortVideos={ShortVideos}/>
-  }else if (screenWidth > 587 && screenWidth < 874){
-    return <MediumScreenComponent FullLengthVideos={FullLengthVideos} ShortVideos={ShortVideos}/>
   }else{
     return <Largescreencomponent FullLengthVideos={FullLengthVideos} ShortVideos={ShortVideos}/>
   }
