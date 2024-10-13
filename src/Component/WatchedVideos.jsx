@@ -5,14 +5,17 @@ import { collection,doc, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, firestore } from "../firebase/firebase";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
+import { GoHistory } from "react-icons/go";
+import { Link } from "react-router-dom";
 function WatchedVideos() {
   const [watchedVideos,setwatchedVideos] = useState([]);
   const contentsRef = useRef();
+  const [scrolled,setscrolled] = useState(false);
   const GetWatchedVideos = () => {
     onSnapshot(collection(firestore,`users/${auth.currentUser.uid}/watchedVideos`),async(snanpShot)=>{
       setwatchedVideos(await Promise.all(
       snanpShot.docs.map(async(Doc)=>{
-       const VideoDocRef = doc(firestore,"videos",Doc.data().videoUrl);
+         const VideoDocRef = doc(firestore,"videos",Doc.data().videoUrl);
        const getVideo = await getDoc(VideoDocRef);
        const userDocRef = doc(firestore,"users",getVideo.data()?.createdBy);
        const user = await getDoc(userDocRef);
@@ -20,7 +23,7 @@ function WatchedVideos() {
         videoId:VideoDocRef.id,
         videoData:getVideo.data(),
         userData:user.data(),
-       }
+      }
       }),
     )
   )
@@ -30,33 +33,31 @@ function WatchedVideos() {
     GetWatchedVideos();
   },[]);
   const ScrollRight = (e) => {
-    console.log(e)
-    const forwardIcon = document.getElementsByClassName("forwardIcon")[0];
-    const backwardIcon = document.getElementsByClassName("backwardIcon")[0];
     contentsRef.current.scrollBy({
       left: 847,
       behavior: 'smooth'
   });
-  forwardIcon.style.display = "none";
-  backwardIcon.style.display = "block"
-  backwardIcon.style.position = "absolute"
-  backwardIcon.style.transform = "translate(-18px, 37px)"
-  backwardIcon.style.bottom = "unset"
+  setscrolled(true)
   }
   const ScrollLeft = (e) => {
-   console.log(e)
-    const forwardIcon = document.getElementsByClassName("forwardIcon")[0];
-    const backwardIcon = document.getElementsByClassName("backwardIcon")[0];
     contentsRef.current.scrollBy({
       left: -847,
       behavior: 'smooth'
   });
-  forwardIcon.style.display = "block";
-  backwardIcon.style.display = "none"
+  setscrolled(false)
   }
-  return (
+  return watchedVideos.length > 0 &&(
     <>
-     <div className='forwardIcon watched_VideosforwardIcon' onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
+     <div className="top_Section">
+              <div className="left">
+                <GoHistory />
+                <h4>History</h4>
+              </div>
+             <Link to={`/history`} className='viewAll'>View all</Link>
+            </div>
+            {watchedVideos.length >= 5 && (
+     <div className='forwardIcon watched_VideosforwardIcon' style={{display: !scrolled?"block": "none"}} onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
+            )}
      <div ref={contentsRef} style={{
       display: "flex",
       overflowX: "scroll",
@@ -69,7 +70,7 @@ function WatchedVideos() {
         return <WatchedVideo video={video} key={i} />;
       })}
       </div>
-       <div className="backwardIcon" style={{display:"none"}} onClick={(e)=>{ScrollLeft(e)}}><IoIosArrowBack/></div>
+       <div className="backwardIcon"style={scrolled?{display:"block",position:"absolute",bottom:"0",top:"0",height:"36px",transform: "translate(-17px, 174px)"}:{display:"none"}} onClick={(e)=>{ScrollLeft(e)}}><IoIosArrowBack/></div>
     </>
   );
 }

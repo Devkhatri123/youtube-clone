@@ -1,0 +1,63 @@
+#historypage{
+    margin-top: 63px;
+}
+#historypage h1 {
+    color: white;
+    font-size: 29px;
+    font-weight: 700;
+    margin-left: 13px;
+}
+.shortsShelf .short-video #short-video {
+    min-width: 108px;
+    max-width: 90px;
+    height: 199px;
+}
+.shortsShelf .short-video #short-video video {
+    height: 180px;
+}
+.Watchedvideos{
+    padding: 10px;
+}
+.FullLengthVideos{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.FullLengthVideos #video{
+    display: flex;
+}
+.FullLengthVideos #video a #thumbnail_container{
+    width: 150px;
+} 
+.FullLengthVideos #video a #thumbnail_container img{
+    border-radius: 6px;
+}
+.FullLengthVideos #video .video_bottom{
+    width: 100%;
+}
+.FullLengthVideos #video .video_bottom .video_bttom_left{
+    align-items: flex-end;
+}
+.FullLengthVideos #video .video_bottom .video_bttom_left a{
+    display: none;
+}
+@media screen and (min-width:588px) {
+    .FullLengthVideos #video {
+        flex-basis: unset;
+        aspect-ratio: unset;
+        max-width: calc(100% - 16px);
+    }
+    .FullLengthVideos #video a #thumbnail_container{
+        width: 30vw;
+    }
+    .FullLengthVideos #video .video_bottom{
+        align-items: baseline !important;
+    }
+    .FullLengthVideos #video_title{
+        font-size: 1.1rem;
+    }
+    .FullLengthVideos .video_title_and_channelName{
+        margin-left: 18px;
+        font-size: unset;
+    }
+}

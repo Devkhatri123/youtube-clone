@@ -38,10 +38,11 @@ function LargeScreenUploadVideo() {
   const HandleChange = (e) => {
  setVideoURL(URL.createObjectURL(e.target.files[0]));
  setVideoFile(e.target.files[0])
+ console.log(e.target.files[0])
   }
   const HandleThumbnailChange = (e) => {
     setthumbnailURL(URL.createObjectURL(e.target.files[0]));
-    setthumbnailFile(e.target.files[0])
+    setthumbnailFile(e.target.files[0]);
   }
   useEffect(()=>{
     
@@ -49,19 +50,23 @@ function LargeScreenUploadVideo() {
    navigate("/")
    }
   },[]);
+  useEffect(()=>{
+  console.log( thumbnailFile);
+  
+  },[thumbnailFile])
   const uploadvideo = () => {
     if(!currentUser){
       alert("You are not signedIn")
       return;
     } 
     let videoLength = videoRef.current.firstChild.firstChild.nextElementSibling.childNodes[0].duration;
-
+    const video = videoRef.current.firstChild.firstChild.nextElementSibling.childNodes[0]
     let shortivideo = null;
     const seconds = Math.floor(videoLength % 60);
     const minutes = Math.floor(videoLength / 60) % 60;
     if(minutes >= 1 ) shortivideo  = false
     else if(minutes === 1 || seconds <= 60) shortivideo = true;
-    UploadVideoContext.uploadVideoFunc(thumbnailFile,videoFile,videoTitle,description,shortivideo,user,Comments);
+    UploadVideoContext.uploadVideoFunc(thumbnailFile,videoFile,videoTitle,description,shortivideo,user,Comments,video);
   }
 const HandleCommentMode = (e) => {
   console.log(e.target.value)

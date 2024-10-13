@@ -16,6 +16,20 @@ body {
   margin: 1rem 0 0 0.8rem;
   font-weight: bolder;
   font-size: 2rem;
+} 
+.shortVideo_middle_control {
+  color: white;
+  background: #000000;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  padding: 1px;
+  position: absolute;
+  padding: 0.4em 0.4em;
+  font-size: 1.7em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #shortvideo {
@@ -26,7 +40,7 @@ body {
 .short_video_container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -126,6 +140,44 @@ body {
   background: #fff;
   border-radius: 27px;
 }
+@media screen and (max-width:990px) {
+  .shortvideolayout{
+    position: fixed;
+    color: white;
+    bottom: 30px;
+    background-color: #212121;
+    width: 96%;
+    z-index: 23;
+    border-radius: 12px;
+    display: flex;
+    padding: 10px 20px;
+    flex-direction: column;
+    gap: 12px;
+    height: 96px;
+
+  }
+  .shortvideolayout .menuitems {
+    display: flex;
+    gap: 12px;
+    font-size: 16px;
+    flex-direction: column;
+  }
+  .shortvideolayout .menuitems div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .line{
+    background: #f1f1f1;
+    opacity: .15;
+    border-radius: 4px;
+    height: 4px;
+    margin: 0 auto;
+    width: 50px;
+    margin-top: 0;
+    padding: 2.3px;
+  }
+}
 /* Media Queries for Small Screens */
 @media only screen and (max-width: 512px) {
   .short_details {
@@ -158,20 +210,7 @@ body {
   .control > p {
     font-size: 0.7rem;
   }
-  .middle_control {
-    color: white;
-    background: rgba(0, 0, 0, 0.3);
-    width: 1.7em;
-    height: 1.7em;
-    border-radius: 50%;
-    padding: 1px;
-    position: absolute;
-    padding: 0.4em 0.4em;
-    font-size: 1.7em;
-  }
-  .middle_control > svg {
-    color: black;
-  }
+ 
   #short_progressBar_width {
     /* width: 100%; */
     display: block;
@@ -203,17 +242,18 @@ body {
     text-overflow: ellipsis;
     white-space: normal;
   }
-  .shortvideoprogressBar {
+  #shortvideoprogressBar {
     background-color: #34393d;
     padding: 0;
     border-radius: 9px;
+    height: 4px;
     /* width: 100%; */
     /* margin: 0 5px; */
   }
   .short_channel button{
     display: none;
   }
- 
+
 }
 .shortVivdeoComment #message_page{
   top: 38%;
@@ -221,6 +261,26 @@ body {
   left: 0;
   border-radius: 12px;
   position: fixed;
+}
+@media screen and (max-width:600px) {
+  .ActivesmalldevicesProgressWidthtransition{
+    transition-duration: .5s;
+    width:97%;
+    margin:0 5px;
+   }
+   .RemovesmalldevicesProgressWidthtransition{
+    transition-duration: .5s;
+    width:unset;
+    margin:0;
+   }
+   .ActivesmalldevicesBottomtransition{
+    margin-bottom: 25px;
+    transition-duration: .5s;
+   }
+   .RemovesmalldevicesBottomtransition{
+    margin-bottom: unset;
+    transition-duration: .5s;
+   }
 }
 @media screen and (min-width:513px) and (max-width:990px){
   .short_details {
@@ -235,6 +295,7 @@ body {
     height: 30px;
     width: 30px;
   }
+
 }
 @media screen and (min-width: 990px) {
   .shortVideos_container {
@@ -243,7 +304,7 @@ body {
     margin: 0 auto; */
   }
   .short_video_container{
-    max-width: 487px;
+    width: 637px;
     padding: 27px;
     margin:  0 auto;
     height: unset;
@@ -256,14 +317,14 @@ body {
   .short_details {
     bottom: 0;
     font-size: 0.8em;
-    left: 83px;
+    left: 33px;
     bottom: 38px;
   }
   .short_title {
     margin: 10px 0px 8px 5px;
   }
   .short_controls{
-    right: 9px;
+    right: -40px;
     bottom: 33px;
   }
  .shortVivdeoComment #message_page{
@@ -279,9 +340,9 @@ body {
     color: white;
  }
  .shortVivdeoComment #message_page .message-body {
-   background-color: unset;
+    background-color: unset;
     position: fixed;
-    width: 45%;
+    /* width: 45%; */
     height: 100%;
     z-index: 2;
     overflow-y: scroll;

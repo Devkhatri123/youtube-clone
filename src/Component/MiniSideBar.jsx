@@ -12,21 +12,19 @@ function MiniSideBar(props) {
 const [shortVideo,setshortVideo] = useState([])
 const navContext = useContext(Navbarcontext)
 useEffect(()=>{
- setshortVideo(props.NonFilteredVideos.filter((video)=>{
+  console.log(props)
+ setshortVideo(props.NonFilteredVideos && props.NonFilteredVideos.filter((video)=>{
     return video.Videodata.shortVideo;
   }))
-},[])
-useEffect(()=>{
-console.log(shortVideo)
-},[shortVideo])
-  return !navContext.showSidebar ? (
+},[props])
+  return (
     <div className='mini-sidebar'>
       <div className="home">
        <MdHomeFilled/>
         <p>Home</p>
       </div>
       <div className="shorts">
-      <Link to={`/short/${shortVideo[0]?.id}`}>
+      <Link to={shortVideo&& `/short/${shortVideo[0]?.id}`}>
         <SiYoutubeshorts/>
         <p>Shorts</p>
 </Link>
@@ -42,7 +40,7 @@ console.log(shortVideo)
         </Link>
       </div>
     </div>
-  ):<LargeScreenSideBar/>
+  )
 }
 
 export default MiniSideBar

@@ -10,12 +10,36 @@ export const Uploadvideo = createContext();
  const UploadvideoProvider = ({ children }) => {
     const [Videoprogress,setvideouploadProgress] = useState(0);
     const [ThumbnailProgress,setThumbnailProgress] = useState(0);
-    
+    var newFile;
     const navigate = useNavigate();
-   const uploadVideoFunc = async(thumbnailFile,videoFile,videoTitle,description,shortvideo,user,Comments) => {
-    console.log("Comments" + "   " + Comments);
+   const uploadVideoFunc = async(thumbnailFile,videoFile,videoTitle,description,shortvideo,user,Comments,video) => {
     const videopRef = ref(storage, `Videos/${v4()}`);
     const ThumbNailRef = ref(storage, `Thumbnail/${v4()}`);
+    var canvas = document.createElement('canvas');     
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);  
+    newFile = await new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+          if (blob) {
+              const img = new Image();
+              img.src = window.URL.createObjectURL(blob);
+              Object.assign(blob, {
+                  src: img.src,
+                  name: videoFile.name.replace(".mp4", ".png"), // Name the extracted thumbnail based on video name
+                  lastModified: Date.now(),
+              });
+
+              resolve(blob); // Resolve the blob as the new thumbnail file
+          } else {
+              console.error("Failed to create blob from canvas");
+              resolve(null); // Resolve with null if there was an issue
+          }
+      });
+      
+  });
+  console.log(newFile);
+
 
     const uploadVideoTask =  uploadBytesResumable(videopRef, videoFile);
     uploadVideoTask.on(
@@ -28,7 +52,7 @@ export const Uploadvideo = createContext();
         console.log(error);
       },
     );
-    const ThumbNailuploadTask =  uploadBytesResumable(ThumbNailRef, thumbnailFile);
+    const ThumbNailuploadTask =  uploadBytesResumable(ThumbNailRef,thumbnailFile ? thumbnailFile : newFile);
     ThumbNailuploadTask.on("state_changed",(snapShot)=>{
     const Thumbnailprogress = Math.round((snapShot.bytesTransferred / snapShot.totalBytes) * 100);
     setThumbnailProgress(Thumbnailprogress);
@@ -41,6 +65,7 @@ export const Uploadvideo = createContext();
     const videoId = v4();
     const videoURL = await getDownloadURL(uploadVideoTask.snapshot.ref);
     const thumbnailURL = await getDownloadURL(ThumbNailuploadTask.snapshot.ref);
+    console.log(thumbnailURL)
     let docRef = doc(firestore,"videos",videoId);
     const data = {
       Title:videoTitle,
@@ -65,7 +90,6 @@ export const Uploadvideo = createContext();
       console.log("new video added in subscriber doc");
       const userDocRef = doc(firestore,`users/${Doc.data().userId}`);
       const subscriber = await getDoc(userDocRef);
-      console.log("Numberofvideos" + "   " + subscriber.data().Numberofvideos);
       if(subscriber.data().Numberofvideos){
       await updateDoc(userDocRef,{
           Numberofvideos:subscriber.data().Numberofvideos + 1,
@@ -75,7 +99,6 @@ export const Uploadvideo = createContext();
             Numberofvideos:1,
            });
         }
-        console.log("Numberofvideos" + "   " + subscriber.data().Numberofvideos);
       });
     }).catch((error)=>{
       console.log(error)
@@ -84,6 +107,7 @@ export const Uploadvideo = createContext();
       videoUrl:videoId,
     }).then(()=>{
       navigate("/");
+      console.log("video has been uploaded")
     })
    })
   }

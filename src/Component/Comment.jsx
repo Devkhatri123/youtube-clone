@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RxCross1 } from 'react-icons/rx';
 import { CurrentState } from '../Context/HidevideoinfoCard';
 import VideoInfoCard from './VideoInfoCard';
@@ -13,6 +13,9 @@ function Comment(props) {
     const currentState = useContext(CurrentState);
     const [user,setUser] = useState(null)
     const [CloseMessage,setCloseMessage] = useState(false);
+    const touchStartRef = useRef(0); // To store the initial touch position
+    const touchEndRef = useRef(0);
+    const CommentRef = useRef();
     let [Message,setMessage] = useState('');
    const [Comments,setComments] = useState([]);
     useEffect(()=>{
@@ -31,14 +34,35 @@ function Comment(props) {
      })
     
     },[props.videoId]);
-    
+    const sectionTouch = (e) => {
+      touchStartRef.current = e.touches[0].clientY;
+    }
+    const drageSection = (e) => {
+      touchEndRef.current = e.changedTouches[0].clientY;
+      const swipeDistance = touchStartRef.current - touchEndRef.current;
+      
+      CommentRef.current.style.transform= `translateY(${Math.abs(swipeDistance)}px)`;
+    }
+    const HideLayout = () => {
+      const swipeDistance = touchStartRef.current - touchEndRef.current;
+      if(swipeDistance <= -100){
+        CommentRef.current.style.display = "none";
+        currentState.setshortvideoShowMessages(false)
+        document.body.style.overflow = "scroll";
+      }else{
+        CommentRef.current.style.transform= `translateY(-9.5px)`;
+      }
+    } 
   return (
     <>
     {currentState.shortvideoShowMessages && (
-      <div id='message_page'>
-        <div className="message-top">
+      <div id='message_page' ref={CommentRef} style={{transform:"translateY(-9.5px)"}}>
+        <div className="message-top"  onTouchMove={drageSection} onTouchStart={sectionTouch} onTouchEnd={HideLayout}>
+        <div className="line"><span></span></div>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <h3>Comments  <span style={{fontweight: "500"}}>{props.video?.NumberOfComments}</span></h3>
           <RxCross1 onClick={()=>{currentState.setshortvideoShowMessages(false);document.body.style.overflow="scroll";setCloseMessage(true)}} />
+        </div>
         </div>
         <div className="message-body">
          <CommentBody videoId = {props.videoId} video = {props.video}/>

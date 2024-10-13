@@ -3,77 +3,77 @@ import "../CSS/LoadingScreen.css"
 function MainPageLoadingScreen() {
   return (
     <>
-    <div class="navbar">
-        <div class="navbar-logo"></div>
+    <div className="navbar">
+        <div className="navbar-logo"></div>
         <div className="large-screennavbar-center">
         <input type="text" name="" id="search-term" placeholder='search here' disabled/>
       <button></button> </div>
-        <div class="navbar-icons">
-            <div class="navbar-icon"></div>
-            <div class="navbar-icon"></div>
-            <div class="navbar-icon"></div>
+        <div className="navbar-icons">
+            <div className="navbar-icon"></div>
+            <div className="navbar-icon"></div>
+            <div className="navbar-icon"></div>
         </div>
     </div>
 
 
-    <div class="skeleton-container">
-        <div class="skeleton-card">
-            <div class="skeleton-thumbnail"></div>
-            <div class="skeleton-details">
-                <div class="skeleton-avatar"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
+    <div className="skeleton-container">
+        <div className="skeleton-card">
+            <div className="skeleton-thumbnail"></div>
+            <div className="skeleton-details">
+                <div className="skeleton-avatar"></div>
+                <div className="skeleton-info">
+                    <div className="skeleton-title"></div>
+                    <div className="skeleton-text"></div>
                 </div>
             </div>
         </div>
-        <div class="skeleton-card">
-            <div class="skeleton-thumbnail"></div>
-            <div class="skeleton-details">
-                <div class="skeleton-avatar"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
+        <div className="skeleton-card">
+            <div className="skeleton-thumbnail"></div>
+            <div className="skeleton-details">
+                <div className="skeleton-avatar"></div>
+                <div className="skeleton-info">
+                    <div className="skeleton-title"></div>
+                    <div className="skeleton-text"></div>
                 </div>
             </div>
         </div>
-        <div class="skeleton-card">
-            <div class="skeleton-thumbnail"></div>
-            <div class="skeleton-details">
-                <div class="skeleton-avatar"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
+        <div className="skeleton-card">
+            <div className="skeleton-thumbnail"></div>
+            <div className="skeleton-details">
+                <div className="skeleton-avatar"></div>
+                <div className="skeleton-info">
+                    <div className="skeleton-title"></div>
+                    <div className="skeleton-text"></div>
                 </div>
             </div>
         </div>
-        <div class="skeleton-card">
-            <div class="skeleton-thumbnail"></div>
-            <div class="skeleton-details">
-                <div class="skeleton-avatar"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
+        <div className="skeleton-card">
+            <div className="skeleton-thumbnail"></div>
+            <div className="skeleton-details">
+                <div className="skeleton-avatar"></div>
+                <div className="skeleton-info">
+                    <div className="skeleton-title"></div>
+                    <div className="skeleton-text"></div>
                 </div>
             </div>
         </div>
-        <div class="skeleton-card">
-            <div class="skeleton-thumbnail"></div>
-            <div class="skeleton-details">
-                <div class="skeleton-avatar"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
+        <div className="skeleton-card">
+            <div className="skeleton-thumbnail"></div>
+            <div className="skeleton-details">
+                <div className="skeleton-avatar"></div>
+                <div className="skeleton-info">
+                    <div className="skeleton-title"></div>
+                    <div className="skeleton-text"></div>
                 </div>
             </div>
         </div>
-        <div class="skeleton-card">
-            <div class="skeleton-thumbnail"></div>
-            <div class="skeleton-details">
-                <div class="skeleton-avatar"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
+        <div className="skeleton-card">
+            <div className="skeleton-thumbnail"></div>
+            <div className="skeleton-details">
+                <div className="skeleton-avatar"></div>
+                <div className="skeleton-info">
+                    <div className="skeleton-title"></div>
+                    <div className="skeleton-text"></div>
                 </div>
             </div>
         </div>

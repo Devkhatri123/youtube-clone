@@ -11,9 +11,12 @@
   margin: 12px 11px 18px 11px;
 }
 .viewAll {
-  color: #3ea6ff /*! rtl:ignore */;
   font-weight: 400;
-  font-size: 0.7em;
+  color: white;
+  border: 1px solid;
+  border-radius: 17px;
+  padding: 3px 12px;
+  font-size: 0.7rem;
 }
 .left > svg {
   font-size: 1.2em;
@@ -73,7 +76,7 @@
   /* gap: 0.5em; */
   margin: 15px 0px 0px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 30px;
+  padding-bottom: 5px;
 }
 .watched_video{
   width: min-content;
@@ -262,18 +265,94 @@
   background-color: #181818;
   text-align: center;
 }
-
+#list{
+  font-size: calc(15px + 6*((100vw - 320px) / 680));
+  margin-top: 53px;
+}
 .playlist-title {
   font-size: 18px;
   font-weight: bold;
+}
+@media screen and (min-width:600px)  {
+  #list{
+    display: grid;
+    margin: 66px 33px 0 57px;
+    grid-template-columns: 30% 70%;
+    /* margin: 66px 50px 0 50px; */
+    /* margin-left: 58px; */
+    column-gap: 12px;
+
+  }
+  #list #left{
+    margin: 0 0 0 34px;
+  }
+  #list #left>.video img {
+    border-radius: 6px;
+  }
+  #list #left>div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0 0 0;
+  }
+  #list #left>div h3{
+    font-size: 1.3rem;
+    font-family: 'Noto sans';
+    font-weight: 700;
+  }
+  #list #left>div svg{
+    font-size: 1.2rem;
+  }
+
+  #right #video{
+    aspect-ratio: unset;
+    display: flex;
+    max-width: 100%;
+    margin-bottom: 12px;
+    margin-right: 20px;
+  }
+  #list #left  p {
+    color: #aaa;
+  }
+ #username{
+    font-size: 0.89rem;
+}
+.videoslength{
+  font-size: 0.7rem;
+
+}
+  #right #video a{
+   width: 190px;
+  }
+  #right #video .video_bottom{
+    width: 100%;
+    align-items: unset !important;
+    margin: 0px 0px 10px 10px !important;
+  }
+  #right #video .video_bottom .video_bttom_left{
+    align-items: flex-start;
+  }
+  #right #video .video_bottom .video_bttom_left .video_title_and_channelName .title{
+    margin-bottom: 2px;
+    font-size: 16px;
+    line-height: 1.5;
+    max-height: 3.5em;
+  }
+  #right #video .video_bottom div>svg{
+    font-size: 1.1rem;
+  }
 }
 @media screen and (min-width:990px) {
   .libraryPage{
     max-width: 850px;
     margin: 73px auto 0 auto !important;
   }
+  .playlists{
+    margin-left: -63px;
+  }
   .watched_Videos{
     margin: 24px 0px 0px 8px;
+    flex-direction: column;
   }
   .createVideo{
     display: none;
@@ -291,11 +370,13 @@
     border: 1px solid;
     border-radius: 17px;
     padding: 3px 12px;
+    font-size: 0.7rem;
   }
   .Shelf{
     display: block;
     margin-top: 20px;
-    height: 226px;
+    /* height: 226px; */
+    margin-left: -54px;
   }
   #contents{
     display: flex;
@@ -304,7 +385,12 @@
     overflow-x: scroll;
   }
   #contents #video{
-    min-width: calc(24.9% - 6px);
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: calc(26% - 16px);
+    /* max-width: calc(34.33% - 14px); */
+    aspect-ratio: 16 / 9;
+    min-width: calc(26% - 16px);
   }
   #contents #video a #thumbnail_container{
     border-radius: 7px;
@@ -318,7 +404,7 @@
     padding: 10px;
     border-radius: 50%;
     width: 34px;
-    transform: translate(832px, -141px);
+    transform: translate(888px, -151px);
     cursor: pointer;
   }
   .backwardIcon{
@@ -331,23 +417,37 @@
     cursor: pointer;
   }
   .watched_video {
-    flex-grow: 1;
+    lex-grow: 1;
     flex-shrink: 1;
-    flex-basis: calc(33.33% - 16px);
+    flex-basis: calc(26% - 16px);
     /* max-width: calc(33.33% - 16px); */
     aspect-ratio: 16 / 9;
-    min-width: calc(24.9% - 16px);
+    min-width: calc(26% - 16px);
   }
   .watched_video .videoThumbnail{
     width: unset;
   }
+  .watched_video .videoThumbnail a{
+    padding-top: 56.25%;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: block;
+  }
   .watched_video .videoThumbnail a img {
   height: unset !important;
   width: unset;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   }
   .watched_VideosforwardIcon{
-    transform: translate(820px, 36px);
+    transform: translate(879px, 94px);
     height: max-content;
     position: absolute;
+    z-index: 1;
   }
+  
 }

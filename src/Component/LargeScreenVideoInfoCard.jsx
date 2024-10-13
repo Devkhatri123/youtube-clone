@@ -1,4 +1,4 @@
-import React,{useEffect,useState,useContext} from 'react'
+import React,{useEffect,useState,useContext, useRef} from 'react'
 import {CurrentState} from "../Context/HidevideoinfoCard"
 import {sanitize} from "dompurify"
 import { collection,doc,getDoc,updateDoc,setDoc,deleteDoc, addDoc } from 'firebase/firestore';
@@ -25,6 +25,7 @@ import { Dangerous } from '@mui/icons-material';
 import { color } from '@mui/system';
 import ShareOnSocialMediaModal from './ShareOnSocialMediaModal';
 import { videoContext } from '../Context/VideoContext';
+import ErrorPage from './ErrorPage';
 function LargeScreenVideoInfoCard(props) {
    let [isLiked, setisLiked] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
@@ -34,7 +35,7 @@ function LargeScreenVideoInfoCard(props) {
     const [ErrorMessage,SetErrorMessage] = useState('');
     const [user,setuser] = useState(null);
     const [IsbtnDisable,setIsbtnDisable] = useState(false);
-    const VideoContext = useContext(videoContext)
+    const VideoContext = useContext(videoContext);
     useEffect(()=>{
     auth.onAuthStateChanged((currentuser)=>{
       setuser(currentuser);
@@ -58,7 +59,7 @@ function LargeScreenVideoInfoCard(props) {
     }
     }catch (error){
      SetError(true);
-    SetErrorMessage(error)
+    SetErrorMessage(error.message)
     }
   }
       checkCurrentWatchedVideo();
@@ -107,7 +108,7 @@ function LargeScreenVideoInfoCard(props) {
       }
           }
         checkSubscribedOrNot()
-      },[props.videoId,props.user,props.CurrentUser]);
+      },[props.videoId,props.user,props.CurrentUser,user]);
       const UnSubscribeChannel = async() => {
         if(user){
         if(props.user){
@@ -124,27 +125,15 @@ function LargeScreenVideoInfoCard(props) {
       }
       const doLike = async() => {
        if(props.CurrentUser){
-        const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LikedVideos`),props.videoId);
-        const videoDocRef = doc(firestore,"videos",props.videoId);
-        const getLikedDoc = await getDoc(docRef);
-        if(!getLikedDoc.exists()){
-        const data = {
-          VideoTitle:props.Video.Title,
-          description:props.Video.description,
-          Thumbnail:props.Video.Thumbnail,
-        }
-        await setDoc(docRef,data);
-        await updateDoc(videoDocRef,{
-          likes:props.Video.likes + 1,
-         })
-        setisLiked(true);
-        }
+        const result = VideoContext.LikeVideo(user,props.videoId,props.Video)
+        if(result) setisLiked(true);
       }
       }
       useEffect(()=>{
         const checkLikedOrNot = async() => {
+          try{
           if(user){
-          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/LikedVideos`),props.videoId);
+          const LikedDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LV`),props.videoId);
           const GetLikedDoc = await getDoc(LikedDocRef);
           if(GetLikedDoc.exists()){
             setisLiked(true);
@@ -152,13 +141,18 @@ function LargeScreenVideoInfoCard(props) {
             setisLiked(false);
           }
         }
+      }catch(error){
+        console.log(error.message)
+        SetError(true)
+        SetErrorMessage(error.message)
+      }
       }
         checkLikedOrNot();
-      },[props.videoId,props.user,props.CurrentUser])
+      },[props.videoId,props.user,props.CurrentUser,user])
       const doUnLike = async() => {
         if(user){
           try{
-        await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LikedVideos`),props.videoId));
+        await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LV`),props.videoId));
         const videoDocRef = doc(firestore,"videos",props.videoId);
         await updateDoc(videoDocRef,{
           likes: props.Video.likes - 1,
@@ -252,7 +246,7 @@ function LargeScreenVideoInfoCard(props) {
     </div> */}
     </div>
     ):<p style={{color:"white"}}>Loading...</p>
-  ):<p style={{color:"white"}}>{ErrorMessage.message}</p>
+  ):<ErrorPage ErrorMessage={ErrorMessage}/>
 }
 
 export default LargeScreenVideoInfoCard

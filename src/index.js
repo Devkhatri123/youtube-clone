@@ -21,6 +21,10 @@ import Home from "./Component/Home";
 import HomepageShorts from "./Component/HomepageShorts";
 import HomePageStateProvider from "./Context/HomePageContext";
 import VideoActionProvider from "./Context/VideoContext";
+import History from "./Component/History";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import UserPlayList from "./Component/UserPlayList";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 let router = createBrowserRouter(
@@ -87,7 +91,9 @@ let router = createBrowserRouter(
       <>
       <NavbarStateProvider>
         <Navbar/>
+        <VideoActionProvider>
      <SearchResults/>
+     </VideoActionProvider>
       </NavbarStateProvider>
    </>
     ),
@@ -98,7 +104,9 @@ let router = createBrowserRouter(
       <>
       <Navbar/>
       <HomePageStateProvider>
+      <VideoActionProvider>
       <Home/>
+      </VideoActionProvider>
       </HomePageStateProvider>
    </>
     ),
@@ -115,9 +123,23 @@ let router = createBrowserRouter(
     ),
   },
   {
-    path: `/playlist/?`,
+    path: `/playlist?`,
     element: (
       <>
+      <Navbar/>
+      <VideoActionProvider>
+      <UserPlayList/>
+      </VideoActionProvider>
+    </>
+    ),
+  },
+  {
+    path: `/history/?`,
+    element: (
+      <>
+      <VideoActionProvider>
+      <History/>
+      </VideoActionProvider>
     </>
     ),
   },
@@ -125,6 +147,7 @@ let router = createBrowserRouter(
 root.render(
   <RouterProvider router={router}>
     {/* <App /> */}
+    
     </RouterProvider>
 );
 

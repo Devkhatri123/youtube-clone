@@ -5,7 +5,8 @@ export const Navbarcontext = createContext();
  const NavbarStateProvider = ({ children }) => {
    const [showSidebar,setshowSidebar] = useState(false);
     const [searchTerm,setsearchTerm] = useState('');
-    const [Error,setError] = useState(false)
+    const [Error,setError] = useState(false);
+    const [ErrorMessage,setErrorMessage] = useState('');
     const [searchedVideos,setsearchedVideos] = useState([]);
     const [savedVideos,setsaveVideos] = useState([])
     const [videos,setVideos] = useState([]);
@@ -46,7 +47,7 @@ export const Navbarcontext = createContext();
       return {FullLengthVideo,shortVideo}
     }
    return(
-   <Navbarcontext.Provider value={{searchedVideos,searchTerm,savedVideos,Error,showSidebar,setshowSidebar,setError,setsearchedVideos,GetData,setsaveVideos,setsearchTerm,FilteredVideos}}>
+   <Navbarcontext.Provider value={{searchedVideos,searchTerm,savedVideos,Error,showSidebar,ErrorMessage,setErrorMessage,setshowSidebar,setError,setsearchedVideos,GetData,setsaveVideos,setsearchTerm,FilteredVideos}}>
       {children}
       </Navbarcontext.Provider>
    )

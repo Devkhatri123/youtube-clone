@@ -26,6 +26,7 @@
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
     "react-share-kit": "^1.1.0",
+    "react-toastify": "^10.0.5",
     "react-youtube": "^10.1.0",
     "throttle": "^1.0.3",
     "use-history": "^1.4.1",

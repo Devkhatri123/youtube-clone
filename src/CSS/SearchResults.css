@@ -37,9 +37,13 @@
     }
     .SearchedVideos .videos #video .video_bottom .video_bttom_left{
         flex-direction: column-reverse;
+        align-items: flex-start;
     }
     .SearchedVideos .videos #video {
         max-width: unset;
         aspect-ratio: unset;
     }
+    .SearchedVideos .videos #video .video_bottom .video_bttom_left .video_title_and_channelName #video_title{
+        font-size: 19px;
+    } 
 }

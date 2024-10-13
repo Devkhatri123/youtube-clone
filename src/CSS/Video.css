@@ -114,8 +114,9 @@ margin-left: 6px;
   .video[poster] {
     object-fit: cover;
   }
-  .video_bottom{
+  .video_bottomm{
     color: white;
+    align-items: center;
   }
 .videos:last-child{
   margin-bottom: 64px;
@@ -160,12 +161,13 @@ margin-left: 6px;
     max-height: 3em;
     text-overflow: ellipsis;
     overflow: hidden;
+    color: #aaa;
   }
   #video_title{
     font-family: "Roboto";
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    max-height: 2.5em;
+    max-height: 3.5em;
     -webkit-line-clamp: 2;
     overflow: hidden;
     line-height: 1.25;
@@ -174,16 +176,13 @@ margin-left: 6px;
  
 }
 @media screen and (min-width:587px){
-  .video_bttom_left{
-    align-items: unset;
-  }
   .video_bttom_left img {
     height: 30px;
     width: 30px;
   }
 }
 /* Medium Screens CSS */
-@media screen and (min-width:587px) and (max-width:874px){
+@media screen and (min-width:600px) and (max-width:874px){
   .videos{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -327,7 +326,7 @@ input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance: none;
   width: 5px;
   height: 5px;
-  background: ##ff0000;
+  background: #ff0000;
   cursor: pointer;
   border-radius: 50%;
   z-index: 9999;

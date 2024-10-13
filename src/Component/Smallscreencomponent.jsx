@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useContext, useRef} from 'react'
 import { Link } from 'react-router-dom';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import shortsIcon from "../Pics/Youtube_shorts_icon.webp";
@@ -8,12 +8,20 @@ import { GoThumbsdown } from "react-icons/go";
 import { IoMdClose } from "react-icons/io";
 import "../CSS/HomeScreen.css"
 import BottomLayout from './BottomLayout';
+import ToastNotification from './ToastNotification';
+import VideoInfoCard from './VideoInfoCard';
+import { videoContext } from '../Context/VideoContext';
 function Smallscreencomponent(props) {
-  console.log(props)
-  const [ThumbnailHeight,setThumbnailHeight] = useState();
-  const [ThumbnailWidth,setThumbNailWidth] = useState();
+  const videocontext = useContext(videoContext)
+  const [ThumbnailHeight,setThumbnailHeight] = useState(null);
+  const [ThumbnailWidth,setThumbNailWidth] = useState(null);
   const [bottomLayout,setbottomLayout] = useState(false);
+  const [ActiveVideoIndex,setActiveVideoIndex] = useState(null);
+  const [Top,setTop] = useState(null);
+  const [Left,setLeft] = useState(null);
+  const vidoRef = useRef()
   useEffect(()=>{
+    if(window.location.href == "/"){
     if(window.innerWidth <= 600){
       setThumbNailWidth(window.innerWidth);
       setThumbnailHeight(ThumbnailWidth * (9/16));
@@ -28,15 +36,61 @@ function Smallscreencomponent(props) {
     return ()=>{
       window.removeEventListener("resize",updateVideoSize)
     }
+  }
 },[ThumbnailHeight,ThumbnailWidth]);
+const showLayout = (e,i) => {
+  videocontext.setbottomlayout(true);
+  // setbottomLayout(!bottomLayout);
+  setActiveVideoIndex(i);
+  if(window.innerWidth <= 600){
+  document.body.style.opacity = "0.7";
+  setLeft(null);
+  setTop(null);
+  }else{
+    setLeft(e.pageX - 246);
+    setTop(e.clientY);
+  }
+  document.body.style.overflow = "hidden";
+  console.log(e.clientY)
+}
+useEffect(()=>{
+  if(videocontext.bottomlayout){
+    if(window.innerWidth <= 600){
+      document.body.style.opacity = "0.7";
+    }
+     document.body.style.overflow="hidden";
+  }
+  else{
+    document.body.style.overflow="scroll"
+    document.body.style.opacity = "1";
+  } 
+},[videocontext.bottomlayout])
+const dots = document.getElementById("dots");
+if(dots){
+  window.addEventListener("resize",()=>{
+    if(window.innerWidth > 600){
+    setLeft(dots.getBoundingClientRect().left - 246);
+    // setTop(dots.getBoundingClientRect().y + 9);
+    }else{
+      setLeft(null)
+      setTop(null);
+    }
+  })
+}
+useEffect(()=>{
+if(videocontext.showToastNotification) setbottomLayout(false)
+},[videocontext.showToastNotification])
+
+
   return (
     <div>
     <div className='videos'>
   {props.FullLengthVideos && props.FullLengthVideos.slice(0,1).map((FullLengthVideo,index)=>{
-      return  <div id="video" key={index}>
+     return  <div id="video" key={index}>
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>
+      
       </div>
          </Link>
          <div className="video_bottom">
@@ -59,11 +113,26 @@ function Smallscreencomponent(props) {
                           </div>
                         </div>
                       </div>
-                      <div onClick={()=>{setbottomLayout(true);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
+                      <div onClick={(e)=>{showLayout(e,index)}}><BsThreeDotsVertical className="videomenu" id={ActiveVideoIndex === index ? 'dots':null}/></div>
         </div>
-        {bottomLayout && (
-        <BottomLayout/>
-        )}
+        {index === ActiveVideoIndex && (
+                  <>
+                    {videocontext.bottomlayout && !videocontext.showToastNotification && (
+                      <div  id="Layout">
+                        <BottomLayout
+                          Left={Left}
+                          Top={Top}
+                          videoURL={FullLengthVideo.id}
+                          video={FullLengthVideo.Videodata}
+                          // user={PresentUser}
+                        />
+                      </div>
+                    )}
+                    {videocontext.showToastNotification && (
+                        <ToastNotification />
+                    )}
+                  </>
+                )}
         </div>
     })}
     </div>
@@ -79,7 +148,7 @@ function Smallscreencomponent(props) {
           return <div className="short-video" key={index}>
           <div id="short-video">
             
-            <video src={shortvideo.Videodata.videoURL} ></video>
+            <img src={shortvideo.Videodata.Thumbnail} alt=''></img>
             <div className="short-video-detail">
             <div className="short-video-title">{shortvideo.Videodata.Title}</div>
             <div className="views">{shortvideo.Videodata.views} Views</div>
@@ -94,10 +163,10 @@ function Smallscreencomponent(props) {
       )}
     <div className="videos">
        {props.FullLengthVideos && props.FullLengthVideos.slice(1).map((FullLengthVideo,index)=>{
-      return  <div id="video" key={index}>
+  return  <div id="video" key={index + 1}>
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
-      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={{height:ThumbnailHeight, width:ThumbnailWidth}}/>
+      <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>
       </div>
          </Link>
          <div className="video_bottom">
@@ -118,11 +187,29 @@ function Smallscreencomponent(props) {
                           </div>
                         </div>
                       </div>
-            <div onClick={()=>{setbottomLayout(!bottomLayout);console.log("clciked")}}><BsThreeDotsVertical className="videomenu" /></div>
+            <div onClick={(e)=>{
+             showLayout(e,index + 1)
+             }}
+           ><BsThreeDotsVertical className="videomenu" id={ActiveVideoIndex === index ? 'dots':null}/></div>
         </div>
-        {bottomLayout && (
-        <BottomLayout/>
-        )}
+        {index+1 === ActiveVideoIndex && (
+                  <>
+                    {videocontext.bottomlayout && !videocontext.showToastNotification && (
+                      <div  id="Layout">
+                        <BottomLayout
+                          Left={Left}
+                          Top={Top}
+                          videoURL={FullLengthVideo.id}
+                          video={FullLengthVideo.Videodata}
+                          // user={PresentUser}
+                        />
+                      </div>
+                    )}
+                    {videocontext.showToastNotification && (
+                        <ToastNotification />
+                    )}
+                  </>
+                )}
         </div>
     })}
     </div>

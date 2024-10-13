@@ -7,7 +7,25 @@ import { RedditShare } from 'react-share-kit';
 import { PinterestShare } from 'react-share-kit';
 import "../CSS/VideoPage.css"
 function ShareOnSocialMediaModal(props) {
-    const videocontext = useContext(videoContext)
+    const videocontext = useContext(videoContext);
+    const copyLink = async(e) => {
+      const linkInput = document.getElementById("link");
+      try{
+         await navigator.clipboard.writeText(linkInput.value)
+         e.target.innerText = "Copied!";
+         videocontext.setshowToastNotification(true);
+         videocontext.setNotificationMessage('Link Copied!');
+         setTimeout(() => {
+            e.target.innerText = "Copy";
+            videocontext.setshowToastNotification(false)
+         }, 1000);
+         setTimeout(() => {
+          videocontext.setshowToastNotification(false)
+         }, 3000);
+      }catch(error){
+        console.log(error)
+      }
+    }
   return videocontext.showModal && (
     <div className='shareModal'>
       <div className="modalHeader">
@@ -58,8 +76,8 @@ function ShareOnSocialMediaModal(props) {
    />
       </div>
       <div id="url">
-        <input type="text" disabled value={!props? window.location.href: `http://localhost:3000/watch?v=${props.URL}`}/>
-        <button>Copy</button>
+        <input type="text" id='link' disabled value={!props.URL? window.location.href: `http://localhost:3000/watch?v=${props.URL}`}/>
+        <button onClick={copyLink}>Copy</button>
       </div>
     </div>
   )

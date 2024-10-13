@@ -8,9 +8,30 @@
   display: block;
  }
 }
+
+  /* Style the track */
 p{
   text-align: justify;
 }
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  border-top: 3px solid #FFF;
+  border-right: 3px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
 .full-video-page{
   position: relative;
   top: 59px;
@@ -124,7 +145,14 @@ video {
 .comments_turnedOff_message{
   padding: 23px 20px 20px 14px;
 }
-
+.replybox button{
+  background-color: white;
+  color: black;
+  padding: 7px 16px;
+  float: right;
+  border-radius: 16px;
+  margin-top: 12px;
+}
 /*checking*/
 
 .channel_details {
@@ -170,23 +198,30 @@ video {
     flex-shrink: 0; /* Prevents button from shrinking */
     margin-top: 5px;
   }
-  .like_share_save_container{
+  .like_share_save_container {
     display: flex;
     gap: 0.6rem;
     margin-top: 8px;
     -webkit-box-pack: start;
     justify-content: start;
-    overflow: scroll hidden;
+    overflow-x: auto; /* Use auto to allow scrolling */
     white-space: nowrap;
-     margin-left: 12px;
-    scrollbar-width: none;
-  }
+    margin-left: 12px;
+    /* Hide scrollbar for webkit browsers */
+    -webkit-scrollbar-width: none;
+    scrollbar-width:none 
+}
+
+.like_share_save_container::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
   .like_share_save_container > div {
     background: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     font-size: 1.2rem;
-    padding: 0.4rem 1.4rem;
+    padding: 0.1rem 1rem;
     border-radius: 21px;
     gap: 0.5rem;
   }
@@ -212,22 +247,26 @@ video {
   z-index: 2;
   overflow-y: scroll;
   color: white;
-  /* position: fixed; */
+  position: fixed;
+  border-radius: 14px 14px 0 0;
+  width: 100%;
  }
- .message-top{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 12px;
-    background: #0f0f0f;
-    position: sticky;
-    top: 0;
-    /* bottom: 0; */
-    left: 0;
-    right: 0;
-    border-bottom: 0.1px solid white;
-    color: white;
- }
+ .message-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 12px;
+  background: #0f0f0f;
+  position: -webkit-sticky; /* Added for Safari iOS support */
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  border-bottom: 0.1px solid white;
+  color: white;
+}
+
  .message-body{
   /* background-color: #0f0f0f; */
   position: fixed;
@@ -295,13 +334,21 @@ video {
  }
  .comment-bottom .icons {
   display: flex;
-  gap: 0.9em;
+  gap: 0.7em;
+  align-items: center;
+ }
+ .comment-bottom .icons svg {
+  font-size: 1.1rem;
+ }
+ .comment-bottom .icons span{
+  color: rgb(170, 170, 170);
+  font-size: 13.1px;
  }
   .like_share_save_container > div > svg {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
   .likes, .share, .save, .report{
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
   .Next_videos{
     border-top: 1px solid white;
@@ -326,11 +373,13 @@ video {
     color: white;
  }
  .video_bottom{
-    display: flex;
-    /* align-items: center; */
-    justify-content: space-between;
-    margin: 6px 7px 10px 7px;
-    height: 47px;
+  display: flex;
+  /* align-items: center; */
+  justify-content: space-between;
+  margin: 6px 7px 10px 7px;
+  height: 47px;
+  color: white;
+  align-items: center;
  }
  
  .video_bttom_left img {
@@ -342,12 +391,13 @@ video {
  .menu{
     font-size: 23px;
  }
- #video-title{
+ #video-title {
   font-family: "Roboto", "Arial", sans-serif;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   font-size: 1em;
   -webkit-line-clamp: 2;
+  line-clamp: 2; /* Added for compatibility */
   overflow: hidden;
   line-height: 1.25;
   text-overflow: ellipsis;
@@ -355,7 +405,8 @@ video {
   font-weight: 800;
   font-size: 1.1em;
   margin: 10px 0 0px 0;
- }
+}
+
 .subscribed_btn{
   background-color: #2f2d2b;
   color: white;
@@ -404,24 +455,40 @@ video {
   .Next_videos div>.videos{
     display: flex;
     /* margin-top: -30px; */
+    /* margin-left: 17px; */
+    margin-right: 0;
+    margin-bottom: 0;
+    gap: 14px
   }
   .Next_videos div>.videos>#video{
     flex-basis: calc(100% - 16px);
     max-width: calc(100% - 16px);
     display: flex;
+    aspect-ratio: unset;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .Next_videos{
+    width: 35%;
+    border: none;
+    margin-top: 52px;
+  }
+  .Next_videos div>.videos>#video>.video_bottom>.video_bttom_left  a{
+    display: none;
+  }
+  .Next_videos .video_bttom_left img {
+    display: none;
   }
   .Next_videos div>.videos>#video>a{
-    width: 242px;
-    margin-right: 16px;
+    width: unset;
+    margin-right: 0;
   }
+ 
   .Next_videos> div>.videos>#video > a > #thumbnail_container{
-    padding-top: 0;
-    width: inherit;
-    height: 139px;
+    padding-top: 56.25%;
+    /* height: 139px; */
   }
-  .Next_videos div>.videos>#video > a > #thumbnail_container>img{
-    height: 134px;
-   }
+  
    .Next_videos div>.videos>#video>.video_bottom{
     margin: 0 !important;
     width: 100%;
@@ -433,6 +500,10 @@ video {
    }
    .message-body{
     position: unset;
+   }
+   .greaterthan-2000px-screen-div{
+    display: flex;
+    margin-top: 55px;
    }
 }
 @media screen and (max-width:990px){
@@ -452,20 +523,23 @@ video {
     width: 100%;
     height: 100%;
     z-index: 2;
+    border-radius: 14px 14px 0 0;
     overflow-y: scroll;
     color: white;
 }
 .description_top {
-  display: flex;
-    align-items: center;
+    display: flex;
+    /* align-items: center; */
     justify-content: space-between;
     padding: 12px 12px;
     background: #0f0f0f;
+    position: -webkit-sticky; /* Added for Safari iOS support */
     position: sticky;
     top: 0;
     /* bottom: 0; */
     left: 0;
     right: 0;
+    flex-direction: column;
     border-bottom: 0.1px solid white;
 }
 .description_top h3 {
@@ -477,8 +551,9 @@ video {
   display: block;
   max-height: 2.6rem;
   -webkit-line-clamp: 1;
-  display: box;
+  line-clamp: 1;
   display: -webkit-box;
+  display: box;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   white-space: normal;
@@ -496,7 +571,8 @@ video {
     padding: 0.5rem 1rem;
     height: -webkit-fill-available;
     overflow-y: scroll;
-    scroll-behavior: smooth;
+    /* -webkit-scroll-behavior:smooth; */
+    /* scroll-behavior: smooth; */
 }
 .video-title h2{
   padding: 4px 0;
@@ -506,6 +582,7 @@ video {
   -webkit-box-orient: vertical;
   /* max-height: 2.5em; */
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
   line-height: 1.25;
   text-overflow: ellipsis;
@@ -540,28 +617,72 @@ video {
 .large-screen-video-below-controls{
   display: none !important;
 }
+#showreplybtn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+
+}
 }
 @media  screen and (min-width:990px) {
  
   .fullVideoPage{
-    position: absolute;
+    /* position: absolute; */
     right: 256px;
     top: 65px;
     left: 0;
+    flex: 0 0 62%;
     /* overflow-y: scroll; */
     /* width: 61%; */
     margin-left: 70px;
     overflow: visible;
   }
+  .greaterthan-2000px-screen-div{
+    margin-top: 68px;
+    display: flex;
+    grid-template-columns: repeat(2, 1fr);
+    /* grid-template-columns: 68% 32%; */
+    /* column-gap: 13px;*/
+  }
   .Next_videos {
-    position: fixed;
-    right: 0;
-    width: 400px;
-    /* left: 0; */
-    bottom: 0;
-    top: 21px;
-    overflow-y: auto;
-    border: none;
+    /* position: fixed; */
+      position: relative;
+      top: -40px;
+      border: none;
+}
+.large-screen-video-below-controls{
+  display: none;
+}
+#wrapper:hover{
+  .large-screen-video-below-controls{
+    display: block;
+    transition-duration: 1s;
+  }
+}
+#wrapper:hover:fullscreen{
+  .large-screen-video-below-controls{
+    display: block;
+    transition-duration: 1s;
+  }
+}
+.large-screen-video-below-controls:fullscreen{
+  display: none;
+}
+#showreplybtn{
+  display: flex;
+  align-items: center;
+  color: #3ea6ff;
+  /* font-weight: 600; */
+  font-size: 16px;
+  margin-left: 6px;
+  margin-top: 9px;
+  width: fit-content;
+  padding: 6px 16px;
+  border-radius: 33px;
+}
+#showreplybtn:hover{
+  background-color: #273751;
 }
 .Next_videos .videos #video{
   aspect-ratio: unset;
@@ -573,7 +694,7 @@ video {
  .Next_videos .videos #video .video_bottom{
   width: -webkit-fill-available;
   align-items: baseline;
-  margin: 6px 7px 10px 12px !important;
+  margin: 2px 7px 10px 12px !important;
  }
  .Next_videos .videos #video a {
   width: 230px;
@@ -637,14 +758,16 @@ video {
   display: flex;
   gap: 7px;
 }
-.large-screen-video-below-controls{
-  display: block;
+.below_controls{
+  display: none !important;
 }
- .video_section:hover {
-  .large-screen-video-below-controls{
-    display: block;
-  }
+.middle_controls{
+  display: none !important;
 }
+.video_top_controls {
+  display: none !important;
+}
+
    .Next_videos >.large-screen-main-videoPage .videos #video .video_bottom  svg {
     font-size: 17px;
     cursor: pointer;
@@ -785,7 +908,8 @@ video {
 }
 .large-screen-video-below-controls > .bottom-toggle-buttons .bottom-toggle-buttons-right > svg {
   height: 32px;
-  width: 24px; 
+  width: 30px;
+
 }
 .large-screen-video-below-controls > .bottom-toggle-buttons .bottom-toggle-buttons-right > svg :hover {
   cursor: pointer;
@@ -794,11 +918,6 @@ video {
   font-size: 15px;
 }
 
-.video_section:hover {
-  .middle_controls, .below_controls, .video_top_controls {
-      display: none;
-  }
-}
 .video_section{
   -webkit-transition: opacity .25s cubic-bezier(0,0,.2,1);
     transition: opacity .25s cubic-bezier(0,0,.2,1);
@@ -893,28 +1012,36 @@ video {
   border-radius: 0;
   height: 2em;
 }
-#myRange{
+#replyinput{
+  outline: none;
+  border: unset;
+  border-bottom: 1px solid white;
+  padding: 0;
+  border-radius: 0;
+  height: 2em;
+  width: 100%;
+  background: transparent;
+}
+#myRange {
   z-index: 9999;
   position: relative;
   bottom: 15.5px;
   left: 0px;
   width: 100%;
-  accent-color: #ff0000;
   height: 4px;
+  accent-color: #ff0000;
 }
-#myRange::-webkit-slider-thumb{
-  -webkit-appearance: none;
-  width: 10px;
-  height: 10px;
-  background: #ff0000;
-  cursor: pointer;
-  border-radius: 50%;
+@supports not (accent-color: auto) {
+  #myRange{
+    appearance: none;
+    background-color: #ff0000;
+  }
 }
 #myRange::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 10px;
-  height: 10px; 
+  height: 10px;
   background: #ff0000;
   cursor: pointer;
   border-radius: 50%;
@@ -927,6 +1054,7 @@ video {
   cursor: pointer;
   border-radius: 50%;
 }
+
 }
 @media screen and (min-width:990px) and (max-width:1115px) {
   .fullVideoPage{

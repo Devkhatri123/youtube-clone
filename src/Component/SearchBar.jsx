@@ -18,7 +18,6 @@ function SearchBar() {
     document.body.style.overflow='visible';
   };
   useEffect(()=>{
-    console.log("Navbar is mounted");
     const fetchedData = JSON.parse(sessionStorage.getItem('inputData'))
     if(fetchedData){
       Setsearch(fetchedData?.searchTerm)

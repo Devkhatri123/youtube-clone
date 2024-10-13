@@ -17,13 +17,17 @@ import { onSnapshot,doc,getDoc,collection } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import UploadvideoProvider from '../Context/UploadVideoContext';
 import { Link } from 'react-router-dom';
+import ErrorPage from './ErrorPage';
 function Library() {
     const contentsRef = useRef();
     let [isUploadVideoEnabled,setisUploadVideoEnabled] = useState(false);
     let [user,Setuser] = useState(null);
+    const [scrolled,setscrolled] = useState(false);
     const [Loading,setLoading] = useState(true);
     const [LikedVideos,setLikedVideos] = useState([]);
     const [Watchlater,setWatchlater] = useState([]);
+    const [error,setError] = useState(false)
+    const [ErrorMessage,setErrorMessage] = useState(false)
     useEffect(() => {
       auth.onAuthStateChanged((user) => {
         Setuser(user);
@@ -37,7 +41,8 @@ function Library() {
         if(user){
       const userDocRef = doc(firestore,"users",user?.uid);
       const User = await getDoc(userDocRef);
-      onSnapshot(collection(firestore,`users/${user?.uid}/LikedVideos`),async(snanpShot)=>{
+      if(User.data()){
+      onSnapshot(collection(firestore,`users/${user?.uid}/LV`),async(snanpShot)=>{
        const fetchedLikedVideos = await Promise.all(
         snanpShot.docs.map(async(Doc)=>{
          const VideoDocRef = doc(firestore,"videos",Doc.id);
@@ -47,14 +52,23 @@ function Library() {
           LikedvideoData:getVideo.data(),
           // userData:User.data(),
          }
-        }),
+        },(error)=>{
+          setError(true)
+          setErrorMessage(error.message)
+          console.log(error)
+        }
+      ),
+      
       )
       setLikedVideos({LikedVideos:fetchedLikedVideos,user:User.data()})
       });
     }
+    }
     setLoading(false)
     }catch(error){
       console.log(error);
+      setError(true)
+      setErrorMessage(error.message)
       setLoading(false)
     }
     }
@@ -72,7 +86,8 @@ function Library() {
           if(user){
         const userDocRef = doc(firestore,"users",user?.uid);
         const User = await getDoc(userDocRef);
-        onSnapshot(collection(firestore,`users/${user?.uid}/Watchlater`),async(snanpShot)=>{
+
+        onSnapshot(collection(firestore,`users/${user?.uid}/WL`),async(snanpShot)=>{
          const fetchedWatchlatervideos = await Promise.all(
           snanpShot.docs.map(async(Doc)=>{
            const VideoDocRef = doc(firestore,"videos",Doc.id);
@@ -96,34 +111,25 @@ function Library() {
     GetWatchlater()
     },[user]);
     useEffect(()=>{
-    console.log(Watchlater.user);
+    console.log(Watchlater);
     
     },[Watchlater])
     const HandleUploadVideo = () => {
         setisUploadVideoEnabled(true);
     }
-    const ScrollRight = (e) => {
-      console.log(e)
-      const forwardIcon = document.getElementsByClassName("forwardIcon")[0];
-      const backwardIcon = document.getElementsByClassName("backwardIcon")[0];
+    const scrollLikeVideoRight = (e) => {
       contentsRef.current.scrollBy({
         left: 847,
         behavior: 'smooth'
     });
-    forwardIcon.style.display = "none";
-    backwardIcon.style.display = "block"
-    console.log(forwardIcon)
+    setscrolled(true);
     }
-    const ScrollLeft = (e) => {
-     console.log(e)
-      const forwardIcon = document.getElementsByClassName("forwardIcon")[0];
-      const backwardIcon = document.getElementsByClassName("backwardIcon")[0];
-      contentsRef.current.scrollBy({
+    const scrollLikeVideoLeft = (e) => {
+     contentsRef.current.scrollBy({
         left: -847,
         behavior: 'smooth'
     });
-    forwardIcon.style.display = "block";
-    backwardIcon.style.display = "none"
+    setscrolled(false)
     }
     return (
       isUploadVideoEnabled ? (
@@ -132,30 +138,27 @@ function Library() {
         </UploadvideoProvider>
       ) : (
         user ? (
-          <div className='libraryPage'>
-            <div className="top_Section">
-              <div className="left">
-                <GoHistory />
-                <h4>History</h4>
-              </div>
-              <a href='#' className='viewAll'>View all</a>
-            </div>
+          !error || !ErrorMessage ? (
+            <div className='libraryPage'>
             <div className="watched_Videos">
            
               <WatchedVideos />
             </div>
+            {LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 ||(
+             Watchlater.Watchlater && Watchlater.Watchlater.length > 0 && (
+              <>
             <div className="playlists">
               <div className="playlist-header">
                 <h3>Playlists</h3>
               </div>
               <div className='playlists-cards'>
                 {!Loading ? (
-              LikedVideos && (
+             LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 && (
               <div className="playlist-card">
         <div class="thumbnail">
-      {LikedVideos.LikedVideos &&
+      {LikedVideos.LikedVideos.length > 0 &&
       <>
-       <img src={LikedVideos.LikedVideos[1].LikedvideoData.Thumbnail} alt=""/>
+       <img src={LikedVideos.LikedVideos[0]?.LikedvideoData.Thumbnail} alt=""/>
             <div className="overlay">
             <BiLike style={{fontsize: "1.5rem"}}/>
             <p>Liked Videos</p>
@@ -167,22 +170,26 @@ function Library() {
     </div>
     )
   ):<p>Loading...</p>}
+    {!Loading ? (
+      Watchlater.Watchlater.length > 0 &&
     <div class="playlist-card">
         <div className="thumbnail">
-      {LikedVideos.LikedVideos &&
       <>
-       <img src={LikedVideos.LikedVideos[1].LikedvideoData.Thumbnail} alt=""/>
+       <img src={Watchlater.Watchlater[0].WatchlatervideoData.Thumbnail} alt=""/>
             <div className="overlay">
             <FiClock style={{fontsize: "1.5rem"}}/>
             <p>Watch Later Videos</p>
-                <span className="video-count"><CgPlayList />{Watchlater?.Watchlater?.length} {Watchlater?.Watchlater?.length > 1 ? "videos":"video"} </span>
+                <span className="video-count"><CgPlayList />{Watchlater.Watchlater?.length} {Watchlater.Watchlater?.length > 1 ? "videos":"video"} </span>
             </div>
             </>
-}
         </div>
     </div>
+     ):<p>Loading...</p>}
     </div>
             </div>
+            </>
+             )
+    )}
             <div className="createVideo">
               <a href="#">
                 <IoPlayOutline />
@@ -193,21 +200,21 @@ function Library() {
                 <p onClick={HandleUploadVideo}>Create Video</p>
               </a>
             </div>
-            {LikedVideos.LikedVideos && (
+            {LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 && (
               <>
              <div  className='Shelf'>
              <div  className='Shelf-header'>
              <h3>Liked Videos <span style={{color:"#8e9493"}}>{LikedVideos.LikedVideos.length}</span></h3>
-             <a href="#">View all</a>
+             <Link to={`/playlist?list=LV`}>View all</Link>
              </div>
              <div id="contents" ref={contentsRef}>
-             {LikedVideos.LikedVideos && LikedVideos.LikedVideos.filter((LikedVideo)=>{
-              return !LikedVideo.LikedvideoData.shortVideo
+             {LikedVideos && LikedVideos.LikedVideos.filter((LikedVideo)=>{
+              return !LikedVideo.LikedvideoData?.shortVideo
             }).slice(0,6).map((LikedVideo,index)=>{
               return <div id="video" key={index}>
-              <Link to={`/watch?v=${LikedVideo.videoId}`}>
+              <Link to={`/watch?v=${LikedVideo?.videoId}`}>
               <div id="thumbnail_container">
-              <img src={LikedVideo.LikedvideoData.Thumbnail} alt="" className="video"/>
+              <img src={LikedVideo.LikedvideoData?.Thumbnail} alt="" className="video"/>
               </div>
                  </Link>
                  <div className="video_bottom">
@@ -229,25 +236,26 @@ function Library() {
                 </div>
              })}
              </div>
-             <div className='forwardIcon ' onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
-             <div className="backwardIcon" style={{display:"none"}} onClick={(e)=>{ScrollLeft(e)}}><IoIosArrowBack/></div>
+             {LikedVideos.LikedVideos.length >= 5 &&   <div className="forwardIcon" style={{display: !scrolled?"block": "none"}} onClick={(e)=>{scrollLikeVideoRight(e)}}><IoIosArrowForward/></div>}
+             <div className="backwardIcon" style={{display: scrolled?"block": "none"}} onClick={(e)=>{scrollLikeVideoLeft(e)}}><IoIosArrowBack/></div>
              </div>
              
              </>
             )}
+            { Watchlater.Watchlater&&Watchlater.Watchlater.length > 0 &&(
              <div  className='Shelf'>
              <div  className='Shelf-header'>
              <h3>Watch later <span style={{color:"#8e9493"}}>{Watchlater?.Watchlater?.length}</span></h3>
-             <a href="#">View all</a>
+            <Link to={`/playlist?list=WL`}>View all</Link>
              </div>
             <div id="contents">
             {Watchlater.Watchlater && Watchlater.Watchlater.filter((Watchlatervideo)=>{
-              return !Watchlatervideo.WatchlatervideoData.shortVideo;
+              return !Watchlatervideo.WatchlatervideoData?.shortVideo;
             }).slice(0,6).map((Watchlatervideo,i)=>{
               return <div id="video" key={i}>
-              <Link to={`/watch?v=${Watchlatervideo.WatchlatervideoData.videoId}`}>
+              <Link to={`/watch?v=${Watchlatervideo.WatchlatervideoData?.videoId}`}>
               <div id="thumbnail_container">
-              <img src={Watchlatervideo.WatchlatervideoData.Thumbnail} alt="" className="video"/>
+              <img src={Watchlatervideo.WatchlatervideoData?.Thumbnail} alt="" className="video"/>
               </div>
                  </Link>
                  <div className="video_bottom">
@@ -271,7 +279,9 @@ function Library() {
             }
             </div>
             </div>
+            )}
           </div>
+          ):<ErrorPage ErrorMessage={ErrorMessage}/>
         ) : (
           <NotSignedIn />
         )

@@ -10,11 +10,13 @@ import {FaRegUserCircle} from "react-icons/fa";
 import { getDoc,doc,setDoc } from 'firebase/firestore';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import "../CSS/Navbar.css";
-import { createSearchParams, Link} from 'react-router-dom';
+import { createSearchParams, Link, useSearchParams} from 'react-router-dom';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Navbarcontext } from '../Context/NavbarContext';
- const LargeScreenNavbar = React.memo(() => {
+import ErrorPage from './ErrorPage';
+ const LargeScreenNavbar =() => {
   const currentState = useContext(Navbarcontext);
+  
   const inputRef = useRef(null);
   const [searchTerm,setsearchTerm] = useState('');
   const [Loading,setLoading] = useState(true);
@@ -31,12 +33,11 @@ import { Navbarcontext } from '../Context/NavbarContext';
         })
      },[auth]);
      useEffect(()=>{
-     const fetchedData = JSON.parse(sessionStorage.getItem('inputData'))
-     if(fetchedData){
-     setsearchTerm(fetchedData?.searchTerm)
-     }
-     },[searchTerm])
-    
+       const fetchedData = JSON.parse(sessionStorage.getItem('inputData'))
+        if(fetchedData){
+          setsearchTerm(fetchedData?.searchTerm)
+        }
+        },[])
    const HandleSearch = (e) => {
      setsearchTerm(e.target.value);
      console.log(searchTerm)
@@ -131,13 +132,11 @@ import { Navbarcontext } from '../Context/NavbarContext';
       currentState.setError(false)
       }catch(error){
         currentState.setError(true)
-        console.log(error.message)
-        console.log(currentState.Error)
-      }
+        currentState.setErrorMessage(error.message)
+       }
     }
     GetCurentUser();
   },[user]);
-  
   return (
    <div className='large-screen-Navbar'>
     <div className='large-screennavbar-left'>
@@ -160,7 +159,8 @@ import { Navbarcontext } from '../Context/NavbarContext';
       )}
     </div>
     <div className='large-screennavbar-right'>
-   <PiVideoCameraLight onClick={()=>navigate("/uploadVideo")}/>
+
+   {user && <PiVideoCameraLight onClick={()=>navigate("/uploadVideo")}/>}
    <IoMdNotificationsOutline  onClick={HandleToggle}/>
    {CurrentUser?.Numberofvideos && (
     CurrentUser?.Numberofvideos > 0 && CurrentUser?.Numberofvideos < 10 ? (
@@ -200,5 +200,5 @@ import { Navbarcontext } from '../Context/NavbarContext';
     </div>
    </div>
   )
-})
+}
 export default LargeScreenNavbar

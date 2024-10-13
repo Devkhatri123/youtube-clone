@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RxCross1 } from "react-icons/rx";
 import "../CSS/VideoPage.css"
 import VideoInfoCard from './VideoInfoCard';
@@ -10,6 +10,9 @@ import { useSearchParams } from 'react-router-dom';
 function DescriptionPage(props) {
   const [showDescription,setshowDescription] = useState(true);
   const [Video, Setvideo] = useState();
+  const touchStartRef = useRef(0); // To store the initial touch position
+  const touchEndRef = useRef(0);
+  const DescriptionRef = useRef();
   const [user, setUser] = useState();
   const [showFullText,setshowFullText] = useState(false);
   const currentState = useContext(CurrentState)
@@ -59,13 +62,36 @@ function DescriptionPage(props) {
      }
     })
   }
+  const sectionTouch = (e) => {
+    touchStartRef.current = e.touches[0].clientY;
+  }
+  const drageSection = (e) => {
+    touchEndRef.current = e.changedTouches[0].clientY;
+    const swipeDistance = touchStartRef.current - touchEndRef.current;
+    
+    DescriptionRef.current.style.transform= `translateY(${Math.abs(swipeDistance)}px)`;
+  }
+  const HideLayout = () => {
+    const swipeDistance = touchStartRef.current - touchEndRef.current;
+    // shortvideolayout.current.style.transform= `translateY(${Math.abs(swipeDistance)}px)`;
+    if(swipeDistance <= -100){
+      DescriptionRef.current.style.display = "none";
+      currentState.setDescription(false)
+      document.body.style.overflow = "scroll";
+    }else{
+      DescriptionRef.current.style.transform= `translateY(-9.5px)`;
+    }
+  } 
   return (
     <>
       {currentState.Description && (
-        <div id='description_page'>
-          <div className="description_top">
+        <div id='description_page' ref={DescriptionRef} style={{transform:"translateY(-9.5px)"}}>
+          <div className="description_top" onTouchMove={drageSection} onTouchStart={sectionTouch} onTouchEnd={HideLayout}>
+          <div className="line"><span></span></div>
+            <div style={{display:'flex',alignItems:"center",justifyContent:"space-between"}}>
             <h3>Description</h3>
             <RxCross1 onClick={HandleCurrentComponent} />
+            </div>
           </div>
           <div className="description_body">
             <div className="primary-info">

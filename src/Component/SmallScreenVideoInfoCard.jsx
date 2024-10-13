@@ -28,6 +28,13 @@ function SmallScreenVideoInfoCard(props) {
     const [LoggedInUser,setLoggedInUser] = useState(null);
     const [queryParameters] = useSearchParams();
   const searchQuery = queryParameters.get("v");
+  const [screenWidth,setscreenWidth] = useState();
+  useEffect(()=>{
+   setscreenWidth(window.innerWidth);
+   window.addEventListener("resize",()=>{
+    setscreenWidth(window.innerWidth)
+   })
+  },[screenWidth])
     useEffect(()=>{
       auth.onAuthStateChanged((currentuser)=>{
         setLoggedInUser(currentuser);
@@ -85,14 +92,12 @@ function SmallScreenVideoInfoCard(props) {
       }
       const doLike = async() => {
        if(props.CurrentUser){
-        const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LikedVideos`),props.videoId);
+        const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LV`),props.videoId);
         const videoDocRef = doc(firestore,"videos",props.videoId);
         const getLikedDoc = await getDoc(docRef);
         if(!getLikedDoc.exists()){
         const data = {
-          VideoTitle:props.Video.Title,
-          description:props.Video.description,
-          Thumbnail:props.Video.Thumbnail,
+          videoURL:props.videoId,
         }
         await setDoc(docRef,data);
         await updateDoc(videoDocRef,{
@@ -106,7 +111,7 @@ function SmallScreenVideoInfoCard(props) {
       useEffect(()=>{
         const checkLikedOrNot = async() => {
           if(props.CurrentUser){
-          const LikedDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LikedVideos`),props.videoId);
+          const LikedDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LV`),props.videoId);
           const GetLikedDoc = await getDoc(LikedDocRef);
           if(GetLikedDoc.exists()){
             setisLiked(true);
@@ -119,7 +124,7 @@ function SmallScreenVideoInfoCard(props) {
       },[props.videoId,props.user,props.CurrentUser])
       const doUnLike = async() => {
           try{
-        await deleteDoc(doc(collection(firestore,`users/${props.CurrentUser?.uid}/LikedVideos`),props.videoId));
+        await deleteDoc(doc(collection(firestore,`users/${props.CurrentUser?.uid}/LV`),props.videoId));
         const videoDocRef = doc(firestore,"videos",props.videoId);
         await updateDoc(videoDocRef,{
           likes: props.Video.likes - 1,
@@ -166,7 +171,7 @@ function SmallScreenVideoInfoCard(props) {
        },[LoggedInUser,searchQuery])
        const watchLater = async() => {
          if(LoggedInUser){
-          const watchlaterDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/Watchlater`),props.videoId);
+          const watchlaterDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/WL`),props.videoId);
           const watchlaterDoc = await getDoc(watchlaterDocRef);
           if(!watchlaterDoc.exists()){
             await setDoc(watchlaterDocRef,{videoURL:props.videoId});
@@ -178,13 +183,12 @@ function SmallScreenVideoInfoCard(props) {
          }
        }
   return (
-    !currentState.shortvideoShowMessages ? (
-    !currentState.Description ? (
     <div className="video_page">
-          <div onClick={()=>{currentState.setDescription(true)}} style={{margin:"0 0.9em"}}>
+       { currentState.shortvideoShowMessages && <Comment video={props.Video} user={props.user} videoId={props.videoId}/>}
+       { currentState.Description && <DescriptionPage/>}
+          <div onClick={()=>{currentState.setDescription(true);window.scrollTo(0,0);document.body.style.overflow="hidden";}} style={{margin:"0 0.9em"}}>
             <VideoDetail/>
             </div>
-         
              <div className="channel_details">
                 <div className="channel_details_left_part">
                   <img src={props.user?.channelPic} alt={props.user?.name} />
@@ -218,7 +222,7 @@ function SmallScreenVideoInfoCard(props) {
                 </div>
               </div>
               {/* {currentState.shortvideoShowMessages ? <Comment video={Video} user={user} videoId={params.id}/>:null} */}
-              <div className="comments" onClick={()=>{currentState.setshortvideoShowMessages(true);document.body.style.overflow="hidden"}}>
+              <div className="comments" onClick={()=>{currentState.setshortvideoShowMessages(true);document.body.style.overflow="hidden";window.scrollTo(0,0)}}>
               {props.Video?.comments === "On"?(
                 <>
                 {props.Video?.Comments ? (
@@ -240,13 +244,12 @@ function SmallScreenVideoInfoCard(props) {
                  <p className="comments_turnedOff_message">Comments are Turned Off for this video</p>
               )}
               </div>
+              {/* {screenWidth <= 587 && props?.NextVideos.length > 0 && (
               <div className="Next_videos">
                <Videos video={props?.NextVideos}/>
-              
-           </div>
             </div>
-    ):<DescriptionPage/>
-):<Comment video={props.Video} user={props.user} videoId={props.videoId}/>
+              )} */}
+            </div>
   )
 }
 

@@ -37,11 +37,9 @@ function SearchResults() {
         });
       }
       // 
-      console.log(Loading)
       setFullVideos(newVideos); 
       setLoading(false);
-      console.log("done");
-    }catch(error){
+     }catch(error){
       console.log(error)
     }
     }

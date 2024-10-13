@@ -10,19 +10,20 @@ import { IoReloadOutline } from "react-icons/io5";
 import { RxEnterFullScreen } from "react-icons/rx";
 import { MdOutlineFullscreenExit } from "react-icons/md";
 import { MdOutlineArrowBackIos } from "react-icons/md";
+import { MdOutlinePictureInPictureAlt } from "react-icons/md";
 import { GoGear } from "react-icons/go";
 import { useRef } from "react";
 import "../CSS/VideoPage.css";
 import { onSnapshot, doc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { useSearchParams } from "react-router-dom";
+import ErrorPage from "./ErrorPage";
 function VideoPlayer(props) {
   const LargeScreenVideoBelowControls = useRef();
   const volumeRangeRef = useRef();
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get("v");
   const videoRef = useRef();
-  const parentProgressBarRef = useRef();
   const ProgressBarWidth = useRef();
   let [reloadVideo, setreloadVideo] = useState(false);
   let [TotalVideoSeconds, setTotalVideoSeconds] = useState(0);
@@ -36,8 +37,8 @@ function VideoPlayer(props) {
   let [seconds, setseconds] = useState(0);
   let [minutes, setminutes] = useState(0);
   let [hours, sethours] = useState(0);
-  const [videoWidth, setvideoWidth] = useState();
-  const [videoHeight, setvideoHeight] = useState();
+  const [videoWidth, setvideoWidth] = useState(null);
+  const [videoHeight, setvideoHeight] = useState(null);
   let [Video, Setvideo] = useState(null);
   let [Loading, setLoading] = useState(true);
   const [Fullscreen, setFullscreen] = useState(false);
@@ -68,15 +69,18 @@ function VideoPlayer(props) {
   };
   useEffect(() => {
     setProgress(0);
-    LargeScreenVideoBelowControls.current.style.display = "none";
+    setvideoHeight(null);
+    setvideoWidth(null)
+    // const video_section = document.getElementsByClassName("video_section")[0];
+    // video_section.style.height = "unset"
+    // LargeScreenVideoBelowControls.current.style.display = "none";
     const myRange = document.getElementById("myRange");
     myRange.value = 0;
-    //  ProgressBarWidth.current.value = 0;
     FetchVideo();
     videoRef.current?.addEventListener("loadeddata", () => {
       if (videoRef.current?.readyState >= 3) {
         videoRef.current.play();
-        LargeScreenVideoBelowControls.current.style.display = "block";
+        videoRef.current.playsInline = true;
         videoRef.current.muted = false;
         volumeRangeRef.current.value = videoRef.current.volume * 100;
         setisMute(false);
@@ -102,13 +106,14 @@ function VideoPlayer(props) {
         setvideoWidth(window.innerWidth);
         setvideoHeight(videoWidth * (9 / 16));
       } else if (window.innerWidth >= 507 && window.innerWidth < 990) {
-        setvideoWidth(window.innerWidth - 171);
-        setvideoHeight(videoWidth * (9 / 16));
+        
+        setvideoWidth("unset");
+        setvideoHeight((window.innerWidth - 171) * (9 / 16));
         currentVideo.style.margin = "0 auto";
       } else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
         if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
           setvideoWidth(window.innerWidth - 474);
-          setvideoHeight(videoWidth / 2);
+          setvideoHeight((videoWidth / 2));
           video_section.style.height = videoHeight + "px";
           LargeScreenVideoBelowControls.current.style.bottom = "-40px";
         }else{
@@ -117,14 +122,17 @@ function VideoPlayer(props) {
         }
         currentVideo.style.margin = "unset";
       } else if (window.innerWidth > 1115 && window.innerWidth <= 1754) {
-        setvideoWidth(window.innerWidth - 474);
         if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
-          setvideoHeight(videoWidth / 2);
-          LargeScreenVideoBelowControls.current.style.bottom = "-37px";
+          setvideoWidth(window.innerWidth - 474);
+          setvideoHeight((videoWidth / 2));
           video_section.style.height = videoHeight + "px";
+          LargeScreenVideoBelowControls.current.style.bottom = "-37px";
         }else{
           setvideoHeight(videoWidth * 0.5625);
-         }
+          setvideoWidth(window.innerWidth - 474);
+          LargeScreenVideoBelowControls.current.style.bottom = "-30px";
+          //  video_section.style.height = videoHeight + "px";
+        }
         currentVideo.style.margin = "unset";
       } else {
         if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
@@ -145,13 +153,13 @@ function VideoPlayer(props) {
             setvideoWidth(window.innerWidth);
             setvideoHeight(videoWidth * (9 / 16));
           } else if (window.innerWidth >= 507 && window.innerWidth < 990) {
-            setvideoWidth(window.innerWidth - 171);
-            setvideoHeight(videoWidth * (9 / 16));
+            setvideoWidth("unset");
+            setvideoHeight((window.innerWidth - 171) * (9 / 16));
             currentVideo.style.margin = "0 auto";
           } else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
             if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
               setvideoWidth(window.innerWidth - 474);
-              setvideoHeight(videoWidth / 2);
+              setvideoHeight((videoWidth / 2));
               video_section.style.height = videoHeight + "px";
               LargeScreenVideoBelowControls.current.style.bottom = "-40px";
             }else{
@@ -160,13 +168,14 @@ function VideoPlayer(props) {
             }
             currentVideo.style.margin = "unset";
           } else if (window.innerWidth > 1115 && window.innerWidth <= 1754) {
-            setvideoWidth(window.innerWidth - 474);
             if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
-              setvideoHeight(videoWidth / 2);
+              setvideoWidth(window.innerWidth - 474);
+          setvideoHeight((videoWidth / 2));
               video_section.style.height = videoHeight + "px";
               LargeScreenVideoBelowControls.current.style.bottom = "-37px";
             }else{
               setvideoHeight(videoWidth * 0.5625);
+              setvideoWidth(window.innerWidth - 474);
               LargeScreenVideoBelowControls.current.style.bottom = "-30px";
               //  video_section.style.height = videoHeight + "px";
             }
@@ -219,7 +228,7 @@ function VideoPlayer(props) {
     ProgressBarWidth.current.value = Progress;
     if (Progress < 100 && duration === e.target.duration) {
       ProgressBarWidth.current.value = Progress + 1;
-      setProgress(100);
+      // setProgress(100);
     }
     if (duration === e.target.duration) {
       setisPaused(true);
@@ -247,8 +256,9 @@ useEffect(()=>{
     }
 },[Fullscreen])
   const ChangeVideoDuration = (e) => {
-    videoRef.current.currentTime =
-      e.target.value * (videoRef.current.duration / 100);
+    const value =  e.target.value * (videoRef.current.duration / 100);
+    videoRef.current.currentTime = e.target.value * (videoRef.current.duration / 100);
+      ProgressBarWidth.current.style.setProperty('--slider-value', value + '%')
   };
   const HandleMuteUnmute = () => {
     if (videoRef.current.muted) {
@@ -308,13 +318,19 @@ useEffect(()=>{
     videoRef.current.playbackRate = speedRate;
     setopenPlaySpeedModal(false);
   }
- 
-  return (
+  useEffect(()=>{
+  if(openPlaySpeedModal) document.body.style.overflow = "hidden";
+  else document.body.style.overflow = "unset";
+  },[openPlaySpeedModal])
+ const enablePNP = () => {
+  videoRef.current.requestPictureInPicture()
+ }
+  return !Error || ErrorMessage ? ( 
     <div
       className="video_section"
       style={
-        window.innerWidth > 1040 && props.areNextVideos && !props.src
-          ? { width: videoWidth }
+      props.areNextVideos && !props.src
+          ? { width: videoWidth,height:videoHeight }
           : null
       }
     >
@@ -327,6 +343,7 @@ useEffect(()=>{
         )}
       </div>
       <div id="wrapper">
+        {Fullscreen && <div><h1>{Video.Title}</h1></div>}
         {props.src ? (
           <video
             src={props.src}
@@ -347,6 +364,11 @@ useEffect(()=>{
               ref={videoRef}
               id="currentVideo"
               controls={false}
+              autoPlay
+              playsInline
+               preload="yes"
+              type="video/mp4"
+              muted
               style={
                 props.areNextVideos
                   ? { width: !Fullscreen ? videoWidth : "unset", height: videoHeight }
@@ -403,8 +425,9 @@ useEffect(()=>{
               type="range"
               min={0}
               max={100}
+              value={Progress}
               ref={ProgressBarWidth}
-              style={{ width: "100%" }}
+              style={{ width: "100%",accentColor:"red" }}
               onChange={ChangeVideoDuration}
               id="myRange"
             />
@@ -413,6 +436,7 @@ useEffect(()=>{
         <div
           className="large-screen-video-below-controls"
          ref={LargeScreenVideoBelowControls}
+         style={{bottom:Fullscreen? "0px":null}}
         >
            {openPlaySpeedModal && (
         <>
@@ -422,8 +446,7 @@ useEffect(()=>{
             <MdOutlineArrowBackIos onClick={()=>setopenPlaySpeedModal(false)}/>
             <p>Playback Speed</p>
             </div>
-            <a href="#">Custom</a>
-          </div>
+           </div>
           <div className="options">
             <p onClick={()=>changePlaySpeed(0.25)}>0.25</p>
             <p onClick={()=>changePlaySpeed(0.5)}>0.5</p>
@@ -496,6 +519,7 @@ useEffect(()=>{
               </p>
             </div>
             <div className="bottom-toggle-buttons-right">
+              <MdOutlinePictureInPictureAlt onClick={enablePNP}/>
               <GoGear onClick={()=>setopenPlaySpeedModal(true)}/>
               {!Fullscreen ? (
                 <RxEnterFullScreen onClick={HandleFullScreen} />
@@ -507,7 +531,7 @@ useEffect(()=>{
         </div>
       </div>
     </div>
-  );
+  ):<ErrorPage ErrorMessage={ErrorMessage}/>
 }
 
 export default VideoPlayer;
