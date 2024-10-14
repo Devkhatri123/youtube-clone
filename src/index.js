@@ -30,7 +30,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 let router = createBrowserRouter(
   [
   {
-    path: "/",
+    path: "/youtube-clone",
     element: <>
     <StateProvider>
       <NavbarStateProvider>
@@ -147,7 +147,6 @@ let router = createBrowserRouter(
 root.render(
   <RouterProvider router={router} >
     <Router basename={process.env.PUBLIC_URL}></Router>
-    
     </RouterProvider>
 );
 

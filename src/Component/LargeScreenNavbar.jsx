@@ -141,7 +141,7 @@ import ErrorPage from './ErrorPage';
    <div className='large-screen-Navbar'>
     <div className='large-screennavbar-left'>
         <div onClick={()=>{currentState.setshowSidebar(!currentState.showSidebar);console.log(currentState.showSidebar)}}><MdMenu style={{zIndex:"9999"}}/></div>
-        <img src={youtubeImage} alt='logo' onClick={()=>{navigate("/");currentState.setshowSidebar(!currentState.showSidebar)}}/>
+        <img src={youtubeImage} alt='logo' onClick={()=>{navigate("/youtube-clone");currentState.setshowSidebar(!currentState.showSidebar)}}/>
     </div>
     <div className="large-screennavbar-center">
         <input type="text" name="" id="search-term" ref={inputRef} placeholder='search here' value={searchTerm} onChange={HandleSearch} onKeyDown={HandleKeyDown}/>

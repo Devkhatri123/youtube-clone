@@ -58,7 +58,7 @@ function SmallScreenNavbar() {
         <div className="header">
           <div className="left_side">
             <IoMdMenu id="menu" />
-            <img src={youtubeImage} alt="logo" id="logo" onClick={()=>navigate("/")}/>
+            <img src={youtubeImage} alt="logo" id="logo" onClick={()=>navigate("/youtube-clone")}/>
           </div>
           <div className="center"></div>
           <div className="right_side">
