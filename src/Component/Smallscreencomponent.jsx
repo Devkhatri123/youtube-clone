@@ -11,12 +11,19 @@ import BottomLayout from './BottomLayout';
 import ToastNotification from './ToastNotification';
 import VideoInfoCard from './VideoInfoCard';
 import { videoContext } from '../Context/VideoContext';
+import { auth } from '../firebase/firebase';
 function Smallscreencomponent(props) {
   const videocontext = useContext(videoContext)
   const [ThumbnailHeight,setThumbnailHeight] = useState(null);
   const [ThumbnailWidth,setThumbNailWidth] = useState(null);
   const [bottomLayout,setbottomLayout] = useState(false);
   const [ActiveVideoIndex,setActiveVideoIndex] = useState(null);
+  const [LoggedInUser,setLoggedInUser] = useState(null);
+  useEffect(()=>{
+    auth.onAuthStateChanged((currentUser)=>{
+    setLoggedInUser(currentUser)
+    })
+  },[])
   const [Top,setTop] = useState(null);
   const [Left,setLeft] = useState(null);
   const vidoRef = useRef()
@@ -124,7 +131,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                           Top={Top}
                           videoURL={FullLengthVideo.id}
                           video={FullLengthVideo.Videodata}
-                          // user={PresentUser}
+                           user={LoggedInUser}
                         />
                       </div>
                     )}
@@ -136,7 +143,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
         </div>
     })}
     </div>
-    {props.ShortVideos && (
+    {props.ShortVideos && props.ShortVideos.length > 0&& (
     <div class="short-videos">
      <div className="short-video-section">
         <div className="shelf-header">
@@ -201,7 +208,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                           Top={Top}
                           videoURL={FullLengthVideo.id}
                           video={FullLengthVideo.Videodata}
-                          // user={PresentUser}
+                          user={LoggedInUser}
                         />
                       </div>
                     )}

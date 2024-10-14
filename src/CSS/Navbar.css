@@ -58,6 +58,7 @@
     background: #212121;
     padding: 0.7rem 0.7rem 0 0.7rem;
     position: fixed;
+    top:0;
     z-index: 2;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 2px -2px;
   }
@@ -71,7 +72,7 @@
   }
   .search_container > input {
     background: #383838;
-    width: 93%;
+    width: -webkit-fill-available;
     border-radius: 46px;
     padding: 0.3em 0.2em 0.4em 0.6em;
      outline:none;
@@ -204,8 +205,9 @@
   }
   .large-screennavbar-center{
     display: flex;
-    align-items: center; 
+    align-items: center;
     width: 53%;
+    max-width: 48%;
   }
   .large-screennavbar-center input {
     border-radius: 40px 0 0 40px;

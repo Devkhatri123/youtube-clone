@@ -34,14 +34,9 @@
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
     padding: 16px 8px;
     max-width: 301px;
-    transition: transform 0.4s ease, opacity 0.4s ease;
+    transform: translateY(16px);
  }
-  /* When visible (add this class via hover, focus, or animation) */
-  #toast_notification.transition {
-    /* opacity: 1; Fade in */
-    transform: translateY(-35px);
-    transition-duration: 3s; /* Slide up into view */
-}
+
 #toast_text{
     display: flex;
     width: 100%;
@@ -254,7 +249,7 @@ font-size: 16px;
         width: 97%;
         min-width: unset;
         max-width: unset;
-        margin-left: 12px;
+        margin-left: 9px;
         bottom: 27px;
     }
 }

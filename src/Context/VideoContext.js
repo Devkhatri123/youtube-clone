@@ -32,7 +32,14 @@ export const videoContext = createContext();
         if(!watchlaterDoc.exists()){
           await setDoc(watchlaterDocRef,{videoURL:videoId});
        }
+      setNotificationMessage("Saved to Watchlater");
+      }else{
+        setNotificationMessage("You are not LoggedIn");
       }
+      document.body.style.opacity = "1";
+      setshowToastNotification(true);
+
+      
     }
     return <videoContext.Provider value={{showModal,showToastNotification,NotificationMessage,bottomlayout,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater}}>{children}</videoContext.Provider>
 }

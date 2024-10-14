@@ -144,8 +144,8 @@ function Library() {
            
               <WatchedVideos />
             </div>
-            {LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 ||(
-             Watchlater.Watchlater && Watchlater.Watchlater.length > 0 && (
+            {LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 &&(
+              
               <>
             <div className="playlists">
               <div className="playlist-header">
@@ -188,7 +188,6 @@ function Library() {
     </div>
             </div>
             </>
-             )
     )}
             <div className="createVideo">
               <a href="#">
@@ -208,9 +207,7 @@ function Library() {
              <Link to={`/playlist?list=LV`}>View all</Link>
              </div>
              <div id="contents" ref={contentsRef}>
-             {LikedVideos && LikedVideos.LikedVideos.filter((LikedVideo)=>{
-              return !LikedVideo.LikedvideoData?.shortVideo
-            }).slice(0,6).map((LikedVideo,index)=>{
+             {LikedVideos && LikedVideos.LikedVideos.slice(0,6).map((LikedVideo,index)=>{
               return <div id="video" key={index}>
               <Link to={`/watch?v=${LikedVideo?.videoId}`}>
               <div id="thumbnail_container">
@@ -249,9 +246,7 @@ function Library() {
             <Link to={`/playlist?list=WL`}>View all</Link>
              </div>
             <div id="contents">
-            {Watchlater.Watchlater && Watchlater.Watchlater.filter((Watchlatervideo)=>{
-              return !Watchlatervideo.WatchlatervideoData?.shortVideo;
-            }).slice(0,6).map((Watchlatervideo,i)=>{
+            {Watchlater.Watchlater && Watchlater.Watchlater.slice(0,6).map((Watchlatervideo,i)=>{
               return <div id="video" key={i}>
               <Link to={`/watch?v=${Watchlatervideo.WatchlatervideoData?.videoId}`}>
               <div id="thumbnail_container">

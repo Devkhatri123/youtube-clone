@@ -20,7 +20,8 @@ function CommentBody(props) {
     const [clickedReplyMessage,setclickedReplyMessage] = useState(null);
     const [CommentsLoading,setCommentLoading] = useState(true);
     const [showReplies,setshowReplies] = useState(false);
-    const [ReplyMessage,setReplyMessage] = useState('')
+    const [ReplyMessage,setReplyMessage] = useState('');
+    const [clickedReplyMessageIndex,setclickedReplyMessageIndex] = useState(null);
     useEffect(()=>{
         auth.onAuthStateChanged((curretnUser)=>{
            setUser(curretnUser);
@@ -100,6 +101,28 @@ function CommentBody(props) {
             }
           }
           }
+          const replyCommentLike = async(e,i) => {
+            if(user){
+              const DocRef = doc(firestore,"videos",videoId || props.videoId);
+              if(!Comments[i.ParentCommentindex].replies[i.childCommentindex].ReplyCommentLikes?.usersId.includes(user.uid)){
+                Comments[i.ParentCommentindex].replies[i.childCommentindex].ReplyCommentLikes?.usersId.push(user.uid);
+                Comments[i.ParentCommentindex].replies[i.childCommentindex].ReplyCommentLikes.ReplyCommentnumberOfLikes += 1;
+                await updateDoc(DocRef,{
+                  Comments:Comments
+               })
+              }else{
+                if(Comments[i.ParentCommentindex].replies[i.childCommentindex].ReplyCommentLikes.ReplyCommentnumberOfLikes > 0){
+                 Comments[i.ParentCommentindex].replies[i.childCommentindex].ReplyCommentLikes.ReplyCommentnumberOfLikes -= 1;
+                }
+               const UserIdIndex =  Comments[i.ParentCommentindex].replies[i.childCommentindex].ReplyCommentLikes?.usersId.findIndex((Id)=>  Id === user.uid);
+               Comments[i.ParentCommentindex].replies[i.childCommentindex].ReplyCommentLikes?.usersId.splice(UserIdIndex,1);
+               await updateDoc(DocRef,{
+                Comments:Comments,
+              })
+              }
+              console.log(Comments[i.ParentCommentindex].replies[i.childCommentindex])
+          }
+        }
           const HandleReplyMessage = (e) => {
             setReplyMessage(e.target.value)
           }
@@ -169,8 +192,8 @@ function CommentBody(props) {
                 )}
                 {comment.replies &&(
                   <>
-               <div id='showreplybtn' onClick={()=>{setshowReplies(!showReplies)}}>{!showReplies?<IoIosArrowDown />:<IoIosArrowUp/>}<button>{comment.replies.length} replies</button></div>
-                 {showReplies &&(
+               <div id='showreplybtn' onClick={()=>{setshowReplies(!showReplies);setclickedReplyMessageIndex(index)}}>{!showReplies?<IoIosArrowDown />:clickedReplyMessageIndex === index?<IoIosArrowUp/>:<IoIosArrowDown />}<button>{comment.replies.length} replies</button></div>
+                 {showReplies && index === clickedReplyMessageIndex &&(
                   <>
                   {comment.replies.map((replycomment,i)=>{
                     return <div id="comment" key={i}>
@@ -187,7 +210,7 @@ function CommentBody(props) {
                       </div>
                       <div className="comment-bottom">
                         <div className="icons">
-                          {user && replycomment.ReplyCommentLikes?.usersId.includes(user.uid) ? <BiSolidLike onClick={(e)=>{commentLike(e,index)}}/>:<BiLike onClick={(e)=>{commentLike(e,index)}}/>}<span>{replycomment.ReplyCommentLikes.ReplyCommentnumberOfLikes}</span>
+                          {user && replycomment.ReplyCommentLikes?.usersId.includes(user.uid) ? <BiSolidLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>:<BiLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>}<span>{replycomment.ReplyCommentLikes.ReplyCommentnumberOfLikes}</span>
                           <BiDislike/>
                        </div>
                           <BsThreeDotsVertical/>

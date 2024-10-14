@@ -72,6 +72,7 @@
 }
 .watched_Videos {
   display: flex;
+  flex-direction: column;
   overflow-x: scroll;
   /* gap: 0.5em; */
   margin: 15px 0px 0px 8px;
@@ -273,21 +274,75 @@
   font-size: 18px;
   font-weight: bold;
 }
+#contents #video a{
+  display: block;
+  background-color: black;
+}
+#contents #video a #thumbnail_container img {
+  object-fit: contain;
+}
+@media screen and (max-width:600px) {
+  #left{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Noto Sans';
+  }
+  #left .video{
+    max-width: 94%;
+    padding-top: 12px;
+    margin: 0 auto;
+  }
+  #left div>h3 {
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    color: white;
+    font-weight: 700;
+    margin-left: clamp(0.6rem, 3vw, 1.9rem);
+  }
+  #left p{
+    margin-left: clamp(1rem, 2vw, 0.5rem);
+    color: white;
+    font-size: 1.1rem;
+  }
+  #right{
+    margin-top: 16px;
+    border-top: 1px solid white;
+    padding-top: 13px;
+  }
+  #right #video{
+    display: flex;
+    margin-bottom: 12px;
+  }
+  #right #video a{
+    min-width: 100px;
+    display: flex;
+    flex-basis: calc(63%);
+  }
+  #right #video .video_bottom{
+    width: 100%;
+  }
+  #right #video .video_bottom .video_bttom_left .video_title_and_channelName{
+    justify-content: flex-start;
+  }
+  }
 @media screen and (min-width:600px)  {
   #list{
     display: grid;
     margin: 66px 33px 0 57px;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 40% 60%;
     /* margin: 66px 50px 0 50px; */
     /* margin-left: 58px; */
     column-gap: 12px;
 
+  }
+  #right{
+    margin-top: 20px;
   }
   #list #left{
     margin: 0 0 0 34px;
   }
   #list #left>.video img {
     border-radius: 6px;
+    width: clamp(30rem, 100vw, 100rem);
   }
   #list #left>div{
     display: flex;
@@ -299,6 +354,7 @@
     font-size: 1.3rem;
     font-family: 'Noto sans';
     font-weight: 700;
+    color: white;
   }
   #list #left>div svg{
     font-size: 1.2rem;
@@ -449,5 +505,21 @@
     position: absolute;
     z-index: 1;
   }
-  
+  #toast_notification {
+    transform: translateY(-20px);
+  }
+}
+
+@media screen and (min-width:600px) and (max-width:990px) {
+  #list{
+    margin: 66px 33px 0 26px;
+  }
+  #list #left{
+  margin: unset;
+  }
+}
+@media screen and (max-width:990px) {
+  .watched_Videos{
+    margin-top: 50px;
+  }
 }

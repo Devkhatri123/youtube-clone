@@ -322,36 +322,8 @@ margin-left: 6px;
 #previewVideo_time:hover{
   cursor: pointer;
 }
-input[type="range"]::-webkit-slider-thumb{
-  -webkit-appearance: none;
-  width: 5px;
-  height: 5px;
-  background: #ff0000;
-  cursor: pointer;
-  border-radius: 50%;
-  z-index: 9999;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  z-index: 9999;
-  appearance: none;
-  width: 5px;
-  height: 5px;
-  background: #ff0000;
-  cursor: pointer;
-  border-radius: 50%;
-  z-index: 9999;
-}
 
-input[type="range"]::-moz-range-thumb {
-  z-index: 9999;
-  width: 5px;
-  height: 5px;
-  background: #ff0000;
-  cursor: pointer;
-  border-radius: 50%;
-  z-index: 9999;
-}
+
 }
 @media screen and (min-width:990px) {
   .large-screen-main-videoPage{

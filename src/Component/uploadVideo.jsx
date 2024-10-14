@@ -70,14 +70,15 @@ console.log(user);
 
   const uploadVideo = async () => {
     try{
-    console.log(videoRef.current.firstChild.firstChild.nextElementSibling.childNodes[0].duration);
+    const commentMode = sessionStorage.getItem("commentMode");
+    const video = videoRef.current.firstChild.firstChild.nextElementSibling.childNodes[0]
     let videoLength = videoRef.current.firstChild.firstChild.nextElementSibling.childNodes[0].duration;
     let shortivideo = null;
     const seconds = Math.floor(videoLength % 60);
     const minutes = Math.floor(videoLength / 60) % 60;
     if(minutes >= 1 ) shortivideo  = false
     else if(minutes === 1 || seconds <= 60) shortivideo = true;
-    UploadVideoContext.uploadVideoFunc(thumbnailFile,videoFile,videoTitle,description,shortivideo,user);
+    UploadVideoContext.uploadVideoFunc(thumbnailFile,videoFile,videoTitle,description,shortivideo,user,commentMode,video);
     }catch(error){
       console.log(error)
     }

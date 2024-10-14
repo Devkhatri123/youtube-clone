@@ -103,9 +103,7 @@ function UserPlayList() {
         <div className="video">
           <img
             src={
-              listvideos.listvideos.filter((Listvideo)=>{
-                return !Listvideo.Videodata.shortVideo
-              })[0].Videodata.Thumbnail
+              listvideos.listvideos[0].Videodata.Thumbnail
             }
             alt=""
           />
@@ -119,17 +117,15 @@ function UserPlayList() {
       )}
       <div id="right">
       {listvideos.listvideos &&
-            listvideos.listvideos.filter((video) => {
-              return !video.Videodata?.shortVideo && video.Videodata !== undefined;
-            }).map((video, index) => {
+            listvideos.listvideos.map((video, index) => {
               return (
                 <div id="video" key={index}>
                   <Link to={`/watch/${video?.videoId}`}>
-                    <div id="thumbnail_container">
+                    <div id="thumbnail_container" style={video?.Videodata.shortVideo ?{background:"black"}:{background:"unset"}}>
                       <img
                         src={video?.Videodata.Thumbnail}
                         alt=""
-                        className="video"
+                        className="video" style={video?.Videodata.shortVideo ? {objectFit:"contain"}:{objectFit:"cover"}}
                       />
                     </div>
                   </Link>

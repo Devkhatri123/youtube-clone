@@ -37,8 +37,7 @@ function BottomLayout(props) {
     } 
 const watchlater = async() => {
   await VideoContext.WatchLater(props.user,props.videoURL)
-  VideoContext.setshowToastNotification(true);
-  VideoContext.setNotificationMessage('Saved to Watchlater');
+  // VideoContext.setNotificationMessage('Saved to Watchlater');
   setTimeout(() => {
     VideoContext.setbottomlayout(false)
    }, 3000);

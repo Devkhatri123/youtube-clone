@@ -140,7 +140,7 @@ function ShortVideos() {
     });
     if (user) {
       const docRef = doc(
-        collection(firestore, `users/${auth.currentUser.uid}/LikedVideos`),
+        collection(firestore, `users/${auth.currentUser.uid}/LV`),
         params.id
       );
       const videoDocRef = doc(firestore, "videos", params.id);
