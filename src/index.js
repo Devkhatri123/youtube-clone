@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
 import Library from "./Component/Library";
 import Footer from "./Component/Footer";
 import Navbar from "./Component/Navbar";
@@ -145,8 +145,8 @@ let router = createBrowserRouter(
   },
 ]);
 root.render(
-  <RouterProvider router={router}>
-    {/* <App /> */}
+  <RouterProvider router={router} >
+    <Router basename={process.env.PUBLIC_URL}></Router>
     
     </RouterProvider>
 );
