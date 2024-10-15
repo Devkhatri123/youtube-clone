@@ -317,7 +317,7 @@ function ShortVideos() {
       }
       onTouchEnd={!currentState.shortvideoShowMessages ? handleTouchEnd : null}
     >
-      <Link to={"/"}>
+      <Link to={"/youtube-clone"}>
         <IoIosArrowRoundBack className="back_icon" />
       </Link>
       {FilteredShortVideos.map((shortvideo, index) => {

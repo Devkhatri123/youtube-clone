@@ -49,7 +49,7 @@ function Footer() {
  
   return (
     <div className="footer">
-      <Link to="/">
+      <Link to="/youtube-clone">
         <IoMdHome />
         <p>Home</p>
       </Link>
