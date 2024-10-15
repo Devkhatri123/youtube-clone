@@ -103,10 +103,17 @@ if(videocontext.showToastNotification) setbottomLayout(false)
          <div className="video_bottom">
                       <div className="video_bttom_left">
                       <Link to={`/${FullLengthVideo.Videodata.createdBy}/${FullLengthVideo.UserData?.name.replace(" ","")}/videos`} >
+                      {FullLengthVideo.UserData?.channelURL ? (
                         <img
-                          src={FullLengthVideo.UserData?.channelPic}
+                          src={FullLengthVideo.UserData?.channelURL}
                           alt={FullLengthVideo.UserData?.name}
                         />
+                      ) : (
+                        <img
+                          src={FullLengthVideo.UserData?.channelURL}
+                          alt={FullLengthVideo.UserData?.name}
+                        />
+                      )}
                         </Link>
                         <div className="video_title_and_channelName">
                           <h3 id="video_title" className="title">
@@ -178,10 +185,17 @@ if(videocontext.showToastNotification) setbottomLayout(false)
          </Link>
          <div className="video_bottom">
                       <div className="video_bttom_left">
+                      {FullLengthVideo.UserData?.channelURL ? (
                         <img
-                          src={FullLengthVideo.UserData?.channelPic}
+                          src={FullLengthVideo.UserData?.channelURL}
                           alt={FullLengthVideo.UserData?.name}
                         />
+                      ) : (
+                        <img
+                          src={FullLengthVideo.UserData?.channelURL}
+                          alt={FullLengthVideo.UserData?.name}
+                        />
+                      )}
                         <div className="video_title_and_channelName">
                           <h3 id="video_title" className="title">
                             {FullLengthVideo.Videodata?.Title}

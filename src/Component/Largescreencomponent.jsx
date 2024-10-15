@@ -19,8 +19,10 @@ function Largescreencomponent(props) {
     auth.onAuthStateChanged((currentUser) => {
       setPresentUser(currentUser);
     });
-    console.log(props.FullLengthVideos)
   }, []);
+  useEffect(()=>{
+    console.log(props.FullLengthVideos)
+  },[props.FullLengthVideos])
   const showModal = (e, index, L) => {
     // SetshowLayout(!showLayout);
     videocontext.setbottomlayout(true)
@@ -66,13 +68,16 @@ function Largescreencomponent(props) {
                       )}/videos`}
                       style={{ maxWidth: "max-content", width: "71px" }}
                     >
-                      {FullLengthVideo.UserData?.channelPic ? (
+                      {FullLengthVideo.UserData?.channelURL ? (
                         <img
-                          src={FullLengthVideo.UserData?.channelPic}
+                          src={FullLengthVideo.UserData?.channelURL}
                           alt={FullLengthVideo.UserData?.name}
                         />
                       ) : (
-                        <FaRegUserCircle />
+                        <img
+                          src={FullLengthVideo.UserData?.channelURL}
+                          alt={FullLengthVideo.UserData?.name}
+                        />
                       )}
                     </Link>
                     <Link to={`/watch/${FullLengthVideo.id}`}>
