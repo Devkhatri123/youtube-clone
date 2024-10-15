@@ -11,7 +11,6 @@ function Largescreencomponent(props) {
   const videocontext = useContext(videoContext);
   const LinkRef = useRef();
   const layoutRef = useRef();
-  const [showLayout, SetshowLayout] = useState(false);
   const [PresentUser, setPresentUser] = useState(null);
   const [clickedVideoIndex, setclickedVideoIndex] = useState(0);
   const [Left, setLeft] = useState(0);
@@ -20,6 +19,7 @@ function Largescreencomponent(props) {
     auth.onAuthStateChanged((currentUser) => {
       setPresentUser(currentUser);
     });
+    console.log(props.FullLengthVideos)
   }, []);
   const showModal = (e, index, L) => {
     // SetshowLayout(!showLayout);
