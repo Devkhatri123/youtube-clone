@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import "../CSS/Video.css"
 import Smallscreencomponent from "./Smallscreencomponent";
 import Largescreencomponent from "./Largescreencomponent";
 function Videos(props) {

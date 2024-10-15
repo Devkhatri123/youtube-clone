@@ -46,7 +46,7 @@ function HomeHeader(props) {
   return (
     <>
     <div id="header">
-         <img src={homeContext.user?.channelPic} alt="" />
+         <img src={homeContext.user?.channelURL} alt="" />
          <div id="header-top">
          <h1>{homeContext.user?.name}</h1>
         {btnLoading ? <button disabled>Loading...</button>:<button style={isSubscribed ?{color:"white",background:"#272727"}:{color:"black",background:"white"}}>{isSubscribed ? "subscribed":"subscribe"}</button>} 

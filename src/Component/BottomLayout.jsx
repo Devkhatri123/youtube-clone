@@ -7,7 +7,6 @@ import { RiShareForwardLine } from "react-icons/ri";
 import ShareOnSocialMediaModal from './ShareOnSocialMediaModal';
 import { videoContext } from '../Context/VideoContext';
 function BottomLayout(props) {
-    const [CloseBottomLayout,setCloseBottomLayout] = useState(true);
     const VideoContext = useContext(videoContext);
     const touchStartRef = useRef(0);
     const touchEndRef = useRef(0);
@@ -26,7 +25,6 @@ function BottomLayout(props) {
       const swipeDistance = touchStartRef.current - touchEndRef.current;
       if(swipeDistance <= -65){
         BottomLayout.current.style.display = "none";
-      //  setCloseBottomLayout(false)
       VideoContext.setbottomlayout(false)
         document.body.style.overflow = "scroll";
         document.body.style.opacity = "1";
@@ -37,7 +35,6 @@ function BottomLayout(props) {
     } 
 const watchlater = async() => {
   await VideoContext.WatchLater(props.user,props.videoURL)
-  // VideoContext.setNotificationMessage('Saved to Watchlater');
   setTimeout(() => {
     VideoContext.setbottomlayout(false)
    }, 3000);
@@ -54,7 +51,8 @@ document.addEventListener("click",(e)=>{
   if(BottomLayout.current){
   if(!BottomLayout.current.contains(e.target) && e.target.localName !== "svg" && e.target.nodeName !== "path"){
   VideoContext.setbottomlayout(false)
-  }else{
+  document.body.style.opacity = "1"; 
+}else{
     VideoContext.setbottomlayout(true)
   }
 }

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaRegUserCircle } from "react-icons/fa";
 import BottomLayout from "./BottomLayout";
-import "../CSS/Video.css";
 import { auth } from "../firebase/firebase";
 import { videoContext } from "../Context/VideoContext";
 import ToastNotification from "./ToastNotification";

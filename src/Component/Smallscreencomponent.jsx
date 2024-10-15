@@ -177,7 +177,8 @@ if(videocontext.showToastNotification) setbottomLayout(false)
       )}
     <div className="videos">
        {props.FullLengthVideos && props.FullLengthVideos.slice(1).map((FullLengthVideo,index)=>{
-  return  <div id="video" key={index + 1}>
+        console.log(index)
+  return  <div id="video" key={index + 1} style={index===props.FullLengthVideos.length?{marginBottom:"50px"}:null}>
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>

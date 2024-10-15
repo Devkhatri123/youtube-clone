@@ -61,7 +61,23 @@ body {
   scroll-behavior: smooth; 
   /* scroll-snap-type: y mandatory; */
 }
+.progressBar{
+  /* width: 93%; */
+  background-color: #34393d;
+  padding: 0;
+  border-radius: 7px;
+  /* margin-left: 10px !important; */
+  margin-top: 9px;
 
+}
+
+#progressBar_width{
+  background: red;
+  /* width: 100%; */
+  padding: 3px;
+  border-radius: 7px;
+  cursor: pointer;
+}
 .short_details {
   position: absolute;
   /* left: 15px; */
