@@ -7,8 +7,7 @@ export const HomeContext = createContext();
     const [Allvideos,setAllvideos] = useState([]);
     const [Loading,setLoading] = useState(true);
     const [Error,setError] = useState('');
-    const createdVideos = [];
-
+  
     const GetchannelData = async(id) => {
         setLoading(true);
               try{

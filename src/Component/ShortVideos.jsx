@@ -25,15 +25,15 @@ import { firestore } from "../firebase/firebase";
 import { useNavigate } from "react-router";
 import { auth } from "../firebase/firebase";
 import Comment from "../Component/Comment";
-import { CurrentState } from "../Context/HidevideoinfoCard";
+import { videoContext } from "../Context/VideoContext";
+import DescriptionPage from "./DescriptionPage";
 function ShortVideos() {
   let [Index, setIndex] = useState(0);
   const [user, SetUser] = useState(null);
   const [LikeShort, setLikeShort] = useState(false);
   const [Loading, setLoading] = useState(true);
   const [Ispause, setIspause] = useState(false);
-  let [ShortVideos, setShortVideos] = useState([]);
-  const [dataSet, setdataSet] = useState(null);
+  const [ShortVideos, setShortVideos] = useState([]);
   const [FilteredShortVideos, setFilteredShortVideos] = useState([]);
   const [videoWidth, setvideoWidth] = useState(window.innerWidth);
   const [videoHeight, setvideoHeight] = useState();
@@ -47,7 +47,7 @@ function ShortVideos() {
   const navigate = useNavigate();
   const params = useParams();
   const [windowHeight, setwindowHeight] = useState();
-  const currentState = useContext(CurrentState);
+  const currentState = useContext(videoContext);
   useEffect(() => {
     try {
       onSnapshot(collection(firestore, "videos"), async (snapshot) => {
@@ -168,8 +168,6 @@ function ShortVideos() {
     );
     let currentContainer = short_video_container[Index];
     let video = currentContainer.getElementsByTagName("video").shortvideo;
-    let dataset = video.dataset.video;
-    setdataSet(dataset);
     if (Ispause) video.play();
     else video.pause();
   };
@@ -241,8 +239,6 @@ function ShortVideos() {
   };
   const GotoPreviousVideo = () => {
     const shortVideoContainers = document.querySelectorAll(".short_video_container");
-    console.log(  Index)
-    // Ensure Index stays within valid bounds:
     if (Index <= 0) return; // Handle reaching the end
 
     let currentVideo = shortVideoContainers[Index];
@@ -352,11 +348,11 @@ function ShortVideos() {
             <div
               className={`short_details ${Ispause && ActiveIndex === index ? "ActivesmalldevicesBottomtransition":"RemovesmalldevicesBottomtransition"}`}
               style={
-                currentState.shortvideoShowMessages? { zIndex: "0" }: { zIndex: "10", position: "absolute"}
+                currentState.shortvideoShowMessages || currentState.Description? { zIndex: "0" }: { zIndex: "10", position: "absolute"}
               }
             >
               <div className="short_channel">
-                <img src={shortvideo.UserData.channelPic} alt="" />
+                <img src={shortvideo.UserData.channelPic || shortvideo.UserData.channelURL} alt="" />
                 <p>{shortvideo.UserData.name}</p>
                 <button>subscribe</button>
               </div>
@@ -371,7 +367,7 @@ function ShortVideos() {
               className={`short_controls ${Ispause && ActiveIndex === index ? "ActivesmalldevicesBottomtransition":"RemovesmalldevicesBottomtransition"}`}
               id="shortcontrols"
               style={
-                currentState.shortvideoShowMessages ? { zIndex: "0", position: "absolute"}: { zIndex: "10", position: "absolute"}
+                currentState.shortvideoShowMessages || currentState.Description ? { zIndex: "0", position: "absolute"}: { zIndex: "10", position: "absolute"}
               }
             >
               <div className="like control">
@@ -413,7 +409,7 @@ function ShortVideos() {
               </div>
               <div className="channel control">
                 <img
-                  src={shortvideo.UserData.channelPic}
+                  src={shortvideo.UserData.channelPic || shortvideo.UserData.channelURL}
                   alt=""
                   style={{ width: "45px", borderRadius: "10px" }}
                 />
@@ -424,12 +420,17 @@ function ShortVideos() {
             <div className="shortvideolayout" ref={shortvideolayout}>
               <div className="line" onTouchMove={drageSection} onTouchStart={sectionTouch} onTouchEnd={HideLayout}><span></span></div>
               <div className="menuitems">
-              <div><RiMenu2Fill/><p>Description</p></div>
+              <div onClick={()=>{currentState.setDescription(true);setActiveIndex(index);setshortvideoLayout(false)}}><RiMenu2Fill/><p>Description</p></div>
               <div><FaRegBookmark/><p>Save To Watch later</p></div>
               </div>
             </div>
               )
            )}
+            {currentState.Description === true && (
+                ActiveIndex == index &&(
+                  <DescriptionPage isshortVideo/>
+                )
+             )}
           </div>
         );
       })}

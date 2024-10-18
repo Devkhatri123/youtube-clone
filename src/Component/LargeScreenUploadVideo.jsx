@@ -8,6 +8,7 @@ import { Uploadvideo } from '../Context/UploadVideoContext';
 import { auth } from '../firebase/firebase';
 import { firestore } from '../firebase/firebase';
 import { getDoc,doc } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 function LargeScreenUploadVideo() {
   const inputRef = useRef();
   const imgRef = useRef();
@@ -77,7 +78,7 @@ const HandleCommentMode = (e) => {
       <div className="uploadvideo-inner">
         <div className='uploadvideo-inner-top'>
           <h3>Upload Video</h3>
-          <IoMdClose/>
+        <Link to={"/youtube-clone"}><IoMdClose/></Link> 
         </div>
         {!VideoURL ? (
         <div className='uploadvideo-inner-center'>

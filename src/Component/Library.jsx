@@ -1,5 +1,4 @@
 import React, { useState,useEffect, useRef } from 'react'
-import { GoHistory } from "react-icons/go";
 import "../CSS/Library.css"
 import WatchedVideos from './WatchedVideos';
 import { IoPlayOutline } from "react-icons/io5";
@@ -155,6 +154,7 @@ function Library() {
                 {!Loading ? (
              LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 && (
               <div className="playlist-card">
+                <Link to={`/playlist?list=LV`}>
         <div class="thumbnail">
       {LikedVideos.LikedVideos.length > 0 &&
       <>
@@ -167,12 +167,14 @@ function Library() {
             </>
 }
         </div>
+        </Link>
     </div>
     )
   ):<p>Loading...</p>}
     {!Loading ? (
       Watchlater.Watchlater.length > 0 &&
     <div class="playlist-card">
+      <Link to={`/playlist?list=WL`}>
         <div className="thumbnail">
       <>
        <img src={Watchlater.Watchlater[0].WatchlatervideoData.Thumbnail} alt=""/>
@@ -183,6 +185,7 @@ function Library() {
             </div>
             </>
         </div>
+        </Link>
     </div>
      ):<p>Loading...</p>}
     </div>

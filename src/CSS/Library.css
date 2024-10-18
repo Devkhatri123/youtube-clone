@@ -82,7 +82,7 @@
 .watched_video{
   width: min-content;
 }
-.watched_Videos:first-child {
+.watched_Videos {
   margin-left: -50px;
 }
 .videoInfo {
@@ -280,6 +280,11 @@
 }
 #contents #video a #thumbnail_container img {
   object-fit: contain;
+}
+@media screen and (max-width:990px) {
+  .watched_Videos {
+    margin-left: 12px;
+  }
 }
 @media screen and (max-width:600px) {
   #left{

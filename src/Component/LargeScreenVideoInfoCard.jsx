@@ -1,6 +1,4 @@
 import React,{useEffect,useState,useContext, useRef} from 'react'
-import {CurrentState} from "../Context/HidevideoinfoCard"
-import {sanitize} from "dompurify"
 import { collection,doc,getDoc,updateDoc,setDoc,deleteDoc, addDoc } from 'firebase/firestore';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike } from "react-icons/bi";
@@ -17,12 +15,8 @@ import { FaRegFlag } from "react-icons/fa6";
 import { FaFlag } from "react-icons/fa6";
 import { PiDotsThreeBold } from "react-icons/pi";
 import "../CSS/VideoPage.css";
-import { Link } from "react-router-dom";
 import { auth, firestore } from '../firebase/firebase';
 import CommentBody from './CommentBody';
-import Linkify from "linkify-react";
-import { Dangerous } from '@mui/icons-material';
-import { color } from '@mui/system';
 import ShareOnSocialMediaModal from './ShareOnSocialMediaModal';
 import { videoContext } from '../Context/VideoContext';
 import ErrorPage from './ErrorPage';

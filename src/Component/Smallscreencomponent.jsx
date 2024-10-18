@@ -122,8 +122,9 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                           <div>
                             <p>
                               {FullLengthVideo.UserData?.name} •
-                              {" "} {FullLengthVideo.Videodata?.views} Views
+                              {" "} {FullLengthVideo.Videodata?.views} Views •
                             </p>
+                            <p>{videocontext.getVideoPublishedTime(FullLengthVideo)}</p>
                           </div>
                         </div>
                       </div>

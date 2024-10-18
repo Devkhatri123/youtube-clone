@@ -1,5 +1,4 @@
 import React,{useEffect,useState,useContext} from 'react'
-import {CurrentState} from "../Context/HidevideoinfoCard"
 import DescriptionPage from './DescriptionPage';
 import VideoDetail from './VideoDetail';
 import Comment from './Comment';
@@ -20,8 +19,9 @@ import { FaFlag } from "react-icons/fa6";
 import "../CSS/VideoPage.css";
 import { Link, useSearchParams } from "react-router-dom";
 import { auth, firestore } from '../firebase/firebase';
+import { videoContext } from '../Context/VideoContext';
 function SmallScreenVideoInfoCard(props) {
-    const currentState= useContext(CurrentState);
+    const currentState= useContext(videoContext);
     let [isLiked, setisLiked] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
     let [savedVideo,setsavedVideo] = useState(false);

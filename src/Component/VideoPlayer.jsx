@@ -294,26 +294,7 @@ useEffect(()=>{
   const changeVideoVolume = (e) => {
     const newVolume = parseFloat((e.target.value / 100).toFixed(1));
     videoRef.current.volume = newVolume;
-    if(videoRef.current.volume === 0) setisMute(!isMute);
-    
-  };
-//  document.onkeydown = (e) => {
-//     if (e.key === "ArrowRight") {
-//       second = 5;
-//       videoRef.current.currentTime += second;
-//     } else if (e.key === "ArrowLeft") {
-//       second = 5;
-//       videoRef.current.currentTime -= second;
-//     } else if (e.code === "Space" || e.keyCode === 32) {
-//       e.preventDefault();
-//       videoRef.current.paused
-//         ? videoRef.current.play()
-//         : videoRef.current.pause();
-//         setisPaused(!isPaused);
-//     }
-//     second = 0;
-//     console.log(e);
-//   };
+  }
   const changePlaySpeed = (speedRate) => {
     videoRef.current.playbackRate = speedRate;
     setopenPlaySpeedModal(false);
@@ -352,7 +333,7 @@ useEffect(()=>{
             onTimeUpdate={HandlProgress}
             ref={videoRef}
             id="currentVideo"
-            style={{ width: videoWidth,height:videoHeight }}
+            style={{ width: videoWidth }}
           />
         ) : (
           <div className="videoContainer">

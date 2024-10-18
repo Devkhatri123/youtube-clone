@@ -5,7 +5,6 @@ import { firestore } from "../firebase/firebase";
 import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router";
 import { v4 } from "uuid";
-import { queries } from "@testing-library/react";
 export const Uploadvideo = createContext();
  const UploadvideoProvider = ({ children }) => {
     const [Videoprogress,setvideouploadProgress] = useState(0);
@@ -78,6 +77,7 @@ export const Uploadvideo = createContext();
       shortVideo:shortvideo,
       comments:Comments,
       createdBy:auth.currentUser.uid,
+      Time: Date.now(),
     }
     await setDoc(docRef,data).then(async()=>{
       const AddVideoToSubscribers = query(collection(firestore,`users/${auth.currentUser.uid}/subscribers`));
@@ -106,7 +106,7 @@ export const Uploadvideo = createContext();
     await addDoc(collection(firestore,`users/${auth.currentUser.uid}/createdVideos`),{
       videoUrl:videoId,
     }).then(()=>{
-      navigate("/");
+      navigate("/youtube-clone");
       console.log("video has been uploaded")
     })
    })

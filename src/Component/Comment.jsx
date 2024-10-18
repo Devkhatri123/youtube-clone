@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RxCross1 } from 'react-icons/rx';
-import { CurrentState } from '../Context/HidevideoinfoCard';
 import VideoInfoCard from './VideoInfoCard';
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
@@ -9,8 +8,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { auth, firestore } from '../firebase/firebase';
 import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import CommentBody from './CommentBody';
+import { videoContext } from '../Context/VideoContext';
 function Comment(props) {
-    const currentState = useContext(CurrentState);
+    const currentState = useContext(videoContext);
     const [user,setUser] = useState(null)
     const [CloseMessage,setCloseMessage] = useState(false);
     const touchStartRef = useRef(0); // To store the initial touch position

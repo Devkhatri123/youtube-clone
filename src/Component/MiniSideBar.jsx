@@ -7,7 +7,6 @@ import "../CSS/MiniSideBar.css";
 import "../CSS/VideoPage.css";
 import { Link } from 'react-router-dom';
 import { Navbarcontext } from '../Context/NavbarContext';
-import LargeScreenSideBar from './LargeScreenSideBar';
 function MiniSideBar(props) {
 const [shortVideo,setshortVideo] = useState([])
 const navContext = useContext(Navbarcontext)

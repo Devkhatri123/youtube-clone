@@ -22,7 +22,7 @@ function WatchedVideo({ video }) {
   return (
     <div className="watched_video">
       <div className="videoThumbnail">
-        <Link to={`/watch/${video.videoId}`}>
+        <Link to={`/watch?v=${video.videoId}}`}>
         <img src={video.videoData.Thumbnail} alt={video.videoData.Title} ref={ImgRef} id="videoThumbnail"/>
         </Link>
       </div>

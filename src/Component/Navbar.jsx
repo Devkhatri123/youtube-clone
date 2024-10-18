@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../CSS/Navbar.css";
 import SmallScreenNavbar from "./SmallScreenNavbar";
 import LargeScreenNavbar from "./LargeScreenNavbar";
-import StateProvider from '../Context/HidevideoinfoCard';
 import NavbarStateProvider from "../Context/NavbarContext";
 function Navbar() {
   const [screenWidth,setscreenWidth] = useState();
@@ -14,14 +13,12 @@ function Navbar() {
   },[screenWidth])
   return (
     <>
-      <StateProvider>
-      <NavbarStateProvider>
+     <NavbarStateProvider>
     {screenWidth < 990 ?(
     <div className="small-screen-navbar"><SmallScreenNavbar/></div>
     ):<div className="large-screen-navbar"> <LargeScreenNavbar/></div>}
     </NavbarStateProvider>
-    </StateProvider>
-      </>
+    </>
    );
 }
 

@@ -1,5 +1,4 @@
 import React,{useState,useEffect, useRef, useContext} from 'react'
-import { MdMenu } from "react-icons/md";
 import youtubeImage from "../Pics/youtube.png";
 import { CiSearch } from "react-icons/ci";
 import { PiVideoCameraLight } from "react-icons/pi";
@@ -10,10 +9,9 @@ import {FaRegUserCircle} from "react-icons/fa";
 import { getDoc,doc,setDoc } from 'firebase/firestore';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import "../CSS/Navbar.css";
-import { createSearchParams, Link, useSearchParams} from 'react-router-dom';
+import { createSearchParams, Link } from 'react-router-dom';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Navbarcontext } from '../Context/NavbarContext';
-import ErrorPage from './ErrorPage';
  const LargeScreenNavbar =() => {
   const currentState = useContext(Navbarcontext);
   
@@ -40,9 +38,7 @@ import ErrorPage from './ErrorPage';
         },[])
    const HandleSearch = (e) => {
      setsearchTerm(e.target.value);
-     console.log(searchTerm)
-    //  setinputData('')
-     const data =  currentState.GetData(searchTerm);
+    const data =  currentState.GetData(searchTerm);
      sessionStorage.setItem("inputData",JSON.stringify({searchTerm:searchTerm,searchedVideos:data}));
      setsearchedVideos(data);
     }
@@ -137,15 +133,28 @@ import ErrorPage from './ErrorPage';
     }
     GetCurentUser();
   },[user]);
+  const searchResult = () => {
+    if(searchTerm){
+   currentState.setsearchTerm(searchTerm)
+      const data= currentState.GetData(searchTerm)
+      sessionStorage.setItem("inputData",JSON.stringify({searchTerm:searchTerm,searchedVideos:data}));
+      navigate({
+        pathname: "/results",
+        search: createSearchParams({
+            v: searchTerm,
+        },{replace:true}).toString()
+    });
+    setsearchedVideos([])
+  }
+  }
   return (
    <div className='large-screen-Navbar'>
     <div className='large-screennavbar-left'>
-        <div onClick={()=>{currentState.setshowSidebar(!currentState.showSidebar);console.log(currentState.showSidebar)}}><MdMenu style={{zIndex:"9999"}}/></div>
         <img src={youtubeImage} alt='logo' onClick={()=>{navigate("/youtube-clone");currentState.setshowSidebar(!currentState.showSidebar)}}/>
     </div>
     <div className="large-screennavbar-center">
         <input type="text" name="" id="search-term" ref={inputRef} placeholder='search here' value={searchTerm} onChange={HandleSearch} onKeyDown={HandleKeyDown}/>
-      <button><CiSearch/></button> 
+      <button><CiSearch  onClick={searchResult}/></button> 
       
       {searchedVideos && searchedVideos.length > 0 && (
       <div className="results" ref={resultRef}>

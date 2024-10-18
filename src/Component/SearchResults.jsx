@@ -6,6 +6,7 @@ import { firestore } from '../firebase/firebase';
 import { Navbarcontext } from '../Context/NavbarContext';
 import Smallscreencomponent from './Smallscreencomponent';
 import MainPageLoadingScreen from './MainPageLoadingScreen';
+import { videoContext } from '../Context/VideoContext';
 
 
 function SearchResults() {

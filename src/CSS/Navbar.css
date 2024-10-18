@@ -240,11 +240,11 @@
   }
   .results{
     position: absolute;
-        top: 55px;
-        background: #272727;
-        width: 50%;
-        border-radius: 10px;
-        padding: 20px 14px;
+    top: 55px;
+    background: #272727;
+    width: 40%;
+    border-radius: 10px;
+    padding: 20px 14px;
   }
   #result{
     display: flex;
@@ -264,6 +264,7 @@
   .notifications-top{
      padding: 7px;
      border-bottom: 1px solid;
+     position:-webkit-sticky;
      position:sticky;
      top: 0;
      background: #282828;

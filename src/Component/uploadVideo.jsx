@@ -32,24 +32,10 @@ function UploadVideo() {
   let [thumbnailFile, setthumbnailFile] = useState();
   const PicPickerRef = useRef(null);
   const HandleFileChange = (e) => {
-    console.log(e.target.files);
     setvideoFile(e.target.files[0]);
     setVideo(URL.createObjectURL(e.target.files[0]));
   };
-  const closePage = () => {
-    if (Video !== "" || description !== "" || CommentMode !== "") {
-      if (
-        window.confirm(
-          "Are you sure you want to close? Your uploaded video and data will be lost"
-        )
-      ) {
-        sessionStorage.clear();
-        setcloseUploadPage(true);
-      }
-    } else {
-      setcloseUploadPage(true);
-    }
-  };
+ 
   useEffect(()=>{
     const GetUser = async() => {
     setuser((await getDoc(doc(firestore,"users",auth.currentUser.uid))).data()); 
@@ -92,7 +78,7 @@ return closeUploadPage ? (
     !commentMode ? (
     <div className="uploadVideo">
     
-      <IoMdClose className="close_page_icon" onClick={closePage} />
+      <IoMdClose className="close_page_icon" />
       <input
             type="file"
             accept="video/*"

@@ -5,10 +5,11 @@
     width: 100%;
 }
 .video_bttom_left img {
-  width: 40px;
+  width: 30px;
   border-radius: 20px;
   margin: 6px 0;
   margin: 0;
+  height: 30px;
 }
 .video_title_and_channelName {
   font-size: 0.8rem;
@@ -177,6 +178,9 @@
   }
 }
 @media screen and (min-width: 600px) {
+  .videos{
+    flex-direction: row;
+  }
   #video-bottom-layout {
     max-width: 236px;
     overflow: scroll;

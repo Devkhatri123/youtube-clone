@@ -19,11 +19,7 @@ function Largescreencomponent(props) {
       setPresentUser(currentUser);
     });
   }, []);
-  useEffect(()=>{
-    console.log(props.FullLengthVideos)
-  },[props.FullLengthVideos])
   const showModal = (e, index, L) => {
-    // SetshowLayout(!showLayout);
     videocontext.setbottomlayout(true)
     setclickedVideoIndex(index);
     setLeft(e.pageX - 246);
@@ -40,6 +36,7 @@ function Largescreencomponent(props) {
       setTop(dots.getBoundingClientRect().y + 9);
     });
   }
+
   return (
     <div className="large-screen-main-videoPage">
       <div className="videos">
@@ -86,11 +83,12 @@ function Largescreencomponent(props) {
                         </h3>
                         <div className="channelnameandviews">
                           <p id="channelName">
-                            {FullLengthVideo.UserData?.name}
+                            {FullLengthVideo.UserData?.name} •
                           </p>
                           <p id="video-views">
-                            {FullLengthVideo.Videodata?.views} Views
+                            {FullLengthVideo.Videodata?.views} Views   •
                           </p>
+                          <p>{videocontext.getVideoPublishedTime(FullLengthVideo)}</p>
                         </div>
                       </div>
                     </Link>

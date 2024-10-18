@@ -5,19 +5,19 @@ import VideoInfoCard from './VideoInfoCard';
 import { useParams } from 'react-router';
 import { doc,onSnapshot } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
-import { CurrentState } from '../Context/HidevideoinfoCard';
 import { useSearchParams } from 'react-router-dom';
+import { videoContext } from '../Context/VideoContext';
 function DescriptionPage(props) {
-  const [showDescription,setshowDescription] = useState(true);
   const [Video, Setvideo] = useState();
   const touchStartRef = useRef(0); // To store the initial touch position
   const touchEndRef = useRef(0);
   const DescriptionRef = useRef();
   const [user, setUser] = useState();
   const [showFullText,setshowFullText] = useState(false);
-  const currentState = useContext(CurrentState)
+  const currentState = useContext(videoContext)
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get('v');
+  const params = useParams()
   const HandleCurrentComponent = () => {
     currentState.setDescription(false)
    // document.body.style.overflowY = "scroll";
@@ -26,7 +26,7 @@ function DescriptionPage(props) {
    if(currentState.Description){
     const FetchVideo = async () => {
       try {
-        const VideoRef = doc(firestore, "videos", videoId);
+        const VideoRef = doc(firestore, "videos", videoId || params.id);
         // const video = await getDoc(videoRef);
         onSnapshot(VideoRef,async(videDoc)=>{
         if (videDoc.exists()) {
@@ -47,7 +47,7 @@ function DescriptionPage(props) {
     };
     FetchVideo();
    }
-  },[videoId,showDescription]);
+  },[videoId]);
   const urlify = (text) => {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.replace(urlRegex, function(url) {
@@ -85,7 +85,7 @@ function DescriptionPage(props) {
   return (
     <>
       {currentState.Description && (
-        <div id='description_page' ref={DescriptionRef} style={{transform:"translateY(-9.5px)"}}>
+        <div id='description_page' ref={DescriptionRef} style={!props.isshortVideo ? {transform:"translateY(-9.5px)"}:{top:"35%"}}>
           <div className="description_top" onTouchMove={drageSection} onTouchStart={sectionTouch} onTouchEnd={HideLayout}>
           <div className="line"><span></span></div>
             <div style={{display:'flex',alignItems:"center",justifyContent:"space-between"}}>

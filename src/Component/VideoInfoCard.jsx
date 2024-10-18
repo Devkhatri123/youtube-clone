@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import VideoPlayer from "./VideoPlayer";
 import {auth } from "../firebase/firebase";
 import "../CSS/VideoPage.css";
-import { CurrentState } from "../Context/HidevideoinfoCard";
 import SmallScreenVideoInfoCard from "./SmallScreenVideoInfoCard";
 import LargeScreenVideoInfoCard from "./LargeScreenVideoInfoCard";
+import { videoContext } from "../Context/VideoContext";
 function VideoInfoCard(props) {
-  const currentState = useContext(CurrentState);
+  const currentState = useContext(videoContext);
   const [CurrentUser, setCurrentUser] = useState(null);
   const [windowWidth, setwindowWidth] = useState(window.innerWidth);
   useEffect(() => {
