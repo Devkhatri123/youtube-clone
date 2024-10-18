@@ -119,7 +119,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                           <h3 id="video_title" className="title">
                             {FullLengthVideo.Videodata?.Title}
                           </h3>
-                          <div>
+                          <div style={{color:"#aaa",display:"flex"}}>
                             <p>
                               {FullLengthVideo.UserData?.name} •
                               {" "} {FullLengthVideo.Videodata?.views} Views •
@@ -202,11 +202,12 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                           <h3 id="video_title" className="title">
                             {FullLengthVideo.Videodata?.Title}
                           </h3>
-                          <div>
+                          <div style={{color:"#aaa",display:"flex"}}>
                             <p>
                               {FullLengthVideo.UserData?.name} •
-                              {" "} {FullLengthVideo.Videodata?.views} Views
+                              {" "} {FullLengthVideo.Videodata?.views} Views •
                             </p>
+                            <p>{videocontext.getVideoPublishedTime(FullLengthVideo)}</p>
                           </div>
                         </div>
                       </div>
