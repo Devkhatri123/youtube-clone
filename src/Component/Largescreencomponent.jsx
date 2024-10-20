@@ -51,6 +51,7 @@ function Largescreencomponent(props) {
                       alt=""
                       className="video"
                     />
+                      <p className='videoLength'>5:23</p>
                   </div>
                 </Link>
                 <div className="video_bottom">

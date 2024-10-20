@@ -96,7 +96,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>
-      
+      <p className='videoLength'>5:23</p>
       </div>
          </Link>
          <div className="video_bottom">
@@ -182,6 +182,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>
+      <p className='videoLength'>5:23</p>
       </div>
          </Link>
          <div className="video_bottom">

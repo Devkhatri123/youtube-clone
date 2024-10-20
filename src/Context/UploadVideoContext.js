@@ -77,6 +77,7 @@ export const Uploadvideo = createContext();
       shortVideo:shortvideo,
       comments:Comments,
       createdBy:auth.currentUser.uid,
+      videoLength:video.duration,
       Time: Date.now(),
     }
     await setDoc(docRef,data).then(async()=>{

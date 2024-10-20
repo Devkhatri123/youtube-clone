@@ -1,6 +1,6 @@
-import { createContext, useState,useEffect } from "react";
+import { createContext, useState} from "react";
 import {doc,getDocs,collection,getDoc} from "firebase/firestore";
-import { auth, firestore } from "../firebase/firebase";
+import { firestore } from "../firebase/firebase";
 export const HomeContext = createContext();
  const HomePageStateProvider = ({ children }) => {
     const [user,setuser] = useState(null);
