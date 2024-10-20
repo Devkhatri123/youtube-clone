@@ -147,6 +147,15 @@ import { Navbarcontext } from '../Context/NavbarContext';
     setsearchedVideos([])
   }
   }
+  document.body.addEventListener("click",(e)=>{
+    const notifications = document.querySelector(".notifications");
+    const notificationIcon = document.querySelector(".notificationIcon");
+    const notificationBadge = document.querySelector(".notification-badge");
+    console.log(notificationIcon)
+     if(!e.target.contains(notifications) && !e.target.contains(notificationIcon) && !e.target.contains(notificationBadge)){
+      setopenNotifications(false);
+     }
+  })
   return (
    <div className='large-screen-Navbar'>
     <div className='large-screennavbar-left'>
@@ -170,7 +179,7 @@ import { Navbarcontext } from '../Context/NavbarContext';
     <div className='large-screennavbar-right'>
 
    {user && <PiVideoCameraLight onClick={()=>navigate("/uploadVideo")}/>}
-   <IoMdNotificationsOutline  onClick={HandleToggle}/>
+   <IoMdNotificationsOutline  onClick={HandleToggle} className='notificationIcon'/>
    {CurrentUser?.Numberofvideos && (
     CurrentUser?.Numberofvideos > 0 && CurrentUser?.Numberofvideos < 10 ? (
     <span className='notification-badge'>{CurrentUser?.Numberofvideos}</span>

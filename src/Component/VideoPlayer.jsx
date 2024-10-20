@@ -71,17 +71,16 @@ function VideoPlayer(props) {
     setProgress(0);
     setvideoHeight(null);
     setvideoWidth(null)
-    // const video_section = document.getElementsByClassName("video_section")[0];
-    // video_section.style.height = "unset"
-    // LargeScreenVideoBelowControls.current.style.display = "none";
     const myRange = document.getElementById("myRange");
     myRange.value = 0;
     FetchVideo();
     videoRef.current?.addEventListener("loadeddata", () => {
+       LargeScreenVideoBelowControls.current.style.display = "none"
       if (videoRef.current?.readyState >= 3) {
         videoRef.current.play();
         videoRef.current.playsInline = true;
         videoRef.current.muted = false;
+        LargeScreenVideoBelowControls.current.style.display = "block"
         volumeRangeRef.current.value = videoRef.current.volume * 100;
         setisMute(false);
         setisPaused(false);
@@ -276,14 +275,15 @@ useEffect(()=>{
   const ExitFullscreen = () => {
     const wrapper = document.getElementById("wrapper");
     const currentVideo = document.getElementById("currentVideo");
+    if(!document.fullscreenEnabled){
     document.exitFullscreen();
-    setFullscreen(false);
     wrapper.style.display = "unset";
     wrapper.style.flexDirection = "unset";
     wrapper.style.justifyContent = "unset";
     currentVideo.style.width = videoWidth;
     currentVideo.style.height = videoHeight;
     currentVideo.style.borderRadius = "12px";
+    }setFullscreen(false);
   };
   const showVolumeRange = () => {
     volumeRangeRef.current.style.display = "block";
@@ -310,7 +310,7 @@ useEffect(()=>{
     <div
       className="video_section"
       style={
-      props.areNextVideos && !props.src
+      !props.src
           ? { width: videoWidth,height:videoHeight }
           : null
       }
@@ -324,7 +324,7 @@ useEffect(()=>{
         )}
       </div>
       <div id="wrapper">
-        {Fullscreen && <div><h1>{Video.Title}</h1></div>}
+        {Fullscreen && <div id="fullscreenDiv"><h1 className="fullscreenVideoTitle">{Video.Title}</h1></div>}
         {props.src ? (
           <video
             src={props.src}
@@ -351,10 +351,8 @@ useEffect(()=>{
               type="video/mp4"
               muted
               style={
-                props.areNextVideos
-                  ? { width: !Fullscreen ? videoWidth : "unset", height: videoHeight }
-                  : null
-              }
+               { width: !Fullscreen ? videoWidth : "100%", height: videoHeight }
+                }
             />
           </div>
         )}

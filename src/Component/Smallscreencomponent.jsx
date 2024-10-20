@@ -12,7 +12,7 @@ import ToastNotification from './ToastNotification';
 import VideoInfoCard from './VideoInfoCard';
 import { videoContext } from '../Context/VideoContext';
 import { auth } from '../firebase/firebase';
-function Smallscreencomponent(props) {
+ function Smallscreencomponent(props) {
   const videocontext = useContext(videoContext)
   const [ThumbnailHeight,setThumbnailHeight] = useState(null);
   const [ThumbnailWidth,setThumbNailWidth] = useState(null);
@@ -77,7 +77,6 @@ if(dots){
   window.addEventListener("resize",()=>{
     if(window.innerWidth > 600){
     setLeft(dots.getBoundingClientRect().left - 246);
-    // setTop(dots.getBoundingClientRect().y + 9);
     }else{
       setLeft(null)
       setTop(null);
@@ -119,7 +118,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                           <h3 id="video_title" className="title">
                             {FullLengthVideo.Videodata?.Title}
                           </h3>
-                          <div style={{color:"#aaa",display:"flex"}}>
+                          <div style={{color:"#aaa",display:"flex",flexWrap:"wrap"}}>
                             <p>
                               {FullLengthVideo.UserData?.name} •
                               {" "} {FullLengthVideo.Videodata?.views} Views •
@@ -202,7 +201,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                           <h3 id="video_title" className="title">
                             {FullLengthVideo.Videodata?.Title}
                           </h3>
-                          <div style={{color:"#aaa",display:"flex"}}>
+                          <div style={{color:"#aaa",display:"flex",flexWrap:"wrap"}}>
                             <p>
                               {FullLengthVideo.UserData?.name} •
                               {" "} {FullLengthVideo.Videodata?.views} Views •

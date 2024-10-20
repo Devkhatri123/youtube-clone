@@ -63,16 +63,15 @@ function LargeScreenVideoInfoCard(props) {
 
 
     const makeSubscribe = async() => {
-      console.log(props.user.channelPic)
-        if(user){
+      if(user){
           setIsbtnDisable(true);
-        const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/subscribedChannel`),props.user.uid);
+        const docRef = doc(collection(firestore,`users/${user?.uid}/subscribedChannel`),props.user.uid);
         const channelDocRef = doc(collection(firestore,`users`),props.user.uid);
         const subscribersReference = doc(collection(firestore,`users/${props.user.uid}/subscribers`),auth.currentUser.uid);
         const data = {
           name:props.user.name,
           email:props.user.email,
-          channepic:props.user.channelPic,
+          channel:props.user.channelPic,
           userId:props.user.uid
         }
         await setDoc(docRef,data); 
@@ -93,7 +92,7 @@ function LargeScreenVideoInfoCard(props) {
         const checkSubscribedOrNot = async() => {
           if(user){
           if(props.user){
-          const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/subscribedChannel`),props.user.uid);
+          const docRef = doc(collection(firestore,`users/${user?.uid}/subscribedChannel`),props.user.uid);
           const Doc = await getDoc(docRef);
           if(Doc.exists()){
            setisSubscribed(true);
@@ -102,7 +101,7 @@ function LargeScreenVideoInfoCard(props) {
       }
           }
         checkSubscribedOrNot()
-      },[props.videoId,props.user,props.CurrentUser,user]);
+      },[props.videoId,props.user,user]);
       const UnSubscribeChannel = async() => {
         if(user){
         if(props.user){

@@ -49,19 +49,19 @@ export const videoContext = createContext();
       let value = seconds;
       if(seconds >= 31536000){
         value = Math.floor(seconds/31536000);
-        if(value >= 1) return value + "  " +"years ago";
+        if(value > 1) return value + "  " +"years ago";
         else return value+ "  " + "year ago";
       }else if (seconds >= 2419200){
         value = Math.floor(seconds/2419200);
-        if(value >= 1) return value+ "  " +"months ago";
+        if(value > 1) return value+ "  " +"months ago";
         else return value + "  " + "month ago";
       }else if(seconds >= 604800){
         value = Math.floor(seconds/604800);
-        if(value >= 1) return value + "  " + "weeks ago";
+        if(value > 1) return value + "  " + "weeks ago";
         else return value + "  " + "week ago";
       }else if(seconds >=86400){
         value = Math.floor(seconds/86400);
-        if(value >= 1)return value+ "  " +"days ago";
+        if(value > 1)return value+ "  " +"days ago";
         else return value + "  " + "day ago";
       }else if(seconds>=3600){
         value = Math.floor(seconds/3600);
@@ -69,11 +69,11 @@ export const videoContext = createContext();
         else return value + "  " + "hour ago";
       }else if(seconds >= 60){
         value = Math.floor(seconds/60);
-        if(value >= 1)return value + "  " + "minutes ago";
+        if(value > 1)return value + "  " + "minutes ago";
         else return value + "  " + "minute ago";
       }else{
         value = Math.floor(seconds);
-        if(value >= 1)return value+ "  " +"seconds ago";
+        if(value > 1)return value+ "  " +"seconds ago";
         else return "now";
       }
     }

@@ -101,8 +101,7 @@ function VideoPage() {
       console.log("Testing videoHeight : " + video.videoHeight);
       if(window.innerWidth < 990){
         setCalculatedscreenWidth("unset");
-        setnextVideosPortionWidth("35%");
-      }else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
+       }else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
       if(video.videoHeight > 720 && video.videoHeight < 1080){
         setCalculatedscreenWidth(window.innerWidth - 474);
         setvideoPlayerHeight(CalculatedscreenWidth / 2)
@@ -135,7 +134,6 @@ function VideoPage() {
     const updateVideoSize = () => {
       if(window.innerWidth < 990){
         setCalculatedscreenWidth("unset");
-        setnextVideosPortionWidth("35%");
       }else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
         if(video.videoHeight > 720 && video.videoHeight < 1080){
           setCalculatedscreenWidth(window.innerWidth - 474);

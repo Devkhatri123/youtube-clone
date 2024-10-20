@@ -80,15 +80,13 @@ function UserPlayList() {
     else{
       document.body.style.overflow="scroll"
     } 
-    console.log(videocontext.bottomlayout)
-  },[videocontext.bottomlayout])
+ },[videocontext.bottomlayout])
   const dots = document.getElementById("dots");
   if(dots){
     window.addEventListener("resize",()=>{
       if(window.innerWidth > 600){
       setLeft(dots.getBoundingClientRect().left - 246);
-      // setTop(dots.getBoundingClientRect().y + 9);
-      }else{
+       }else{
         setLeft(null)
         setTop(null);
       }

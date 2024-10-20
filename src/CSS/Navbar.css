@@ -128,15 +128,7 @@
   width: 20px;
   height: 20px;
 }
-@media screen and (max-width:990px) {
-  .small-screen-navbar{
-    display: block;
-  }
-  .large-screen-navbar{
-    display: none;
-  }
-}
-@media  screen and (min-width:587px) and (max-width:990px) {
+@media  screen and (min-width:587px) and (max-width:991px) {
   .search_Results{
     z-index: 3;
     position: unset;
@@ -164,10 +156,7 @@
     margin-left: 32px;
   }
 }
-@media  screen and (min-width:990px) {
-  .small-screen-navbar{
-    display: none;
-  }
+@media  screen and (min-width:991px) {
   .large-screen-Navbar{
         color: white;
         display: flex;

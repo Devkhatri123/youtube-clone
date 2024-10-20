@@ -13,6 +13,7 @@
     margin: 12px 0 0 16px;
     font-size: 29px;
     position: absolute;
+    z-index: 3;
   }
   .video_upload_top_section {
     height: 211px;
@@ -60,11 +61,12 @@
     display: flex;
     gap: 0px;
     margin-top: 15px;
+    align-items: center;
   }
   .description_section > svg {
     margin: 0px 23px 0 10px;
-    font-size: 36px;
-    width: 51px;
+    font-size: 25px;
+    width: 96px;
   }
   .description_section > div {
     font-size: 15px;

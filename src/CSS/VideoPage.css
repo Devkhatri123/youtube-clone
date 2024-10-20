@@ -12,7 +12,7 @@
   animation: rotation 1s linear infinite;
 }
 .large-screen-video-below-controls{
-  display: none;
+  display: none !important;
 }
 @keyframes rotation {
   0% {
@@ -59,9 +59,9 @@
     color: white;
     display: none;
     justify-content: end;
-    font-size: 30px;
+    font-size: 1.4rem;
     position: absolute;
-    right: 0;
+    right: 17px;
     gap: 4px;
     margin: 5px 10px 0px 0;
     font-weight: bolder;
@@ -151,10 +151,9 @@
   }
   
   .subscribe_btn {
-    padding: 6px 18px;
+    padding: 7px 10px;
     border: none;
     border-radius: 20px;
-
     background-color: white;
     cursor: pointer;
     color: black;
@@ -371,7 +370,15 @@
 .middle_controls,.below_controls {
   display: none;
 }
-
+#fullscreenDiv{
+  position: absolute;
+  top: 0;
+  margin: 24px;
+  z-index: 5;
+}
+.fullscreenVideoTitle{
+  font-size: 1.5rem;
+}
 @media  screen and (max-width:587px) {
   .fullVideoPage{
     margin-top: 46px;
@@ -386,13 +393,35 @@
 .Next_videos div>.short-video-section{
   display: none;
  }
- @media screen and (max-width:990px) {
+ @media screen and (min-width:587px) and (max-width:990px) {
   .fullVideoPage{
-    margin-top: 49px;
+    margin-top: 3.4rem !important;
   }
+ }
+ @media screen and (max-width:587px) {
+  .fullVideoPage{
+    margin-top: 54px !important;
+  }
+ }
+ @media screen and (max-width:990px) {
   .video_top_controls{
-    margin: 20px 10px 0px 0;
-    display: block;
+    margin: 5px 0px 0px 0;
+    display: none;
+  }
+  .video_section:hover{
+    .video_top_controls{
+      display: flex;
+    }
+  }
+  .video_section:hover{
+    .below_controls{
+      display: block;
+    }
+  }
+  #wrapper:hover{
+    .middle_controls{
+      display: flex;
+    }
   }
  }
 @media screen and (min-width:587px) and (max-width:990px) {
@@ -435,10 +464,6 @@
   }
   .video_section {
   background-color: #000;
-  }
-  
-  .below_controls{
-    display: block;
   }
   #description_page{
     background-color: #0f0f0f;
@@ -531,9 +556,6 @@
   padding: 12px;
   margin: 12px 0;
 }
-.large-screen-video-below-controls{
-  display: none !important;
-}
 #showreplybtn{
   display: flex;
   align-items: center;
@@ -552,7 +574,7 @@
     overflow: visible;
   }
   .greaterthan-2000px-screen-div{
-    margin-top: 68px;
+    margin-top: 4rem;
     display: flex;
     grid-template-columns: repeat(2, 1fr);
    }
@@ -563,7 +585,7 @@
 }
 #wrapper:hover{
   .large-screen-video-below-controls{
-    display: block;
+    display: block !important;
   }
 }
 #wrapper:hover:fullscreen{
@@ -751,7 +773,7 @@
 }
 .playBackSpeedModal{
   bottom: 42px;
-  max-width: 227px;
+  width: 30%;
   background: #262622;
   opacity: 0.9;
   max-height: 231px;
@@ -805,9 +827,6 @@
 .large-screen-commnets-section .message-body{
  position: unset !important;
  background-color: unset;
-}
-.large-screen-video-below-controls{
-  display: none;
 }
 .send-message-input input {
   outline: none;
