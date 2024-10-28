@@ -30,9 +30,7 @@ function VideoPlayer(props) {
   let [TotalVideoMinutes, setTotalVideoMinutes] = useState(0);
   let [TotalVideoHours, setTotalVideoHours] = useState(0);
   let [isMute, setisMute] = useState(false);
-  const [FullScreenWidth, setFullScreenWidth] = useState();
   let [isPaused, setisPaused] = useState(true);
-  let [Duration, setDuration] = useState(0);
   let [Progress, setProgress] = useState(0);
   let [seconds, setseconds] = useState(0);
   let [minutes, setminutes] = useState(0);
@@ -80,6 +78,7 @@ function VideoPlayer(props) {
         videoRef.current.play();
         videoRef.current.playsInline = true;
         videoRef.current.muted = false;
+        console.log( videoRef.current.duration)
         LargeScreenVideoBelowControls.current.style.display = "block"
         volumeRangeRef.current.value = videoRef.current.volume * 100;
         setisMute(false);
@@ -144,9 +143,7 @@ function VideoPlayer(props) {
         }
           LargeScreenVideoBelowControls.current.style.bottom = "-57px";
       }
-      setFullScreenWidth(window.innerWidth);
       const updateVideoSize = () => {
-        setFullScreenWidth(window.innerWidth);
         if (currentVideo) {
           if (window.innerWidth < 507) {
             setvideoWidth(window.innerWidth);
@@ -207,7 +204,6 @@ function VideoPlayer(props) {
 
   const TotalTime = (e) => {
     const duration = e.target.duration;
-    setDuration(Math.floor(e.target.duration));
     setTotalVideoSeconds(Math.floor(duration % 60));
     setTotalVideoMinutes(Math.floor(duration / 60) % 60);
     setTotalVideoHours(Math.floor(duration / 3600));
@@ -227,7 +223,6 @@ function VideoPlayer(props) {
     ProgressBarWidth.current.value = Progress;
     if (Progress < 100 && duration === e.target.duration) {
       ProgressBarWidth.current.value = Progress + 1;
-      // setProgress(100);
     }
     if (duration === e.target.duration) {
       setisPaused(true);
@@ -238,10 +233,8 @@ function VideoPlayer(props) {
   };
   const HandleFullScreen = () => {
     const wrapper = document.getElementById("wrapper");
-    // const currentVideo = document.getElementById("currentVideo");
     wrapper.requestFullscreen();
     setFullscreen(true);
-    // videoRef.current.style.height = "unset !important";
   };
 useEffect(()=>{
   const wrapper = document.getElementById("wrapper");
@@ -255,9 +248,7 @@ useEffect(()=>{
     }
 },[Fullscreen])
   const ChangeVideoDuration = (e) => {
-    const value =  e.target.value * (videoRef.current.duration / 100);
     videoRef.current.currentTime = e.target.value * (videoRef.current.duration / 100);
-      ProgressBarWidth.current.style.setProperty('--slider-value', value + '%')
   };
   const HandleMuteUnmute = () => {
     if (videoRef.current.muted) {

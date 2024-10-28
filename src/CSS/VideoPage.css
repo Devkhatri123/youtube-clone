@@ -436,7 +436,8 @@
   .Next_videos{
     width: 35%;
     border: none;
-    margin-top: 52px;
+    margin-top: 58px;
+    margin-right: 11px;
   }
   .Next_videos div>.videos>#video>.video_bottom>.video_bttom_left  a{
     display: none;
@@ -454,7 +455,9 @@
    .Next_videos div>.videos>#video>.video_bottom>.video_bttom_left{
     align-items: unset;
    }
-   .greaterthan-2000px-screen-div{
+}
+@media screen and (min-width:600px) and (max-width:990px) {
+  .greaterthan-2000px-screen-div{
     display: flex;
    }
 }

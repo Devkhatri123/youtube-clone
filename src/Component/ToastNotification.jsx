@@ -14,7 +14,7 @@ function ToastNotification() {
           videocontext.setshowToastNotification(false);
         }, 3000);
       }
-      },[videocontext.showToastNotification])
+      },[videocontext.showToastNotification]);
   return videocontext.showToastNotification && (
     <div id="toast_notification" className='transition'>
     <div id="toast_text">

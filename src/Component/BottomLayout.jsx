@@ -61,7 +61,7 @@ document.addEventListener("click",(e)=>{
   return VideoContext.bottomlayout  && (
     !VideoContext.showModal ? (
       
-    <div id="video-bottom-layout" ref={BottomLayout} style={{left:props && props.Left,top:props && props.Top,maxHeight:height,overflowY:"scroll"}}>
+    <div id="video-bottom-layout" ref={BottomLayout} style={{left:props && props.Left,top:props && props.Top,overflowY:"scroll"}}>
     <div className="line" onTouchMove={drageSection} onTouchStart={sectionTouch} onTouchEnd={HideLayout}><span></span></div>
      <div className="watch-later" onClick={()=>{watchlater();}}>
         <FiClock />
@@ -76,7 +76,7 @@ document.addEventListener("click",(e)=>{
       <BiDislike/>
       <p>DisLike Video</p>
      </div>
-     <div className="share-video" onClick={()=>{VideoContext.setshowModal(true)}}>
+     <div className="share-video" onClick={()=>{VideoContext.setshowModal(true);}}>
       <RiShareForwardLine/>
       <p>Share video</p>
      </div>

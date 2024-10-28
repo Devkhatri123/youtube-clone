@@ -12,16 +12,16 @@ function WatchedVideos() {
   const contentsRef = useRef();
   const [scrolled,setscrolled] = useState(false);
   const GetWatchedVideos = () => {
-    onSnapshot(collection(firestore,`users/${auth.currentUser.uid}/watchedVideos`),async(snanpShot)=>{
+    onSnapshot(collection(firestore,`users/${auth.currentUser.uid}/watchedVideos`),async(snapShot)=>{
       setwatchedVideos(await Promise.all(
-      snanpShot.docs.map(async(Doc)=>{
+      snapShot.docs.map(async(Doc)=>{
          const VideoDocRef = doc(firestore,"videos",Doc.data().videoUrl);
        const getVideo = await getDoc(VideoDocRef);
        const userDocRef = doc(firestore,"users",getVideo.data()?.createdBy);
        const user = await getDoc(userDocRef);
        return {
         videoId:VideoDocRef.id,
-        videoData:getVideo.data(),
+        Videodata:getVideo.data(),
         userData:user.data(),
       }
       }),
@@ -65,7 +65,7 @@ function WatchedVideos() {
       gap:'8px'
      }}>
       {watchedVideos.slice(0,6).filter((video)=>{
-        return !video.videoData.shortVideo
+        return !video.Videodata.shortVideo
       }).map((video,i)=>{
         return <WatchedVideo video={video} key={i} />;
       })}

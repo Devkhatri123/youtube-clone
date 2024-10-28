@@ -3,14 +3,16 @@ import { useParams } from "react-router-dom";
 import Smallscreencomponent from "./Smallscreencomponent";
 import Largescreencomponent from "./Largescreencomponent";
 function Videos(props) {
-  // const [Videos,setVideos] = useState([])
   const [ThumbnailWidth,setThumbNailWidth] = useState(window.innerWidth)
   const [ThumbnailHeight,setThumbnailHeight] = useState(window.innerWidth * (9/16));
   const [screenWidth,setscreenWidth] = useState(window.innerWidth);
   const [FullLengthVideos,setFullLengthVideos] =useState([]);
   const [ShortVideos,SetShortVideos] = useState([]);
+  const [Error,setError] = useState(false);
+  const [ErrorMessage,setErrorMessage] = useState('');
 const params = useParams()
   useEffect(()=>{
+    try {
     setFullLengthVideos(props.video?.filter((FullLengthVideo)=>{
       if(params.id){
       return !FullLengthVideo.Videodata.shortVideo && params.id !== FullLengthVideo.id;
@@ -21,6 +23,10 @@ const params = useParams()
   SetShortVideos(props.video?.filter((shortVideo)=>{
     return shortVideo.Videodata.shortVideo === true
   }))
+}catch(error){
+  setError(true);
+  setErrorMessage(error.message);
+}
   },[props]);
   useEffect(()=>{
     setThumbNailWidth(window.innerWidth);
@@ -44,7 +50,9 @@ const returnComponent = () => {
 }
   return (
     <>
-    {returnComponent()}
+    {!Error && !ErrorMessage && (
+    returnComponent()
+    )}
    </>
   );
 }

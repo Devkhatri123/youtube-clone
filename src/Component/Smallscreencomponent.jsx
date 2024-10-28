@@ -89,14 +89,14 @@ if(videocontext.showToastNotification) setbottomLayout(false)
 
 
   return (
-    <div>
-    <div className='videos'>
+    <>
+   <div className='videos'>
   {props.FullLengthVideos && props.FullLengthVideos.slice(0,1).map((FullLengthVideo,index)=>{
      return  <div id="video" key={index}>
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>
-      <p className='videoLength'>5:23</p>
+      <p className='videoLength'>{videocontext.returnvideoTime(FullLengthVideo.Videodata.videoLength)}</p>
       </div>
          </Link>
          <div className="video_bottom">
@@ -182,7 +182,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>
-      <p className='videoLength'>5:23</p>
+      <p className='videoLength'>{videocontext.returnvideoTime(FullLengthVideo.Videodata.videoLength)}</p>
       </div>
          </Link>
          <div className="video_bottom">
@@ -237,7 +237,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
         </div>
     })}
     </div>
-    </div>
+    </>
   )
 }
 

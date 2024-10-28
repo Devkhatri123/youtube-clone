@@ -44,6 +44,7 @@ export const videoContext = createContext();
       setshowToastNotification(true);
  }
  const getVideoPublishedTime = (FullLengthVideo) => {
+  console.log(FullLengthVideo)
   if(FullLengthVideo.Videodata.Time){
      let seconds = Math.floor((Date.now() - FullLengthVideo.Videodata.Time)/1000);
       let value = seconds;
@@ -78,6 +79,16 @@ export const videoContext = createContext();
       }
     }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime}}>{children}</videoContext.Provider>
+const returnvideoTime = (duration) => {
+  const seconds = Math.floor(duration % 60);
+  const minutes = Math.floor(duration / 60) % 60;
+  const hours = Math.floor(duration / 3600)
+  if(hours !== 0){
+    return hours + ":" + minutes + ":" + seconds;
+  }else{
+   return  minutes + ":" + seconds.toString().padStart(2, 0)
+  }
+}
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider

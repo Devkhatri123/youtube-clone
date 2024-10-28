@@ -18,7 +18,6 @@ function UserPlayList() {
   const [queryParameters] = useSearchParams();
   const [user, setuser] = useState(null);
   const [listvideos, Setlistvideos] = useState([]);
-  const [showLayout,SetshowLayout] = useState(false);
   const [clickedVideoIndex,setclickedVideoIndex] = useState(null);
   const [Left,setLeft] = useState(null);
   const [Top,setTop] = useState(null);
@@ -94,10 +93,11 @@ function UserPlayList() {
   }
   return (
     <>
-    <MiniSideBar NonFilteredVideos={listvideos.listvideos}/>
+    {listvideos.listvideos && (
+      <>
+    <MiniSideBar NonFilteredVideos={listvideos.listvideo && listvideos.listvideos}/>
     <div id="list">
-      { listvideos.listvideos &&(
-      <div id="left">
+     <div id="left">
         <div className="video">
           <img
             src={
@@ -112,7 +112,6 @@ function UserPlayList() {
         <p id="username">{listvideos.user?.name}</p>
         <p className="videoslength">{listvideos.listvideos.length} videos</p>
       </div>
-      )}
       <div id="right">
       {listvideos.listvideos &&
             listvideos.listvideos.map((video, index) => {
@@ -125,6 +124,7 @@ function UserPlayList() {
                         alt=""
                         className="video" style={video?.Videodata.shortVideo ? {objectFit:"contain"}:{objectFit:"cover"}}
                       />
+                   <p className="videoLength">{videocontext.returnvideoTime(video?.Videodata.videoLength)}</p>
                     </div>
                   </Link>
                   <div className="video_bottom">
@@ -135,7 +135,7 @@ function UserPlayList() {
                         </h3>
                         <div>
                           <p>
-                            {listvideos.user?.name} • {video?.Videodata.views} Views
+                            {listvideos.user?.name} • {video?.Videodata.views} Views • {videocontext.getVideoPublishedTime(video)}
                           </p>
                         </div>
                       </div>
@@ -172,6 +172,8 @@ function UserPlayList() {
             })}
       </div>
     </div>
+    </>
+  )}
     </>
   );
 }

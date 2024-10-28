@@ -41,7 +41,9 @@ let router = createBrowserRouter([
       <>
         {/* <App/> */}
         <Navbar />
+        <VideoActionProvider>
         <Library />
+        </VideoActionProvider>
         <Footer />
       </>
     ),

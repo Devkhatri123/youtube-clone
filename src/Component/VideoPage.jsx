@@ -6,6 +6,7 @@ import { firestore, auth } from "../firebase/firebase";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
 import Smallscreencomponent from "./Smallscreencomponent";
+import ErrorPage from "./ErrorPage";
 function VideoPage() {
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get('v');
@@ -26,19 +27,21 @@ function VideoPage() {
     setLoading(true);
     try {
       const VideoRef = doc(firestore, "videos", videoId);
-      // const video = await getDoc(videoRef);
       onSnapshot(VideoRef, async (videDoc) => {
         if (videDoc.exists()) {
           Setvideo(videDoc.data());
           const userRef = doc(firestore, "users", videDoc.data().createdBy);
-          //const User = await getDoc(userRef);
           onSnapshot(userRef, (userDoc) => {
             if (userDoc.exists()) {
               setUser(userDoc.data());
             }
           });
         }
-      });
+      },(error)=>{
+        SetError(true);
+        SetErrorMessage(error.message)
+      }
+    );
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -67,6 +70,9 @@ function VideoPage() {
             Videodata: Doc.data(),
             UserData: docSnap.data(),
           };
+        },(error)=>{
+          SetError(true);
+          SetErrorMessage(error.message)
         })
       );
       setvideos(FetchedData);
@@ -172,7 +178,7 @@ function VideoPage() {
   })
   }, [CalculatedscreenWidth, nextVideosPortionWidth,Video?.videoURL]);
 
-  return (
+  return !ErrorMessage || !Error ?(
     <div className="greaterthan-2000px-screen-div">
     <VideoInfoCard CalculatedscreenWidth={CalculatedscreenWidth} NextVideos={FullLengthVideos} videoId={videoId} nextVideos={videos}
     Video={Video}
@@ -180,15 +186,17 @@ function VideoPage() {
     FullLengthVideos={FullLengthVideos}
     videoPlayerHeight={videoPlayerHeight}
    />
+   {!NextVideosLoading ? (
     <div className="Next_videos"  style={FullLengthVideos.length >0?{ width: nextVideosPortionWidth }:{display:"none"}}>
                         <Smallscreencomponent
                           FullLengthVideos={FullLengthVideos}
                           shortVideos={ShortVideos}
                         />
                       </div>
+                      ):<p>Loading</p>}
       </div>
 
-   )
+   ):<ErrorPage ErrorMessage={ErrorMessage}/>
 }
 
 export default VideoPage;

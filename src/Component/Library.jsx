@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useRef } from 'react'
+import React, { useState,useEffect, useRef, useContext } from 'react'
 import "../CSS/Library.css"
 import WatchedVideos from './WatchedVideos';
 import { IoPlayOutline } from "react-icons/io5";
@@ -17,7 +17,9 @@ import { firestore } from '../firebase/firebase';
 import UploadvideoProvider from '../Context/UploadVideoContext';
 import { Link } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
+import { videoContext } from '../Context/VideoContext';
 function Library() {
+    const videocontext = useContext(videoContext);
     const contentsRef = useRef();
     let [isUploadVideoEnabled,setisUploadVideoEnabled] = useState(false);
     let [user,Setuser] = useState(null);
@@ -48,7 +50,7 @@ function Library() {
          const getVideo = await getDoc(VideoDocRef);
          return {
           videoId:VideoDocRef.id,
-          LikedvideoData:getVideo.data(),
+          Videodata:getVideo.data(),
           // userData:User.data(),
          }
         },(error)=>{
@@ -93,7 +95,7 @@ function Library() {
            const getVideo = await getDoc(VideoDocRef);
            return {
             videoId:VideoDocRef.id,
-            WatchlatervideoData:getVideo.data(),
+            Videodata:getVideo.data(),
             // userData:User.data(),
            }
           }),
@@ -152,13 +154,13 @@ function Library() {
               </div>
               <div className='playlists-cards'>
                 {!Loading ? (
-             LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 && (
+                  LikedVideos.LikedVideos && (
               <div className="playlist-card">
                 <Link to={`/playlist?list=LV`}>
         <div class="thumbnail">
-      {LikedVideos.LikedVideos.length > 0 &&
+      {LikedVideos.LikedVideos &&
       <>
-       <img src={LikedVideos.LikedVideos[0]?.LikedvideoData.Thumbnail} alt=""/>
+       <img src={LikedVideos.LikedVideos[0]?.Videodata.Thumbnail} alt=""/>
             <div className="overlay">
             <BiLike style={{fontsize: "1.5rem"}}/>
             <p>Liked Videos</p>
@@ -169,15 +171,15 @@ function Library() {
         </div>
         </Link>
     </div>
-    )
+  )
   ):<p>Loading...</p>}
     {!Loading ? (
-      Watchlater.Watchlater.length > 0 &&
+      Watchlater.Watchlater &&
     <div class="playlist-card">
       <Link to={`/playlist?list=WL`}>
         <div className="thumbnail">
       <>
-       <img src={Watchlater.Watchlater[0].WatchlatervideoData.Thumbnail} alt=""/>
+       <img src={Watchlater.Watchlater[0].Videodata.Thumbnail} alt=""/>
             <div className="overlay">
             <FiClock style={{fontsize: "1.5rem"}}/>
             <p>Watch Later Videos</p>
@@ -214,20 +216,20 @@ function Library() {
               return <div id="video" key={index}>
               <Link to={`/watch?v=${LikedVideo?.videoId}`}>
               <div id="thumbnail_container">
-              <img src={LikedVideo.LikedvideoData?.Thumbnail} alt="" className="video"/>
+              <img src={LikedVideo.Videodata?.Thumbnail} alt="" className="video"/>
+              <p className='videoLength'>{videocontext.returnvideoTime(LikedVideo.Videodata.videoLength)}</p>
               </div>
                  </Link>
                  <div className="video_bottom">
                               <div className="video_bttom_left">
                                 <div className="video_title_and_channelName">
                                   <h3 id="video_title" className="title">
-                                    {LikedVideo.LikedvideoData?.Title}
+                                    {LikedVideo.Videodata?.Title}
                                   </h3>
                                   <div>
-                                    <p>
-                                      {LikedVideos.user?.name} •
-                                      {" "} {LikedVideo.LikedvideoData?.views} Views
-                                    </p>
+                                  <p>
+                            {LikedVideos.user?.name} • {LikedVideo.Videodata.views} Views • {videocontext.getVideoPublishedTime(LikedVideo)}
+                          </p>
                                   </div>
                                 </div>
                               </div>
@@ -251,22 +253,22 @@ function Library() {
             <div id="contents">
             {Watchlater.Watchlater && Watchlater.Watchlater.slice(0,6).map((Watchlatervideo,i)=>{
               return <div id="video" key={i}>
-              <Link to={`/watch?v=${Watchlatervideo.WatchlatervideoData?.videoId}`}>
+              <Link to={`/watch?v=${Watchlatervideo.Videodata?.videoId}`}>
               <div id="thumbnail_container">
-              <img src={Watchlatervideo.WatchlatervideoData?.Thumbnail} alt="" className="video"/>
+              <img src={Watchlatervideo.Videodata?.Thumbnail} alt="" className="video"/>
+             <p className='videoLength'>{videocontext.returnvideoTime(Watchlatervideo.Videodata.videoLength)}</p>
               </div>
                  </Link>
                  <div className="video_bottom">
                               <div className="video_bttom_left">
                                 <div className="video_title_and_channelName">
                                   <h3 id="video_title" className="title">
-                                    {Watchlatervideo.WatchlatervideoData?.Title}
+                                    {Watchlatervideo.Videodata?.Title}
                                   </h3>
                                   <div>
-                                    <p>
-                                      {Watchlater.user?.name} •
-                                      {" "} {Watchlatervideo.WatchlatervideoData?.views} Views
-                                    </p>
+                                  <p>
+                            {Watchlater.user?.name} • {Watchlatervideo.Videodata.views} Views • {videocontext.getVideoPublishedTime(Watchlatervideo)}
+                          </p>
                                   </div>
                                 </div>
                               </div>

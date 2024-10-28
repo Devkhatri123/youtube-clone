@@ -6,15 +6,19 @@ import { MdOutlineLibraryAdd } from "react-icons/md";
 import "../CSS/MiniSideBar.css";
 import "../CSS/VideoPage.css";
 import { Link } from 'react-router-dom';
-import { Navbarcontext } from '../Context/NavbarContext';
 function MiniSideBar(props) {
 const [shortVideo,setshortVideo] = useState([])
-const navContext = useContext(Navbarcontext)
 useEffect(()=>{
-  console.log(props)
+  if(props){
+    console.log(props.NonFilteredVideos)
+    try{
  setshortVideo(props.NonFilteredVideos && props.NonFilteredVideos.filter((video)=>{
-    return video.Videodata.shortVideo;
+    return video !== undefined  && video.Videodata.shortVideo;
   }))
+}catch(error){
+  console.log(error.message)
+}
+}
 },[props])
   return (
     <div className='mini-sidebar'>
@@ -23,7 +27,7 @@ useEffect(()=>{
         <p>Home</p>
       </div>
       <div className="shorts">
-      <Link to={shortVideo&& `/short/${shortVideo[0]?.id}`}>
+      <Link to={shortVideo && `/short/${shortVideo[0]?.id}`}>
         <SiYoutubeshorts/>
         <p>Shorts</p>
 </Link>

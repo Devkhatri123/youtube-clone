@@ -147,13 +147,14 @@ import { Navbarcontext } from '../Context/NavbarContext';
     setsearchedVideos([])
   }
   }
-  document.body.addEventListener("click",(e)=>{
+  window.addEventListener("click",(e)=>{
     const notifications = document.querySelector(".notifications");
     const notificationIcon = document.querySelector(".notificationIcon");
     const notificationBadge = document.querySelector(".notification-badge");
-    console.log(notificationIcon)
-     if(!e.target.contains(notifications) && !e.target.contains(notificationIcon) && !e.target.contains(notificationBadge)){
-      setopenNotifications(false);
+    if(notifications){
+      if(!notifications.contains(e.target) && e.target !== notificationBadge &&  e.target !== notificationIcon ){
+          setopenNotifications(false)
+        }
      }
   })
   return (

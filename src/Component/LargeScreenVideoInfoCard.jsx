@@ -214,6 +214,7 @@ function LargeScreenVideoInfoCard(props) {
         </div>
         </div>
         </div>
+        {props.Video?.description && (
         <div className="main-description">
           <p style={{color:"gray"}}>{props.Video?.views} views</p>
               <div onClick={()=>setshowFullText(!showFullText)} style={{overflow:"auto"}} dangerouslySetInnerHTML={{__html:  props.Video?.description.length > 0 ? (
@@ -222,9 +223,8 @@ function LargeScreenVideoInfoCard(props) {
                }}
                   >
                  </div>
-              
-              
             </div>
+            )}
     <div className='large-screen-commnets-section'>
       {props.Video?.comments === "On"?(
         <>
