@@ -173,7 +173,7 @@
 
     .user-allshortsvideos .short-video-shelf .short-video #short-video video {
         height: 372px;
-        width: 209px;
+        /* width: 209px; */
     }
 }
 
@@ -181,5 +181,17 @@
     .user-allshortsvideos .short-video-shelf {
         grid-template-columns: repeat(5, 1fr);
         row-gap: 12px;
+    }
+    .short-video-detail {
+        transform: translate(0,0);
+    }
+    .user-allshortsvideos .short-video-title,.views {
+        font-size: 1rem;
+    }
+    .user-allshortsvideos .short-videos .short-video-section .short-video-shelf .short-video,#short-video{
+        min-width: unset; 
+        max-width: unset;
+        width: unset;
+        height: unset;
     }
 }

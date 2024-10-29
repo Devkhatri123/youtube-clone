@@ -19,7 +19,7 @@ export const HomeContext = createContext();
             const results = videosDocData.docs.map(async(Doc)=>{
             const videosDocRef = doc(firestore,`videos/${Doc.data().videoUrl}`);
             const videosDocData = await getDoc(videosDocRef);
-            return {video:videosDocData.data(),videoUrl:Doc.data().videoUrl}
+            return {Videodata:videosDocData.data(),videoUrl:Doc.data().videoUrl}
             })
             const resolvedVideos = Promise.all(results);
           resolvedVideos.then((res)=>{

@@ -7,7 +7,9 @@ import "../CSS/HomePage.css";
 import { HomeContext } from "../Context/HomePageContext";
 import HomeHeader from "./HomeHeader";
 import BottomLayout from "./BottomLayout";
+import { videoContext } from "../Context/VideoContext";
 function Home() {
+  const videocontext = useContext(videoContext)
   const homeContext = useContext(HomeContext);
   const params = useParams();
   const [AllVideos, setAllvideos] = useState([]);
@@ -21,7 +23,6 @@ function Home() {
   const [Left, setLeft] = useState(null);
   const [Top, setTop] = useState(null);
   const [showLayout, SetshowLayout] = useState(false);
-  const createdVideos = [];
   useEffect(() => {
     auth.onAuthStateChanged((currentuser) => {
       SetLoggedInUser(currentuser);
@@ -106,35 +107,33 @@ function Home() {
               Shorts
             </Link>
           </div>
-          <div id="Playlists">
-            <Link to={"#"}>Playlists</Link>
-          </div>
         </div>
         <div id="homepage-body">
           {AllVideos &&
             AllVideos.filter((video) => {
-              return !video.video.shortVideo;
+              return !video.Videodata.shortVideo;
             }).map((video, index) => {
               return (
                 <div id="video" key={index}>
-                  <Link to={`/watch/${video?.videoUrl}`}>
+                  <Link to={`/watch?v=${video?.videoUrl}`}>
                     <div id="thumbnail_container">
                       <img
-                        src={video?.video.Thumbnail}
+                        src={video?.Videodata.Thumbnail}
                         alt=""
                         className="video"
                       />
+                    <p className="videoLength">{videocontext.returnvideoTime(video?.Videodata.videoLength)}</p>
                     </div>
                   </Link>
                   <div className="video_bottom">
                     <div className="video_bttom_left">
                       <div className="video_title_and_channelName">
                         <h3 id="video_title" className="title">
-                          {video?.video.Title}
+                          {video?.Videodata.Title}
                         </h3>
                         <div>
-                          <p>
-                            {user?.name} • {video?.video.views} Views
+                        <p>
+                            {user?.name} • {video?.Videodata.views} Views • {videocontext.getVideoPublishedTime(video)}
                           </p>
                         </div>
                       </div>

@@ -26,7 +26,7 @@ export const Navbarcontext = createContext();
       setsearchedVideos(videos.filter((video)=>{
        const splitedTitle =  video.data?.Title?.toLowerCase().split(" ");
        const spiltedDesc = video.data?.description?.toLowerCase().split(" ");
-       for(let i = 0; i < splitedTitle.length && i < spiltedDesc.length; i++){
+       for(let i = 0; i < splitedTitle?.length && i < spiltedDesc?.length; i++){
        return splitedTitle[i].includes(splitedSearchTerm[i]) || spiltedDesc.includes(splitedSearchTerm[i]);
        }
       }));
