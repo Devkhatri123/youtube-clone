@@ -39,12 +39,12 @@ function LargeScreenVideoInfoCard(props) {
       if(user){
      const checkCurrentWatchedVideo = async () => {
       try {
-    const videoDocRef = doc(collection(firestore,`users/${user?.uid}/watchedVideos`),props.videoId);
+    const videoDocRef = doc(collection(firestore,`users/${user?.uid}/WV`),props.videoId);
     const videoDoc = await getDoc(videoDocRef);
     const videoCollection = doc(firestore,"videos",props.videoId);
     if(!videoDoc.exists()){
       const data = {
-        videoUrl:props.videoId,
+        videoURL:props.videoId,
       }
       await setDoc(videoDocRef,data);
       await updateDoc(videoCollection,{

@@ -91,6 +91,11 @@ function UserPlayList() {
       }
     })
   }
+  const returnUserPlaylistTitle = () => {
+   if(searchQuery == "WL") return "Watch later";
+   else if (searchQuery == "LV") return "Liked Videos";
+   else return "Watched Videos";
+  }
   return (
     <>
     {listvideos.listvideos && (
@@ -107,7 +112,7 @@ function UserPlayList() {
           />
         </div>
         <div>
-        <h3>{searchQuery == 'WL' ? "Watch later" : "Liked Videos"}</h3>
+        <h3>{returnUserPlaylistTitle()}</h3>
         </div>
         <p id="username">{listvideos.user?.name}</p>
         <p className="videoslength">{listvideos.listvideos.length} videos</p>

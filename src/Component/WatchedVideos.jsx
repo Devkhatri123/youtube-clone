@@ -12,10 +12,10 @@ function WatchedVideos() {
   const contentsRef = useRef();
   const [scrolled,setscrolled] = useState(false);
   const GetWatchedVideos = () => {
-    onSnapshot(collection(firestore,`users/${auth.currentUser.uid}/watchedVideos`),async(snapShot)=>{
+    onSnapshot(collection(firestore,`users/${auth.currentUser.uid}/WV`),async(snapShot)=>{
       setwatchedVideos(await Promise.all(
       snapShot.docs.map(async(Doc)=>{
-         const VideoDocRef = doc(firestore,"videos",Doc.data().videoUrl);
+         const VideoDocRef = doc(firestore,"videos",Doc.data().videoURL);
        const getVideo = await getDoc(VideoDocRef);
        const userDocRef = doc(firestore,"users",getVideo.data()?.createdBy);
        const user = await getDoc(userDocRef);
@@ -53,7 +53,7 @@ function WatchedVideos() {
                 <GoHistory />
                 <h4>History</h4>
               </div>
-             <Link to={`/history`} className='viewAll'>View all</Link>
+              <Link to={`/playlist?list=WV`} className='viewAll'>View all</Link>
             </div>
             {watchedVideos.length >= 5 && (
      <div className='forwardIcon watched_VideosforwardIcon' style={{display: !scrolled?"block": "none"}} onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
