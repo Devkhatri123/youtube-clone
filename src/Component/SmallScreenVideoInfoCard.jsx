@@ -74,8 +74,8 @@ function SmallScreenVideoInfoCard(props) {
         checkSubscribedOrNot()
       },[props.videoId,props.user,props.CurrentUser]);
       const doLike = async() => {
-       if(props.CurrentUser){
-        const result = await currentState.LikeVideo(LoggedInUser,props.videoId,props.video)
+      if(LoggedInUser){
+        const result = await currentState.LikeVideo(LoggedInUser,props.videoId,props.Video)
         if(result === "videoLiked") setisLiked(true);
         else setisLiked(false);
       }
