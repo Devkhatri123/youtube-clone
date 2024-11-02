@@ -109,7 +109,13 @@ function VideoPlayer(props) {
         setvideoHeight((window.innerWidth - 171) * (9 / 16));
         currentVideo.style.margin = "0 auto";
       } else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
-        if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
+        if(InitialvideoHeight > 480 && InitialvideoHeight < 720){
+          setvideoWidth(640);
+          setvideoHeight("unset");
+          video_section.style.height =  "306px";
+          LargeScreenVideoBelowControls.current.style.bottom = "-40px";
+        }
+        else if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
           setvideoWidth(window.innerWidth - 474);
           setvideoHeight((videoWidth / 2));
           video_section.style.height = videoHeight + "px";
@@ -153,7 +159,13 @@ function VideoPlayer(props) {
             setvideoHeight((window.innerWidth - 171) * (9 / 16));
             currentVideo.style.margin = "0 auto";
           } else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
-            if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
+            if(InitialvideoHeight > 480 && InitialvideoHeight < 720){
+              setvideoWidth(640);
+              setvideoHeight("unset");
+              video_section.style.height =  "306px";
+              LargeScreenVideoBelowControls.current.style.bottom = "-40px";
+            }
+            else if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
               setvideoWidth(window.innerWidth - 474);
               setvideoHeight((videoWidth / 2));
               video_section.style.height = videoHeight + "px";
@@ -164,9 +176,9 @@ function VideoPlayer(props) {
             }
             currentVideo.style.margin = "unset";
           } else if (window.innerWidth > 1115 && window.innerWidth <= 1754) {
-            if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
+             if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
               setvideoWidth(window.innerWidth - 474);
-          setvideoHeight((videoWidth / 2));
+              setvideoHeight((videoWidth / 2));
               video_section.style.height = videoHeight + "px";
               LargeScreenVideoBelowControls.current.style.bottom = "-37px";
             }else{

@@ -59,35 +59,20 @@ function LargeScreenVideoInfoCard(props) {
       checkCurrentWatchedVideo();
 }
     },[props.videoId,user,props.Video?.views])
-
-
-
-    const makeSubscribe = async() => {
+  const makeSubscribe = async() => {
       if(user){
           setIsbtnDisable(true);
-        const docRef = doc(collection(firestore,`users/${user?.uid}/subscribedChannel`),props.user.uid);
-        const channelDocRef = doc(collection(firestore,`users`),props.user.uid);
-        const subscribersReference = doc(collection(firestore,`users/${props.user.uid}/subscribers`),auth.currentUser.uid);
-        const data = {
-          name:props.user.name,
-          email:props.user.email,
-          channel:props.user.channelPic,
-          userId:props.user.uid
-        }
-        await setDoc(docRef,data); 
-         await updateDoc(channelDocRef,{
-         subscribers:props.user.subscribers +=1,
-        });
-        await setDoc(subscribersReference,{
-          userId:auth.currentUser.uid,
-        });
-        setisSubscribed(true);
-        setIsbtnDisable(false);
+          const result = await VideoContext.subscribeChannel(user,props.user);
+          if(result === "subscribed"){
+            setisSubscribed(true);
+          }else{
+            setisSubscribed(false);
+          }
+          setIsbtnDisable(false);
       }else{
         alert("You are not signedIn");
       }
       }
-      // Showing user that has he subscribed or not in every render
       useEffect(()=>{
         const checkSubscribedOrNot = async() => {
           if(user){
@@ -102,24 +87,11 @@ function LargeScreenVideoInfoCard(props) {
           }
         checkSubscribedOrNot()
       },[props.videoId,props.user,user]);
-      const UnSubscribeChannel = async() => {
-        if(user){
-        if(props.user){
-          setIsbtnDisable(true);
-       await deleteDoc(doc(collection(firestore,`users/${props.CurrentUser?.uid}/subscribedChannel`),props.user.uid));
-       const channelDocRef = doc(collection(firestore,`users`),props.user.uid);
-       await updateDoc(channelDocRef,{
-        subscribers:props.user.subscribers -=1,
-       })
-       setisSubscribed(false);
-       setIsbtnDisable(false);
-        }
-      }
-      }
       const doLike = async() => {
        if(props.CurrentUser){
         const result = VideoContext.LikeVideo(user,props.videoId,props.Video)
-        if(result) setisLiked(true);
+        if(result === "videoLiked") setisLiked(true);
+        else setisLiked(false);
       }
       }
       useEffect(()=>{
@@ -142,22 +114,7 @@ function LargeScreenVideoInfoCard(props) {
       }
         checkLikedOrNot();
       },[props.videoId,props.user,props.CurrentUser,user])
-      const doUnLike = async() => {
-        if(user){
-          try{
-        await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LV`),props.videoId));
-        const videoDocRef = doc(firestore,"videos",props.videoId);
-        await updateDoc(videoDocRef,{
-          likes: props.Video.likes - 1,
-        });
-        setisLiked(false);
-      }catch(error){
-        console.log("Error :" + error);
-      }
-    }
-       }
-       
-        const urlify = (text) => {
+       const urlify = (text) => {
           var urlRegex = /(https?:\/\/[^\s]+)/g;
           return text.replace(urlRegex, function(url) {
            if(url.includes("youtube")){
@@ -189,14 +146,14 @@ function LargeScreenVideoInfoCard(props) {
          <p style={{fontsize:"13px"}}>{props.user?.subscribers} subscribers</p>
          </div>
          </div>
-      {isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={UnSubscribeChannel} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
+      {isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
       </div>
       <div className="like_share_save_container">
         <div>
         {isLiked === false ? (
             <BiLike onClick={doLike} />
           ) : (
-            <BiSolidLike onClick={doUnLike} />
+            <BiSolidLike onClick={doLike} />
           )}
           <span className="likes">{props.Video?.likes}</span>
           <span>|</span>

@@ -111,7 +111,6 @@ function VideoPage() {
       if(video.videoHeight > 720 && video.videoHeight < 1080){
         setCalculatedscreenWidth(window.innerWidth - 474);
         setvideoPlayerHeight(CalculatedscreenWidth / 2)
-        // videoPlayer.style.height = CalculatedscreenWidth / 2  + "px";
         setnextVideosPortionWidth(window.innerWidth-581);
        }else{
        setCalculatedscreenWidth(640);

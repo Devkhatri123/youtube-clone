@@ -1,5 +1,5 @@
 import React,{createContext, useContext, useState} from "react";
-import { collection,doc,setDoc,updateDoc,getDoc, getDocs } from "firebase/firestore";
+import { collection,doc,setDoc,updateDoc,getDoc, getDocs, deleteDoc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { ToastContainer,toast } from "react-toastify";
 export const videoContext = createContext();
@@ -23,10 +23,13 @@ export const videoContext = createContext();
         await updateDoc(videoDocRef,{
           likes:video.likes + 1,
          })
-         console.log("video has been liked")
-         return true
+         return "videoLiked";
         }else{
-          console.log("Video is Already liked")
+          await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LV`),videoId));
+          await updateDoc(videoDocRef,{
+            likes: video.likes - 1,
+          });
+          return "video disliked"
         }
     }
     const WatchLater = async(LoggedInUser,videoId) => {
@@ -35,13 +38,46 @@ export const videoContext = createContext();
         const watchlaterDoc = await getDoc(watchlaterDocRef);
         if(!watchlaterDoc.exists()){
           await setDoc(watchlaterDocRef,{videoURL:videoId});
+          setNotificationMessage("Saved to Watchlater");
+           return "videoAddedFromWatchLater"
+       }else{
+        await deleteDoc(doc(collection(firestore,`users/${LoggedInUser?.uid}/WL`),videoId));
+        setNotificationMessage("videoRemovedFromWatchLater");
+        return "videoRemovedFromWatchLater"
        }
-      setNotificationMessage("Saved to Watchlater");
       }else{
         setNotificationMessage("You are not LoggedIn");
       }
       document.body.style.opacity = "1";
       setshowToastNotification(true);
+ }
+ const subscribeChannel = async(LoggedInUser,videoCreator) => {
+  const docRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/subscribedChannel`),videoCreator.uid);
+  const channelDocRef = doc(collection(firestore,`users`),videoCreator.uid);
+  const subscribersReference = doc(collection(firestore,`users/${videoCreator.uid}/subscribers`),LoggedInUser.uid);
+  const data = {
+    name:videoCreator.name,
+    email:videoCreator.email,
+    channel:videoCreator.channelPic,
+    userId:videoCreator.uid
+  }
+  if(!(await getDoc(docRef)).exists()){
+  await setDoc(docRef,data); 
+   await updateDoc(channelDocRef,{
+   subscribers:videoCreator.subscribers +=1,
+  });
+  await setDoc(subscribersReference,{
+    userId:LoggedInUser.uid,
+  });
+  return "subscribed"
+}else {
+  await deleteDoc(doc(collection(firestore,`users/${LoggedInUser.uid}/subscribedChannel`),videoCreator.uid));
+  const channelDocRef = doc(collection(firestore,`users`),videoCreator.uid);
+  await updateDoc(channelDocRef,{
+   subscribers:videoCreator.subscribers -=1,
+  })
+   return "Unsubscribed"
+}
  }
  const getVideoPublishedTime = (FullLengthVideo) => {
   console.log(FullLengthVideo)
@@ -89,6 +125,6 @@ const returnvideoTime = (duration) => {
    return  minutes + ":" + seconds.toString().padStart(2, 0)
   }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider
