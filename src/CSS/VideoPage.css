@@ -586,6 +586,10 @@
       top: -40px;
       border: none;
 }
+.video_section{
+  background: black;
+  border-radius: 12px;
+}
 #wrapper:hover{
   .large-screen-video-below-controls{
     display: block !important;

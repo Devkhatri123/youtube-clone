@@ -32,11 +32,7 @@ useEffect(()=>{
         <p>Shorts</p>
 </Link>
       </div>
-      <div className="subscription">
-        <MdOutlineSubscriptions/>
-        <p>Subscriptions</p>
-      </div>
-      <div className="library">
+       <div className="library">
         <Link to={"/Library"}>
         <MdOutlineLibraryAdd/>
         <p>You</p>

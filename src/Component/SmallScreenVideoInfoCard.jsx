@@ -174,7 +174,7 @@ function SmallScreenVideoInfoCard(props) {
                 </div>
               </div>
               {/* {currentState.shortvideoShowMessages ? <Comment video={Video} user={user} videoId={params.id}/>:null} */}
-              <div className="comments" onClick={()=>{currentState.setshortvideoShowMessages(true);document.body.style.overflow="hidden";window.scrollTo(0,0)}}>
+              <div className="comments" >
               {props.Video?.comments === "On"?(
                 <>
                 {props.Video?.Comments ? (
@@ -185,7 +185,7 @@ function SmallScreenVideoInfoCard(props) {
                   </p>
                 </div>
                 
-                <div className="comment">
+                <div className="comment" onClick={()=>{currentState.setshortvideoShowMessages(true);document.body.style.overflow="hidden";window.scrollTo(0,0)}}>
                   <img src={props.Video?.Comments[0]?.userPic} alt={props.Video?.Comments[0]?.name} />
                   <span>{props.Video?.Comments[0]?.CommentText}</span>
                 </div>
@@ -196,11 +196,6 @@ function SmallScreenVideoInfoCard(props) {
                  <p className="comments_turnedOff_message">Comments are Turned Off for this video</p>
               )}
               </div>
-              {/* {screenWidth <= 587 && props?.NextVideos.length > 0 && (
-              <div className="Next_videos">
-               <Videos video={props?.NextVideos}/>
-            </div>
-              )} */}
             </div>
   )
 }

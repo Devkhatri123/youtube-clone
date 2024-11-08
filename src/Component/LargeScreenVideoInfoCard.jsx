@@ -166,9 +166,6 @@ function LargeScreenVideoInfoCard(props) {
         {VideoContext.showModal && (
           <ShareOnSocialMediaModal/>
           )}
-        <div style={{padding: "0.3rem 0.7rem"}}>
-          <PiDotsThreeBold/>
-        </div>
         </div>
         </div>
         {props.Video?.description && (
@@ -191,9 +188,6 @@ function LargeScreenVideoInfoCard(props) {
          <p className="comments_turnedOff_message">Comments are Turned Off for this video</p>
       )}
       </div>
-      {/* <div className="Next_videos">
-       <Videos video={props?.NextVideos}/>
-    </div> */}
     </div>
     ):<p style={{color:"white"}}>Loading...</p>
   ):<ErrorPage ErrorMessage={ErrorMessage}/>
