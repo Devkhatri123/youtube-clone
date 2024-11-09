@@ -23,6 +23,7 @@ import ErrorPage from './ErrorPage';
 function LargeScreenVideoInfoCard(props) {
    let [isLiked, setisLiked] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
+    const [isDisliked,setisDisliked] = useState(false);
     const [showFullText,setshowFullText] = useState(false);
     let [Loading, setLoading] = useState(false);
     const [Error,SetError] = useState(false);
@@ -98,7 +99,7 @@ function LargeScreenVideoInfoCard(props) {
         const checkLikedOrNot = async() => {
           try{
           if(user){
-          const LikedDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LV`),props.videoId);
+          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/LV`),props.videoId);
           const GetLikedDoc = await getDoc(LikedDocRef);
           if(GetLikedDoc.exists()){
             setisLiked(true);
@@ -113,7 +114,17 @@ function LargeScreenVideoInfoCard(props) {
       }
       }
         checkLikedOrNot();
-      },[props.videoId,props.user,props.CurrentUser,user])
+      },[props.videoId,props.user,user]);
+      const dislikevideo = ()=>{
+      VideoContext.DisLikeVideo(user,props.videoId,props.Video).then((res)=>{
+        if(res == "video disliked"){
+          if(isLiked) setisLiked(false);
+        setisDisliked(true);
+       }else{
+        setisDisliked(false);
+       }
+       })
+      }
        const urlify = (text) => {
           var urlRegex = /(https?:\/\/[^\s]+)/g;
           return text.replace(urlRegex, function(url) {
@@ -157,7 +168,7 @@ function LargeScreenVideoInfoCard(props) {
           )}
           <span className="likes">{props.Video?.likes}</span>
           <span>|</span>
-          <BiDislike />
+          {isDisliked ? <BiSolidDislike onClick={dislikevideo}/> :  <BiDislike onClick={dislikevideo} />}
           </div>
        <div onClick={()=>{VideoContext.setshowModal(true);console.log(VideoContext.showModal)}}>
           <RiShareForwardLine/>

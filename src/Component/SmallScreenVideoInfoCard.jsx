@@ -23,6 +23,7 @@ import { videoContext } from '../Context/VideoContext';
 function SmallScreenVideoInfoCard(props) {
     const currentState= useContext(videoContext);
     let [isLiked, setisLiked] = useState(false);
+    const [isDisliked,setisDisliked] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
     let [savedVideo,setsavedVideo] = useState(false);
     const [isbuttonDisable,setisbuttonDisable] = useState(false);
@@ -134,6 +135,16 @@ function SmallScreenVideoInfoCard(props) {
          else setsavedVideo(false);
          }
        }
+       const dislikevideo = ()=>{
+        currentState.DisLikeVideo(LoggedInUser,props.videoId,props.Video).then((res)=>{
+          if(res == "video disliked"){
+            if(isLiked) setisLiked(false);
+          setisDisliked(true);
+         }else{
+          setisDisliked(false);
+         }
+         })
+        }
   return (
     <div className="video_page">
        { currentState.shortvideoShowMessages && <Comment video={props.Video} user={props.user} videoId={props.videoId}/>}
@@ -158,7 +169,7 @@ function SmallScreenVideoInfoCard(props) {
                   )}
                   <span className="likes">{props.Video?.likes}</span>
                   <span>|</span>
-                  <BiDislike />
+                  {isDisliked ? <BiSolidDislike onClick={dislikevideo}/> :  <BiDislike onClick={dislikevideo} />}
                 </div>
                 <div>
                   <RiShareForwardLine />

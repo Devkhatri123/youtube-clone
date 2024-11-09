@@ -257,6 +257,7 @@
 #contents #video a{
   display: block;
   background-color: black;
+  border-radius: 12px;
 }
 #contents #video a #thumbnail_container img {
   object-fit: contain;
@@ -456,7 +457,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: calc(26% - 16px);
-    max-width: calc(20% - 16px);
+    min-width: calc(26% - 16px);
   }
   .watched_video .videoThumbnail{
     width: unset;
@@ -469,7 +470,8 @@
     display: block;
   }
   .watched_video .videoThumbnail a img {
-  height: unset !important;
+  /* height: unset !important; */
+  height: 123px;
   width: unset;
   position: absolute;
   top: 0;
@@ -486,6 +488,18 @@
   #toast_notification{
     transform: translateY(-25px) !important;
   }
+  #video_title{
+    font-size: 1rem;
+    margin-top: 16px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-height: 2.5em;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+  }
 }
 
 @media screen and (min-width:600px) and (max-width:990px) {
@@ -499,5 +513,8 @@
 @media screen and (max-width:990px) {
   .watched_Videos{
     margin-top: 50px;
+  }
+  .forwardIcon{
+   display: none !important;
   }
 }

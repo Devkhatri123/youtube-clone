@@ -17,6 +17,8 @@ export const videoContext = createContext();
        const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
         const videoDocRef = doc(firestore,"videos",videoId);
         const getLikedDoc = await getDoc(docRef);
+        const dislikedocRef = doc(collection(firestore,`users/${user.uid}/DV`),videoId);
+        const getdislikeDoc = await getDoc(dislikedocRef);
         if(!getLikedDoc.exists()){
         const data = {videoURL:videoId}
         await setDoc(docRef,data);
@@ -25,12 +27,35 @@ export const videoContext = createContext();
          })
          return "videoLiked";
         }else{
-          await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LV`),videoId));
+          await deleteDoc(docRef);
           await updateDoc(videoDocRef,{
             likes: video.likes - 1,
           });
           return "video disliked"
         }
+    }
+    const DisLikeVideo = async(user,videoId,video)=>{
+      const dislikedocRef = doc(collection(firestore,`users/${user.uid}/DV`),videoId);
+      const videoDocRef = doc(firestore,"videos",videoId);
+      const getdislikeDoc = await getDoc(dislikedocRef);
+      const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
+      const getLikedDoc = await getDoc(docRef);
+       if(getLikedDoc.exists()){
+          await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LV`),videoId));
+          await updateDoc(videoDocRef,{
+            likes: video.likes - 1,
+          });
+          return "video disliked"
+       }else{
+        if(getdislikeDoc.exists()){
+          await deleteDoc(dislikedocRef);
+          return "videoRemoved From dislikes"
+        }else{
+          const data = {videoURL:videoId}
+          await setDoc(dislikedocRef,data);
+          return "video disliked"
+        }
+       }
     }
     const WatchLater = async(LoggedInUser,videoId) => {
        if(LoggedInUser){
@@ -80,7 +105,6 @@ export const videoContext = createContext();
 }
  }
  const getVideoPublishedTime = (FullLengthVideo) => {
-  console.log(FullLengthVideo)
   if(FullLengthVideo.Videodata.Time){
      let seconds = Math.floor((Date.now() - FullLengthVideo.Videodata.Time)/1000);
       let value = seconds;
@@ -125,6 +149,6 @@ const returnvideoTime = (duration) => {
    return  minutes + ":" + seconds.toString().padStart(2, 0)
   }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider
