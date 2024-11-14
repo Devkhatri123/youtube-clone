@@ -514,6 +514,9 @@
   .watched_Videos{
     margin-top: 50px;
   }
+  .watchedVideos_body #video{
+    min-width: calc(33% - 16px) !important;
+  }
   .forwardIcon{
    display: none !important;
   }

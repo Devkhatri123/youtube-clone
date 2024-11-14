@@ -2,29 +2,33 @@ import React, { useContext, useEffect, useRef } from "react";
 import "../CSS/Library.css";
 import { Link } from "react-router-dom";
 import { videoContext } from "../Context/VideoContext";
+import { BsThreeDotsVertical } from "react-icons/bs";
 function WatchedVideo({ video }) {
   const videocontext = useContext(videoContext)
   return (
-    <div className="watched_video">
-      <div className="videoThumbnail">
-        <Link to={`/watch?v=${video.videoId}}`}>
-        <img src={video.Videodata?.Thumbnail} alt={video.Videodata?.Title} id="videoThumbnail"/>
-        </Link>
-        <p className='videoLength' style={{position:"relative",bottom:"25px"}}>{videocontext.returnvideoTime(video.Videodata?.videoLength)}</p>
-      </div>
-      <div className="videoInfo">
-        <p className="text-white " id="watchedVideoTitle">
-          {video.Videodata?.Title}
-        </p>
-        <div style={{display:"flex",alignItems:"baseline",gap:"3px",flexWrap:"wrap"}}>
-        <p id="watchedVideoChannelName"> {video.userData.name} • </p>
-        <p id="WatchedVideo_views_publishedTime">
-          Views {video.Videodata?.views} •  
-        </p>
-        <p style={{fontSize:"0.7rem",color:"#aaa"}}>{videocontext.getVideoPublishedTime(video)}</p>
-        </div>
-      </div>
-    </div>
+    <div id="video" style={{minWidth:"calc(26% - 16px)"}}>
+              <Link to={`/watch?v=${video.Videodata?.videoId}`}>
+              <div id="thumbnail_container">
+              <img src={video.Videodata?.Thumbnail} alt="" className="video"/>
+             <p className='videoLength'>{videocontext.returnvideoTime(video.Videodata.videoLength)}</p>
+              </div>
+                 </Link>
+                 <div className="video_bottom">
+                              <div className="video_bttom_left">
+                                <div className="video_title_and_channelName">
+                                  <h3 id="video_title" className="title">
+                                    {video.Videodata?.Title}
+                                  </h3>
+                                  <div>
+                                  <p>
+                            {video.user?.name} • {video.Videodata.views} Views • {videocontext.getVideoPublishedTime(video)}
+                          </p>
+                                  </div>
+                                </div>
+                              </div>
+                    <BsThreeDotsVertical className="videomenu" />
+                </div>
+                </div>
   );
 }
 

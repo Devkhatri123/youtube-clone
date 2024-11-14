@@ -58,7 +58,7 @@ function WatchedVideos() {
             {watchedVideos.length >= 5 && (
      <div className='forwardIcon watched_VideosforwardIcon' style={{display: !scrolled?"block": "none"}} onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
             )}
-     <div ref={contentsRef} style={{
+     <div ref={contentsRef} className="watchedVideos_body" style={{
       display: "flex",
       overflowX: "scroll",
       width: "-webkit-fill-available",

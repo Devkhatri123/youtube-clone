@@ -151,6 +151,7 @@
     #homepage-body #video {
         flex-direction: column;
         gap: 0;
+        
     }
 
     .user-allshortsvideos .short-video-shelf {
