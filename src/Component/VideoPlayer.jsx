@@ -336,7 +336,7 @@ useEffect(()=>{
             onTimeUpdate={HandlProgress}
             ref={videoRef}
             id="currentVideo"
-            style={{ width: videoWidth }}
+            style={{ height: "300px",margin:" 0 auto !important" }}
           />
         ) : (
           <div className="videoContainer">

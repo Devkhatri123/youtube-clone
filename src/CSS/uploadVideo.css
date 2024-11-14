@@ -269,4 +269,12 @@
     border-radius: 28px;
     font-weight: 600;
   }
+  .large-screen-commnet-type{
+    margin-top: 20px;
+  }
+  .large-screen-commnet-type>div{
+    flex-direction: row;
+    align-items: baseline;
+    gap: 11px;
+  }
 }

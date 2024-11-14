@@ -427,7 +427,7 @@
     flex-shrink: 1;
     flex-basis: calc(26% - 16px);
     aspect-ratio: 16 / 9;
-    max-width: calc(25% - 16px);
+    min-width: calc(26% - 16px);
   }
   #contents #video a #thumbnail_container{
     border-radius: 7px;
@@ -490,7 +490,7 @@
   }
   #video_title{
     font-size: 1rem;
-    margin-top: 16px;
+    /* margin-top: 16px; */
     display: -webkit-box;
     -webkit-box-orient: vertical;
     max-height: 2.5em;

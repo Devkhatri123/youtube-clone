@@ -12,7 +12,7 @@ import ToastNotification from './ToastNotification';
 import VideoInfoCard from './VideoInfoCard';
 import { videoContext } from '../Context/VideoContext';
 import { auth } from '../firebase/firebase';
- function Smallscreencomponent(props) {
+function Smallscreencomponent(props) {
   const videocontext = useContext(videoContext)
   const [ThumbnailHeight,setThumbnailHeight] = useState(null);
   const [ThumbnailWidth,setThumbNailWidth] = useState(null);
@@ -239,4 +239,4 @@ if(videocontext.showToastNotification) setbottomLayout(false)
   )
 }
 
-export default Smallscreencomponent
+export default Smallscreencomponent;

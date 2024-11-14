@@ -19,6 +19,10 @@ export const videoContext = createContext();
         const getLikedDoc = await getDoc(docRef);
         const dislikedocRef = doc(collection(firestore,`users/${user.uid}/DV`),videoId);
         const getdislikeDoc = await getDoc(dislikedocRef);
+        if(getdislikeDoc.data()){
+          await deleteDoc(dislikedocRef);
+            //  return "videoRemoved From dislikes"
+        }
         if(!getLikedDoc.exists()){
         const data = {videoURL:videoId}
         await setDoc(docRef,data);
@@ -33,6 +37,7 @@ export const videoContext = createContext();
           });
           return "video disliked"
         }
+      
     }
     const DisLikeVideo = async(user,videoId,video)=>{
       const dislikedocRef = doc(collection(firestore,`users/${user.uid}/DV`),videoId);
@@ -40,11 +45,13 @@ export const videoContext = createContext();
       const getdislikeDoc = await getDoc(dislikedocRef);
       const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
       const getLikedDoc = await getDoc(docRef);
-       if(getLikedDoc.exists()){
+     if(getLikedDoc.exists()){
           await deleteDoc(doc(collection(firestore,`users/${user?.uid}/LV`),videoId));
           await updateDoc(videoDocRef,{
             likes: video.likes - 1,
           });
+          const data = {videoURL:videoId}
+          await setDoc(dislikedocRef,data);
           return "video disliked"
        }else{
         if(getdislikeDoc.exists()){

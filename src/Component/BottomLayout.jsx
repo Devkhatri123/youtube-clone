@@ -41,11 +41,25 @@ const watchlater = async() => {
 }
 const likevideo = async() => {
  const result = VideoContext.LikeVideo(props.user,props.videoURL,props.video);
- if(result) VideoContext.setshowToastNotification(true);
- VideoContext.setNotificationMessage('Video Liked!');
- setTimeout(() => {
-  VideoContext.setbottomlayout(false)
- }, 3000);
+ if(result){
+  VideoContext.setshowToastNotification(true);
+  VideoContext.setNotificationMessage('Video Liked!');
+  setTimeout(() => {
+   VideoContext.setbottomlayout(false)
+  }, 3000);
+ } 
+}
+const Dislikevideo = () => {
+  const result = VideoContext.DisLikeVideo(props.user,props.videoURL,props.video);
+  if(result){
+  if(result == "videoRemoved From dislikes"){
+    VideoContext.setNotificationMessage('Video Removed DisLikes!');
+  }else VideoContext.setNotificationMessage('Video DisLiked!');
+  VideoContext.setshowToastNotification(true);
+    setTimeout(() => {
+      VideoContext.setbottomlayout(false)
+     }, 3000);
+}
 }
 document.addEventListener("click",(e)=>{
   if(BottomLayout.current){
@@ -72,7 +86,7 @@ document.addEventListener("click",(e)=>{
       <BiLike/>
       <p>Like Video</p>
      </div>
-     <div className="DisLike-video">
+     <div className="DisLike-video" onClick={()=>{Dislikevideo()}}>
       <BiDislike/>
       <p>DisLike Video</p>
      </div>

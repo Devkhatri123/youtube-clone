@@ -22,6 +22,7 @@ import { videoContext } from '../Context/VideoContext';
 import ErrorPage from './ErrorPage';
 function LargeScreenVideoInfoCard(props) {
    let [isLiked, setisLiked] = useState(false);
+   const [issavedVideo,SetsavedVideo] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
     const [isDisliked,setisDisliked] = useState(false);
     const [showFullText,setshowFullText] = useState(false);
@@ -93,6 +94,7 @@ function LargeScreenVideoInfoCard(props) {
         const result = VideoContext.LikeVideo(user,props.videoId,props.Video)
         if(result === "videoLiked") setisLiked(true);
         else setisLiked(false);
+        setisDisliked(false);
       }
       }
       useEffect(()=>{
@@ -125,6 +127,45 @@ function LargeScreenVideoInfoCard(props) {
        }
        })
       }
+      useEffect(()=>{
+          const checkDislikedOrNot = async() => {
+           try{
+            if(user){
+              const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/DV`),props.videoId);
+              const GetLikedDoc = await getDoc(LikedDocRef);
+              if(GetLikedDoc.exists()){
+                setisDisliked(true);
+              }else{
+                setisDisliked(false);
+              }
+            }
+          }catch(error){
+            console.log(error.message);
+          }
+        }
+        checkDislikedOrNot()
+      },[props.videoId,props.user,user])
+      const watchlater = async() => {
+        if(user){
+          const result = await VideoContext.WatchLater(user,props.videoId);
+          if(result === "videoAddedFromWatchLater") SetsavedVideo(true);
+          else SetsavedVideo(false);
+          }
+      }
+      useEffect(()=>{
+        const getWatchlaterVideo = async() => {
+        if(user){
+          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/Watchlater`),props.videoId);
+          const GetLikedDoc = await getDoc(LikedDocRef)
+          if(GetLikedDoc.exists()){
+            SetsavedVideo(true);
+          }else{
+            SetsavedVideo(false);
+          }
+        }
+      }
+        getWatchlaterVideo();
+       },[user,props.videoId])
        const urlify = (text) => {
           var urlRegex = /(https?:\/\/[^\s]+)/g;
           return text.replace(urlRegex, function(url) {
@@ -173,6 +214,10 @@ function LargeScreenVideoInfoCard(props) {
        <div onClick={()=>{VideoContext.setshowModal(true);console.log(VideoContext.showModal)}}>
           <RiShareForwardLine/>
           <span className="share">Share</span>
+        </div>
+        <div>
+          {issavedVideo ? <FaBookmark onClick={watchlater}/>:<FaRegBookmark onClick={watchlater}/>}
+          <span className="share">Save</span>
         </div>
         {VideoContext.showModal && (
           <ShareOnSocialMediaModal/>

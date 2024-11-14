@@ -145,6 +145,24 @@ function SmallScreenVideoInfoCard(props) {
          }
          })
         }
+        useEffect(()=>{
+          const checkDislikedOrNot = async() => {
+           try{
+            if(LoggedInUser){
+              const LikedDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/DV`),props.videoId);
+              const GetLikedDoc = await getDoc(LikedDocRef);
+              if(GetLikedDoc.exists()){
+                setisDisliked(true);
+              }else{
+                setisDisliked(false);
+              }
+            }
+          }catch(error){
+            console.log(error.message);
+          }
+        }
+        checkDislikedOrNot()
+      },[props.videoId,props.user,LoggedInUser])
   return (
     <div className="video_page">
        { currentState.shortvideoShowMessages && <Comment video={props.Video} user={props.user} videoId={props.videoId}/>}
