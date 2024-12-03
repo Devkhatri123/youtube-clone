@@ -233,7 +233,6 @@ function Library() {
                                   </div>
                                 </div>
                               </div>
-                    <BsThreeDotsVertical className="videomenu" />
                 </div>
                 </div>
              })}
@@ -272,7 +271,6 @@ function Library() {
                                   </div>
                                 </div>
                               </div>
-                    <BsThreeDotsVertical className="videomenu" />
                 </div>
                 </div>
             })

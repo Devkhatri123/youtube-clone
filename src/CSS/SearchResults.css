@@ -27,8 +27,8 @@
     }
     .SearchedVideos .videos #video a #thumbnail_container img {
         border-radius: 12px;
-        width: unset;
-        height: unset;
+        /* width: unset;
+        height: unset; */
     }
     .SearchedVideos .videos #video .video_bottom{
         align-items: baseline !important;

@@ -26,7 +26,6 @@ function WatchedVideo({ video }) {
                                   </div>
                                 </div>
                               </div>
-                    <BsThreeDotsVertical className="videomenu" />
                 </div>
                 </div>
   );

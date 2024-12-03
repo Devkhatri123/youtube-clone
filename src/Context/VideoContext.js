@@ -111,6 +111,17 @@ export const videoContext = createContext();
    return "Unsubscribed"
 }
  }
+ const CheckSubscribedOrNot = async(LoggedInUser,SubscribedUser) => {
+  if(LoggedInUser){
+  if(SubscribedUser){
+  const docRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/subscribedChannel`),SubscribedUser.uid);
+  const Doc = await getDoc(docRef);
+  if(Doc.exists()){
+    return true
+  }else return false;
+}
+}
+  }
  const getVideoPublishedTime = (FullLengthVideo) => {
   if(FullLengthVideo.Videodata.Time){
      let seconds = Math.floor((Date.now() - FullLengthVideo.Videodata.Time)/1000);
@@ -156,6 +167,6 @@ const returnvideoTime = (duration) => {
    return  minutes + ":" + seconds.toString().padStart(2, 0)
   }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider

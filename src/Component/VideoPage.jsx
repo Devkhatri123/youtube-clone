@@ -54,7 +54,6 @@ function VideoPage() {
     FetchVideo();
     setCalculatedscreenWidth(null);
     setvideoPlayerHeight(null);
-    setnextVideosPortionWidth(null)
   }, [videoId]);
 
   useEffect(() => {

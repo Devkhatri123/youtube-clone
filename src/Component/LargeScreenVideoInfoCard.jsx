@@ -79,16 +79,14 @@ function LargeScreenVideoInfoCard(props) {
         const checkSubscribedOrNot = async() => {
           if(user){
           if(props.user){
-          const docRef = doc(collection(firestore,`users/${user?.uid}/subscribedChannel`),props.user.uid);
-          const Doc = await getDoc(docRef);
-          if(Doc.exists()){
-           setisSubscribed(true);
-          }
+          const result = VideoContext.CheckSubscribedOrNot(user,props.user);
+          if(result)setisSubscribed(true);
+          else setisSubscribed(false);
         }
       }
           }
         checkSubscribedOrNot()
-      },[props.videoId,props.user,user]);
+      },[props.user,user]);
       const doLike = async() => {
        if(props.CurrentUser){
         const result = VideoContext.LikeVideo(user,props.videoId,props.Video)

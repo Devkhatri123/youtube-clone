@@ -57,7 +57,6 @@ const showLayout = (e,i) => {
     setTop(e.clientY);
   }
   document.body.style.overflow = "hidden";
-  console.log(e.clientY)
 }
 useEffect(()=>{
   if(videocontext.bottomlayout){
