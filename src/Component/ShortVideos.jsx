@@ -93,8 +93,8 @@ function ShortVideos() {
       setvideoHeight(window.innerHeight);
     } else if (window.innerWidth > 990) {
       setwindowHeight("unset")
-      setvideoWidth(637);
-      setvideoHeight(window.innerHeight - 101);
+      setvideoWidth("unset");
+      setvideoHeight(window.innerHeight);
     }
     const updateVideoSize = () => {
       setwindowHeight(window.innerHeight)
@@ -106,8 +106,8 @@ function ShortVideos() {
         setvideoHeight(window.innerHeight);
       } else if (window.innerWidth > 990) {
         setwindowHeight("unset")
-        setvideoWidth(637);
-        setvideoHeight(window.innerHeight - 101);
+        setvideoWidth("unset");
+        setvideoHeight(window.innerHeight);
       }
     };
     window.addEventListener("resize", updateVideoSize);
@@ -117,7 +117,6 @@ function ShortVideos() {
   }, [videoWidth, videoHeight,windowHeight]);
 
   useEffect(() => {
-    console.log(params.id);
     const GetLikeVideo = async () => {
       if (user) {
         const docRef = doc(
@@ -196,7 +195,6 @@ function ShortVideos() {
   const handleSwipeGesture = () => {
     if (!touchEndRef.current || !touchStartRef.current) return;
     const swipeDistance = touchStartRef.current - touchEndRef.current;
-    console.log(swipeDistance);
     const swipeThreshold = 100; // Minimum distance to qualify as a swipe
     let currentVideo = document.querySelectorAll(".short_video_container");
     if (swipeDistance > swipeThreshold) {
@@ -292,7 +290,6 @@ function ShortVideos() {
   }
   const HideLayout = () => {
     const swipeDistance = touchStartRef.current - touchEndRef.current;
-    // shortvideolayout.current.style.transform= `translateY(${Math.abs(swipeDistance)}px)`;
     if(swipeDistance <= -60){
       shortvideolayout.current.style.display = "none";
       setshortvideoLayout(false);
@@ -348,7 +345,7 @@ function ShortVideos() {
             <div
               className={`short_details ${Ispause && ActiveIndex === index ? "ActivesmalldevicesBottomtransition":"RemovesmalldevicesBottomtransition"}`}
               style={
-                currentState.shortvideoShowMessages || currentState.Description? { zIndex: "0" }: { zIndex: "10", position: "absolute"}
+                currentState.shortvideoShowMessages || currentState.Description? { zIndex: "0",visibility:"hidden" }: { zIndex: "10", position: "absolute",visibility:"visible"}
               }
             >
               <div className="short_channel">
@@ -370,7 +367,9 @@ function ShortVideos() {
                 currentState.shortvideoShowMessages || currentState.Description ? { zIndex: "0", position: "absolute"}: { zIndex: "10", position: "absolute"}
               }
             >
-              <div className="like control">
+              <div className="like control" style={
+                currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
+              }>
                 {LikeShort ? (
                   <BiSolidLike />
                 ) : (
@@ -378,7 +377,9 @@ function ShortVideos() {
                 )}
                 <p>{shortvideo.Videodata.likes}</p>
               </div>
-              <div className="dislike control">
+              <div className="dislike control" style={
+                currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
+              }>
                 <BiDislike />
                 <p>2</p>
               </div>
@@ -388,6 +389,9 @@ function ShortVideos() {
                   currentState.setshortvideoShowMessages(true);
                   document.body.style.overflowY = "hidden";
                 }}
+                style={
+                  currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
+                }
               >
                 <MdOutlineMessage />
                 <p>3520</p>
@@ -404,10 +408,14 @@ function ShortVideos() {
                 </div>
                 )
               )}
-              <div className="menu control" onClick={()=>{setshortvideoLayout(true);document.body.style.overflow="hidden"}}>
+              <div className="menu control" onClick={()=>{setshortvideoLayout(true);document.body.style.overflow="hidden"}} style={
+                currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
+              }>
                 <BsThreeDots />
               </div>
-              <div className="channel control">
+              <div className="channel control" style={
+                currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
+              }>
                 <img
                   src={shortvideo.UserData.channelPic || shortvideo.UserData.channelURL}
                   alt=""

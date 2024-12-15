@@ -14,6 +14,7 @@ export const videoContext = createContext();
 
 
     const LikeVideo = async(user,videoId,video) => {
+      if(user){
        const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
         const videoDocRef = doc(firestore,"videos",videoId);
         const getLikedDoc = await getDoc(docRef);
@@ -37,7 +38,10 @@ export const videoContext = createContext();
           });
           return "video disliked"
         }
-      
+      }else{
+        setNotificationMessage("You are not logged in");
+        setshowToastNotification(true);
+      }
     }
     const DisLikeVideo = async(user,videoId,video)=>{
       const dislikedocRef = doc(collection(firestore,`users/${user.uid}/DV`),videoId);
