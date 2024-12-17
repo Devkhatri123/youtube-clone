@@ -317,15 +317,12 @@ body {
 @media screen and (min-width: 990px) {
   .shortVideos_container {
     font-size: calc(15px + 6 * ((100vw - 320px) / 680));
-    /* width: 30%;
-    margin: 0 auto; */
   }
   .short_video_container{
-    /* width: 637px; */
-    padding: 27px;
     margin:  0 auto;
     height: unset;
     max-width: max-content;
+    padding: 10px 27px 10px 27px;
   }
   #shortvideo {
     object-fit: cover;
@@ -336,20 +333,20 @@ body {
     bottom: 0;
     font-size: 0.8em;
     left: 33px;
-    bottom: 38px;
+    bottom: 40px;
   }
   .short_title {
     margin: 10px 0px 8px 5px;
   }
   .short_controls{
     right: -40px;
-    bottom: 33px;
+    bottom: 18px;
   }
  .shortVivdeoComment #message_page{
     background-color: #212121;
     position: fixed;
     left: 26%;
-    top: 0%;
+    top: 1%;
     width: 45%;
     font-size: 14px;
     height: 100%;
@@ -370,6 +367,8 @@ body {
   background-color: #212121;
 }
 .short_channel button{
- display: block;
+  display: block;
+  padding: 5px 8px;
+  font-size: 1rem;
 }
 }

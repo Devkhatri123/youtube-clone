@@ -94,7 +94,7 @@ function ShortVideos() {
     } else if (window.innerWidth > 990) {
       setwindowHeight("unset")
       setvideoWidth("unset");
-      setvideoHeight(window.innerHeight);
+      setvideoHeight(window.innerHeight - 18);
     }
     const updateVideoSize = () => {
       setwindowHeight(window.innerHeight)
@@ -107,7 +107,7 @@ function ShortVideos() {
       } else if (window.innerWidth > 990) {
         setwindowHeight("unset")
         setvideoWidth("unset");
-        setvideoHeight(window.innerHeight);
+        setvideoHeight(window.innerHeight - 18);
       }
     };
     window.addEventListener("resize", updateVideoSize);
@@ -215,13 +215,11 @@ function ShortVideos() {
   };
   const GotoNextVideo = () => {
     const shortVideoContainers = document.querySelectorAll( ".short_video_container");
-
     // Ensure Index stays within valid bounds:
-    if (Index >= shortVideoContainers.length) return; // Handle reaching the end
-
+    if (Index > shortVideoContainers.length) return; // Handle reaching the end
     let currentVideo = shortVideoContainers[Index];
+    if(currentVideo.nextElementSibling){
     currentVideo.getElementsByTagName("video")[0].pause(); // Select first video in the container directly
-
     currentVideo.nextElementSibling?.scrollIntoView({ behavior: "smooth" }); // Optional chaining for safety
     currentVideo.nextElementSibling.style.scrollSnapAlign = "start";
 
@@ -234,6 +232,7 @@ function ShortVideos() {
     );
     setActiveIndex(parseInt(currentVideo.nextElementSibling?.getElementsByTagName("video")[0].dataset.index))
     currentVideo.style.scrollSnapAlign = "unset";
+  }
   };
   const GotoPreviousVideo = () => {
     const shortVideoContainers = document.querySelectorAll(".short_video_container");
@@ -255,9 +254,6 @@ function ShortVideos() {
     setActiveIndex(parseInt(currentVideo.previousElementSibling?.getElementsByTagName("video")[0].dataset.index))
     currentVideo.style.scrollSnapAlign = "unset";
   };
-  useEffect(()=>{
-  console.log(ActiveIndex)
-  },[ActiveIndex])
   useEffect(() => {
     const handleKeyup = (e) => {
       if (e.key === "ArrowDown" || e.keyCode === 40) {
@@ -272,9 +268,7 @@ function ShortVideos() {
     };
   }, [Index, FilteredShortVideos]);
   useEffect(() => {
-    let currentVideo = document.querySelectorAll(".short_video_container")[
-      Index
-    ];
+    let currentVideo = document.querySelectorAll(".short_video_container")[Index];
     if (currentVideo) {
       currentVideo.getElementsByTagName("video").shortvideo.play();
     }

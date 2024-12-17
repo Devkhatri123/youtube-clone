@@ -199,8 +199,9 @@ import { Navbarcontext } from '../Context/NavbarContext';
     return <div className="notification" key={index}>
      <img src={newvideo?.userData?.channelPic} alt="channelpic" style={{width:"40px",height:"40px",borderRadius:"50%"}}/>
      <div style={{minWidth:"271px"}}>
-      <p className='video-title'>{newvideo?.videoData?.Title}</p>
+      <Link to={`/watch?v=${newvideo?.videoId}`}> <p className='video-title'>{newvideo?.videoData?.Title}</p>
       <p>4 hours ago</p>
+      </Link>
      </div>
      <img src={newvideo?.videoData?.Thumbnail} alt="video-thumbnail" className='video-thumbnail'/>
     </div>

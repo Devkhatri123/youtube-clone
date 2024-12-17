@@ -312,10 +312,7 @@ useEffect(()=>{
   return !Error || ErrorMessage ? ( 
     <div
       className="video_section"
-      style={
-      !props.src
-          ? { width: videoWidth,height:videoHeight }
-          : null
+      style={!props.src ? { width: videoWidth,height:videoHeight }: {height:"320px !important"}
       }
     >
       <div className="video_top_controls">

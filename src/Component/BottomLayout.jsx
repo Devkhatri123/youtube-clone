@@ -41,13 +41,13 @@ const watchlater = async() => {
 }
 const likevideo = async() => {
  const result = VideoContext.LikeVideo(props.user,props.videoURL,props.video);
- if(result){
-  VideoContext.setshowToastNotification(true);
-  VideoContext.setNotificationMessage('Video Liked!');
-  setTimeout(() => {
-   VideoContext.setbottomlayout(false)
-  }, 3000);
- } 
+//  if(result){
+//   VideoContext.setshowToastNotification(true);
+//   VideoContext.setNotificationMessage('Video Liked!');
+//   setTimeout(() => {
+//    VideoContext.setbottomlayout(false)
+//   }, 3000);
+//  } 
 }
 const Dislikevideo = () => {
   const result = VideoContext.DisLikeVideo(props.user,props.videoURL,props.video);

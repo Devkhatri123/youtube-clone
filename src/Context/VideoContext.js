@@ -29,14 +29,16 @@ export const videoContext = createContext();
         await setDoc(docRef,data);
         await updateDoc(videoDocRef,{
           likes:video.likes + 1,
-         })
-         return "videoLiked";
+         });
+         setshowToastNotification(true);
+         setNotificationMessage("videoLiked");
         }else{
           await deleteDoc(docRef);
           await updateDoc(videoDocRef,{
             likes: video.likes - 1,
           });
-          return "video disliked"
+          setshowToastNotification(true);
+          setNotificationMessage("video disliked");
         }
       }else{
         setNotificationMessage("You are not logged in");
