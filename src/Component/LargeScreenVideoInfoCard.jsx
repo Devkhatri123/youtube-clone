@@ -20,7 +20,10 @@ import CommentBody from './CommentBody';
 import ShareOnSocialMediaModal from './ShareOnSocialMediaModal';
 import { videoContext } from '../Context/VideoContext';
 import ErrorPage from './ErrorPage';
+import { useSearchParams } from 'react-router-dom';
 function LargeScreenVideoInfoCard(props) {
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get('v');
    let [isLiked, setisLiked] = useState(false);
    const [issavedVideo,SetsavedVideo] = useState(false);
     let [isSubscribed,setisSubscribed] = useState(false);
@@ -64,12 +67,7 @@ function LargeScreenVideoInfoCard(props) {
   const makeSubscribe = async() => {
       if(user){
           setIsbtnDisable(true);
-          const result = await VideoContext.subscribeChannel(user,props.user);
-          if(result === "subscribed"){
-            setisSubscribed(true);
-          }else{
-            setisSubscribed(false);
-          }
+          await VideoContext.subscribeChannel(user,props.user);
           setIsbtnDisable(false);
       }else{
         alert("You are not signedIn");
@@ -79,9 +77,7 @@ function LargeScreenVideoInfoCard(props) {
         const checkSubscribedOrNot = async() => {
           if(user){
           if(props.user){
-          const result = VideoContext.CheckSubscribedOrNot(user,props.user);
-          if(result)setisSubscribed(true);
-          else setisSubscribed(false);
+          VideoContext.CheckSubscribedOrNot(user,props.user);
         }
       }
           }
@@ -153,8 +149,8 @@ function LargeScreenVideoInfoCard(props) {
       useEffect(()=>{
         const getWatchlaterVideo = async() => {
         if(user){
-          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/Watchlater`),props.videoId);
-          const GetLikedDoc = await getDoc(LikedDocRef)
+          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/WL`),videoId);
+          const GetLikedDoc = await getDoc(LikedDocRef);
           if(GetLikedDoc.exists()){
             SetsavedVideo(true);
           }else{
@@ -196,7 +192,7 @@ function LargeScreenVideoInfoCard(props) {
          <p style={{fontsize:"13px"}}>{props.user?.subscribers} subscribers</p>
          </div>
          </div>
-      {isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
+      {VideoContext.isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
       </div>
       <div className="like_share_save_container">
         <div>
@@ -209,7 +205,7 @@ function LargeScreenVideoInfoCard(props) {
           <span>|</span>
           {isDisliked ? <BiSolidDislike onClick={dislikevideo}/> :  <BiDislike onClick={dislikevideo} />}
           </div>
-       <div onClick={()=>{VideoContext.setshowModal(true);console.log(VideoContext.showModal)}}>
+       <div onClick={()=>{VideoContext.setshowModal(true)}}>
           <RiShareForwardLine/>
           <span className="share">Share</span>
         </div>

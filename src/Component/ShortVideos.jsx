@@ -20,6 +20,7 @@ import {
   collection,
   updateDoc,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { useNavigate } from "react-router";
@@ -39,6 +40,7 @@ function ShortVideos() {
   const [videoHeight, setvideoHeight] = useState();
   const [shortvideoLayout,setshortvideoLayout] = useState(false);
   const [ActiveIndex,setActiveIndex] = useState(0);
+  const [IsbtnDisable,setIsbtnDisable] = useState(false);
   const shortvideolayout = useRef();
   const Progressref = useRef();
   const containerRef = useRef();
@@ -139,22 +141,22 @@ function ShortVideos() {
     });
     if (user) {
       const docRef = doc(
-        collection(firestore, `users/${auth.currentUser.uid}/LV`),
-        params.id
-      );
+        collection(firestore, `users/${auth.currentUser.uid}/LV`),params.id);
       const videoDocRef = doc(firestore, "videos", params.id);
       const getLikedDoc = await getDoc(docRef);
       if (!getLikedDoc.exists()) {
-        const data = {
-          videoURL: params.id,
-        };
+        const data = {videoURL: params.id};
         await setDoc(docRef, data);
         await updateDoc(videoDocRef, {
           likes: LikedVideo[0].Videodata.likes + 1,
         });
         setLikeShort(true);
       } else {
-        console.log("video Already exists");
+        await deleteDoc(docRef);
+        await updateDoc(videoDocRef, {
+          likes: LikedVideo[0].Videodata.likes - 1,
+        });
+        setLikeShort(false);
       }
     }
   };
@@ -232,7 +234,7 @@ function ShortVideos() {
     );
     setActiveIndex(parseInt(currentVideo.nextElementSibling?.getElementsByTagName("video")[0].dataset.index))
     currentVideo.style.scrollSnapAlign = "unset";
-  }
+  };
   };
   const GotoPreviousVideo = () => {
     const shortVideoContainers = document.querySelectorAll(".short_video_container");
@@ -292,6 +294,22 @@ function ShortVideos() {
       shortvideolayout.current.style.transform= `translateY(0px)`;
     }
   } 
+  const subscribeChannel = async(creatorData) => {
+    setIsbtnDisable(true);
+    await currentState.subscribeChannel(user,creatorData);
+    setIsbtnDisable(false);
+  }
+   useEffect(()=>{
+          const checkSubscribedOrNot = async() => {
+            if(user){
+              const currentVideo = ShortVideos.filter((video)=>{
+                return params.id == video.id
+              });
+            await currentState.CheckSubscribedOrNot(user,currentVideo[0]?.UserData);
+        }
+            }
+          checkSubscribedOrNot()
+        },[user,params.id]);
   return Loading ? (
     <p className="text-white">Loading...</p>
   ) : (
@@ -345,7 +363,7 @@ function ShortVideos() {
               <div className="short_channel">
                 <img src={shortvideo.UserData.channelPic || shortvideo.UserData.channelURL} alt="" />
                 <p>{shortvideo.UserData.name}</p>
-                <button>subscribe</button>
+                {currentState.isSubscribed === true ? <button className="subscribe_btn subscribed_btn" style={{backgroundColor:" #2f2d2b"}} onClick={()=>{subscribeChannel(shortvideo.UserData)}} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={()=>{subscribeChannel(shortvideo.UserData)}} style={{backgroundColor:" #fff"}} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
               </div>
               <div className="short_title">
                 <p>{shortvideo.Videodata.Title}</p>

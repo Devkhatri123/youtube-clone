@@ -9,6 +9,8 @@ export const videoContext = createContext();
     const [bottomlayout,setbottomlayout] = useState(false);
     const [showToastNotification,setshowToastNotification] = useState(false);
     const [NotificationMessage,setNotificationMessage] = useState('');
+    const [isSubscribed,setisSubscribed] = useState(false);
+    const [isLiked,setisLiked] = useState(false);
     const [Description,setDescription] = useState(false);
     const [shortvideoShowMessages,setshortvideoShowMessages] = useState(false);
 
@@ -46,6 +48,7 @@ export const videoContext = createContext();
       }
     }
     const DisLikeVideo = async(user,videoId,video)=>{
+      if(user){
       const dislikedocRef = doc(collection(firestore,`users/${user.uid}/DV`),videoId);
       const videoDocRef = doc(firestore,"videos",videoId);
       const getdislikeDoc = await getDoc(dislikedocRef);
@@ -58,17 +61,24 @@ export const videoContext = createContext();
           });
           const data = {videoURL:videoId}
           await setDoc(dislikedocRef,data);
-          return "video disliked"
+          setNotificationMessage("video disliked");
+          setshowToastNotification(true);
        }else{
         if(getdislikeDoc.exists()){
           await deleteDoc(dislikedocRef);
-          return "videoRemoved From dislikes"
+          setNotificationMessage("videoRemoved From dislikes");
+          setshowToastNotification(true);
         }else{
           const data = {videoURL:videoId}
           await setDoc(dislikedocRef,data);
-          return "video disliked"
+          setNotificationMessage("video disliked");
+          setshowToastNotification(true);
         }
        }
+      }else{
+        setNotificationMessage("You are not Logged In");
+        setshowToastNotification(true);
+      }
     }
     const WatchLater = async(LoggedInUser,videoId) => {
        if(LoggedInUser){
@@ -107,14 +117,14 @@ export const videoContext = createContext();
   await setDoc(subscribersReference,{
     userId:LoggedInUser.uid,
   });
-  return "subscribed"
+  setisSubscribed(true);
 }else {
   await deleteDoc(doc(collection(firestore,`users/${LoggedInUser.uid}/subscribedChannel`),videoCreator.uid));
   const channelDocRef = doc(collection(firestore,`users`),videoCreator.uid);
   await updateDoc(channelDocRef,{
    subscribers:videoCreator.subscribers -=1,
-  })
-   return "Unsubscribed"
+  });
+  setisSubscribed(false);
 }
  }
  const CheckSubscribedOrNot = async(LoggedInUser,SubscribedUser) => {
@@ -123,8 +133,8 @@ export const videoContext = createContext();
   const docRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/subscribedChannel`),SubscribedUser.uid);
   const Doc = await getDoc(docRef);
   if(Doc.exists()){
-    return true
-  }else return false;
+    setisSubscribed(true);
+  }else  setisSubscribed(false);;
 }
 }
   }
@@ -173,6 +183,6 @@ const returnvideoTime = (duration) => {
    return  minutes + ":" + seconds.toString().padStart(2, 0)
   }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider

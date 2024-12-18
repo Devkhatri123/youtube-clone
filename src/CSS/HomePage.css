@@ -82,6 +82,7 @@
 
 #homepage-body #video .video_bottom {
     width: 100%;
+    margin: 20px 7px 10px 7px !important;
 }
 
 #homepage-body #video .video_bottom .video_bttom_left .video_title_and_channelName {

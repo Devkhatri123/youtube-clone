@@ -11,7 +11,6 @@ function BottomLayout(props) {
     const touchStartRef = useRef(0);
     const touchEndRef = useRef(0);
     const BottomLayout = useRef();
-    const [height,setheight] = useState(248);
     const sectionTouch = (e) => {
       touchStartRef.current = e.touches[0].clientY;
     }
@@ -29,8 +28,7 @@ function BottomLayout(props) {
         document.body.style.overflow = "scroll";
         document.body.style.opacity = "1";
       }else{
-        setheight(248)
-        BottomLayout.current.style.transform= `translateY(0px)`;
+       BottomLayout.current.style.transform= `translateY(0px)`;
       }
     } 
 const watchlater = async() => {
@@ -39,27 +37,15 @@ const watchlater = async() => {
     VideoContext.setbottomlayout(false)
    }, 3000);
 }
-const likevideo = async() => {
- const result = VideoContext.LikeVideo(props.user,props.videoURL,props.video);
-//  if(result){
-//   VideoContext.setshowToastNotification(true);
-//   VideoContext.setNotificationMessage('Video Liked!');
-//   setTimeout(() => {
-//    VideoContext.setbottomlayout(false)
-//   }, 3000);
-//  } 
+const likevideo = () => {
+  VideoContext.LikeVideo(props.user,props.videoURL,props.video);
+  VideoContext.setshowModal(false);
+  VideoContext.setbottomlayout(false);
 }
 const Dislikevideo = () => {
-  const result = VideoContext.DisLikeVideo(props.user,props.videoURL,props.video);
-  if(result){
-  if(result == "videoRemoved From dislikes"){
-    VideoContext.setNotificationMessage('Video Removed DisLikes!');
-  }else VideoContext.setNotificationMessage('Video DisLiked!');
-  VideoContext.setshowToastNotification(true);
-    setTimeout(() => {
-      VideoContext.setbottomlayout(false)
-     }, 3000);
-}
+  VideoContext.DisLikeVideo(props.user,props.videoURL,props.video);
+  VideoContext.setshowModal(false);
+  VideoContext.setbottomlayout(false);
 }
 document.addEventListener("click",(e)=>{
   if(BottomLayout.current){
@@ -70,7 +56,6 @@ document.addEventListener("click",(e)=>{
     VideoContext.setbottomlayout(true)
   }
 }
-// console.log(e)
 })
   return VideoContext.bottomlayout  && (
     !VideoContext.showModal ? (
@@ -80,7 +65,6 @@ document.addEventListener("click",(e)=>{
      <div className="watch-later" onClick={()=>{watchlater();}}>
         <FiClock />
         <p>Watch Later</p>
-       
      </div>
      <div className="Like-video" onClick={()=>{likevideo()}}>
       <BiLike/>

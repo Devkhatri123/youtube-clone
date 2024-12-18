@@ -132,7 +132,7 @@ function VideoPage() {
       setnextVideosPortionWidth(window.innerWidth - 1304);
       }
     } else if (window.innerWidth >= 2000) {
-      setCalculatedscreenWidth(1225);
+      setCalculatedscreenWidth(1291);
       setnextVideosPortionWidth(window.innerWidth - 1558);
     }
     const updateVideoSize = () => {
@@ -165,7 +165,7 @@ function VideoPage() {
         setnextVideosPortionWidth(window.innerWidth - 1304);
         }
       } else if (window.innerWidth >= 2000) {
-        setCalculatedscreenWidth(1225);
+        setCalculatedscreenWidth(1291);
         setnextVideosPortionWidth(window.innerWidth - 1558);
       }
     };

@@ -306,9 +306,7 @@ useEffect(()=>{
   if(openPlaySpeedModal) document.body.style.overflow = "hidden";
   else document.body.style.overflow = "unset";
   },[openPlaySpeedModal])
- const enablePNP = () => {
-  videoRef.current.requestPictureInPicture()
- }
+
   return !Error || ErrorMessage ? ( 
     <div
       className="video_section"
@@ -498,7 +496,6 @@ useEffect(()=>{
               </p>
             </div>
             <div className="bottom-toggle-buttons-right">
-              <MdOutlinePictureInPictureAlt onClick={enablePNP}/>
               <GoGear onClick={()=>setopenPlaySpeedModal(true)}/>
               {!Fullscreen ? (
                 <RxEnterFullScreen onClick={HandleFullScreen} />

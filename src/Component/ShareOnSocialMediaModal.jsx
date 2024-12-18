@@ -17,11 +17,8 @@ function ShareOnSocialMediaModal(props) {
          videocontext.setNotificationMessage('Link Copied!');
          setTimeout(() => {
             e.target.innerText = "Copy";
-            videocontext.setshowToastNotification(false)
+            // videocontext.setshowToastNotification(false)
          }, 1000);
-         setTimeout(() => {
-          videocontext.setshowToastNotification(false)
-         }, 3000);
       }catch(error){
         console.log(error)
       }

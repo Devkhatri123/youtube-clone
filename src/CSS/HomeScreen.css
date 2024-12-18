@@ -35,7 +35,7 @@
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   padding: 16px 8px;
   max-width: 301px;
-  transform: translateY(16px);
+  transform: translateY(25px);
 }
 
 #toast_text {

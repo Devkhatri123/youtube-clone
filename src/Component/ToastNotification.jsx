@@ -19,7 +19,6 @@ function ToastNotification() {
     <div id="toast_notification" className='transition'>
     <div id="toast_text">
       <p style={{fontSize:"1rem"}}>{videocontext.NotificationMessage}</p>
-      <span>undo</span>
      </div>
     </div>
   )
