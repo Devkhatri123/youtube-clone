@@ -77,8 +77,7 @@ function LargeScreenVideoInfoCard(props) {
         const checkSubscribedOrNot = async() => {
           if(user){
           if(props.user){
-          VideoContext.CheckSubscribedOrNot(user,props.user);
-        }
+         await VideoContext.CheckSubscribedOrNot(user,props.user);        }
       }
           }
         checkSubscribedOrNot()

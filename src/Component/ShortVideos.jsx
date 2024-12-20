@@ -139,26 +139,8 @@ function ShortVideos() {
     const LikedVideo = FilteredShortVideos.filter((video) => {
       return video.id === id;
     });
-    if (user) {
-      const docRef = doc(
-        collection(firestore, `users/${auth.currentUser.uid}/LV`),params.id);
-      const videoDocRef = doc(firestore, "videos", params.id);
-      const getLikedDoc = await getDoc(docRef);
-      if (!getLikedDoc.exists()) {
-        const data = {videoURL: params.id};
-        await setDoc(docRef, data);
-        await updateDoc(videoDocRef, {
-          likes: LikedVideo[0].Videodata.likes + 1,
-        });
-        setLikeShort(true);
-      } else {
-        await deleteDoc(docRef);
-        await updateDoc(videoDocRef, {
-          likes: LikedVideo[0].Videodata.likes - 1,
-        });
-        setLikeShort(false);
-      }
-    }
+   await currentState.LikeVideo(user,params.id,LikedVideo[0].Videodata);
+   console.log("opeartioon done")
   };
 
   const HandlePause = (e,currentVideoindex) => {
@@ -382,8 +364,8 @@ function ShortVideos() {
               <div className="like control" style={
                 currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
               }>
-                {LikeShort ? (
-                  <BiSolidLike />
+                {currentState.isLiked ? (
+                  <BiSolidLike onClick={() => HandleLike(shortvideo.id)}/>
                 ) : (
                   <BiLike onClick={() => HandleLike(shortvideo.id)} />
                 )}

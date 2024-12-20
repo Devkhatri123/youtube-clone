@@ -16,6 +16,7 @@ export const videoContext = createContext();
 
 
     const LikeVideo = async(user,videoId,video) => {
+      console.log(video)
       if(user){
        const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
         const videoDocRef = doc(firestore,"videos",videoId);
@@ -25,6 +26,7 @@ export const videoContext = createContext();
         if(getdislikeDoc.data()){
           await deleteDoc(dislikedocRef);
             //  return "videoRemoved From dislikes"
+            setisLiked(true)
         }
         if(!getLikedDoc.exists()){
         const data = {videoURL:videoId}
@@ -34,6 +36,7 @@ export const videoContext = createContext();
          });
          setshowToastNotification(true);
          setNotificationMessage("videoLiked");
+         setisLiked(true)
         }else{
           await deleteDoc(docRef);
           await updateDoc(videoDocRef,{
@@ -41,6 +44,7 @@ export const videoContext = createContext();
           });
           setshowToastNotification(true);
           setNotificationMessage("video disliked");
+          setisLiked(false)
         }
       }else{
         setNotificationMessage("You are not logged in");
@@ -183,6 +187,6 @@ const returnvideoTime = (duration) => {
    return  minutes + ":" + seconds.toString().padStart(2, 0)
   }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,isLiked,setisLiked,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider

@@ -186,15 +186,17 @@ function CommentBody(props) {
                 {Reply && index == clickedReplyMessage &&(
                 <div className="replybox">
                   <input type="text" name="" id="replyinput" value={ReplyMessage} onChange={HandleReplyMessage} placeholder='Send a reply here'/>
+                <div>
                   <button onClick={()=>{setReply(false)}}>cancel</button>
                   <button onClick={()=>{sendReplyMessage(index)}}>send</button>
+                  </div>
                 </div>
                 )}
                 {comment.replies &&(
                   <>
                <div id='showreplybtn' onClick={()=>{setshowReplies(!showReplies);setclickedReplyMessageIndex(index)}}>{!showReplies?<IoIosArrowDown />:clickedReplyMessageIndex === index?<IoIosArrowUp/>:<IoIosArrowDown />}<button>{comment.replies.length} replies</button></div>
                  {showReplies && index === clickedReplyMessageIndex &&(
-                  <>
+                  <div className="Comments">
                   {comment.replies.map((replycomment,i)=>{
                     return <div id="comment" key={i}>
                     <div className="commentChannelPic"><img src={replycomment.ReplyuserPic} alt={replycomment.Replyname} /></div>
@@ -218,7 +220,7 @@ function CommentBody(props) {
                       </div>
                       </div>
                   })}
-                  </>
+                  </div>
                  )}
                  </>
                 )}

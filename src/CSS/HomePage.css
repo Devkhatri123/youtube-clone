@@ -82,11 +82,11 @@
 
 #homepage-body #video .video_bottom {
     width: 100%;
-    margin: 20px 7px 10px 7px !important;
+    margin: 3px 7px 10px 7px !important;
 }
 
 #homepage-body #video .video_bottom .video_bttom_left .video_title_and_channelName {
-    height: 84px;
+    height: 100px;
     gap: 3px;
 }
 
@@ -106,6 +106,17 @@
 }
 
 @media screen and (max-width: 600px) {
+    .video_bottom p {
+        color: white;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        max-height: 2.5em;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+        line-height: 1.25;
+        text-overflow: ellipsis;
+    }
     #homepage-body #video {
         gap: 0;
         aspect-ratio: unset;
@@ -123,7 +134,7 @@
     #homepage-body #video a {
         display: flex;
         max-width: 100%;
-        flex-basis: calc(100% - 150px);
+        flex-basis: calc(100% - 0px);
     }
 
     .user-allshortsvideos .short-videos {
@@ -152,6 +163,13 @@
     #homepage-body #video {
         flex-direction: column;
         gap: 0;
+        flex-direction: column;
+        gap: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: calc(50% - 16px);
+        max-width: calc(49% - 16px);
+        aspect-ratio: 16 / 9;
         
     }
 
@@ -164,7 +182,16 @@
     #homepage-body {
         display: flex;
     }
-
+    #homepage-body #video {
+        flex-direction: column;
+        gap: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: calc(33.33% - 16px);
+        max-width: calc(32.33% - 16px);
+        aspect-ratio: 16 / 9;
+        
+    }
     #header h1 {
         font-size: 2.2rem;
     }
@@ -176,6 +203,9 @@
     .user-allshortsvideos .short-video-shelf .short-video #short-video video {
         height: 372px;
         /* width: 209px; */
+    }
+    #homepage-body #video .video_bottom .video_bttom_left .video_title_and_channelName {
+        height: 68px;
     }
 }
 
@@ -195,5 +225,20 @@
         max-width: unset;
         width: unset;
         height: unset;
+    }
+    #homepage-body #video .video_bottom {
+        margin: 15px 7px 10px 7px !important;
+    }
+    #homepage-body #video {
+        flex-direction: column;
+        gap: 0;
+        flex-direction: column;
+        gap: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: calc(25% - 16px);
+        max-width: calc(25% - 16px);
+        aspect-ratio: 16 / 9;
+        
     }
 }
