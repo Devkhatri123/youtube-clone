@@ -142,7 +142,9 @@ function ShortVideos() {
    await currentState.LikeVideo(user,params.id,LikedVideo[0].Videodata);
    console.log("opeartioon done")
   };
-
+  useEffect(()=>{
+     currentState.checKLikedOrNot(user,params.id)
+  },[params.id,FilteredShortVideos])
   const HandlePause = (e,currentVideoindex) => {
     setActiveIndex(currentVideoindex);
     setIspause(!Ispause);
@@ -284,14 +286,14 @@ function ShortVideos() {
    useEffect(()=>{
           const checkSubscribedOrNot = async() => {
             if(user){
-              const currentVideo = ShortVideos.filter((video)=>{
+              const currentVideo = FilteredShortVideos.filter((video)=>{
                 return params.id == video.id
               });
             await currentState.CheckSubscribedOrNot(user,currentVideo[0]?.UserData);
         }
             }
           checkSubscribedOrNot()
-        },[user,params.id]);
+        },[user,params.id,FilteredShortVideos]);
   return Loading ? (
     <p className="text-white">Loading...</p>
   ) : (

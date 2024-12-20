@@ -18,7 +18,7 @@ export const videoContext = createContext();
     const LikeVideo = async(user,videoId,video) => {
       console.log(video)
       if(user){
-       const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
+        const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
         const videoDocRef = doc(firestore,"videos",videoId);
         const getLikedDoc = await getDoc(docRef);
         const dislikedocRef = doc(collection(firestore,`users/${user.uid}/DV`),videoId);
@@ -50,6 +50,13 @@ export const videoContext = createContext();
         setNotificationMessage("You are not logged in");
         setshowToastNotification(true);
       }
+    }
+    const checKLikedOrNot = async (user,videoId,video) => {
+    if(user){
+      const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
+      if((await getDoc(docRef)).exists()) setisLiked(true);
+      else setisLiked(false);
+    }
     }
     const DisLikeVideo = async(user,videoId,video)=>{
       if(user){
@@ -187,6 +194,6 @@ const returnvideoTime = (duration) => {
    return  minutes + ":" + seconds.toString().padStart(2, 0)
   }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,isLiked,setisLiked,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,isLiked,setisLiked,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot,checKLikedOrNot}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider
