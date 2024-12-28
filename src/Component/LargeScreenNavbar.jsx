@@ -151,12 +151,18 @@ import { Navbarcontext } from '../Context/NavbarContext';
     const notifications = document.querySelector(".notifications");
     const notificationIcon = document.querySelector(".notificationIcon");
     const notificationBadge = document.querySelector(".notification-badge");
+    const results = document.querySelector(".results");
+    const result = document.querySelectorAll("#result");
     if(notifications){
       if(!notifications.contains(e.target) && e.target !== notificationBadge &&  e.target !== notificationIcon ){
           setopenNotifications(false)
         }
+     }else if(results){
+      if(!results.contains(e.target)){
+        setsearchedVideos([]);
+      }
      }
-  })
+  });
   return (
    <div className='large-screen-Navbar'>
     <div className='large-screennavbar-left'>
@@ -171,7 +177,7 @@ import { Navbarcontext } from '../Context/NavbarContext';
         {searchedVideos && searchedVideos.map((searchVideo,index)=>{
            return <div id="result" key={index}>
             <CiSearch/>
-         <Link style={{color:"white"}} to={searchVideo.data.shortVideo ? `/short/${searchVideo.id}`:`/watch/${searchVideo.id}`}>{searchVideo.data.Title}</Link>
+         <Link style={{color:"white"}} to={searchVideo.data.shortVideo ? `/short/${searchVideo.id}`:`/watch?v=${searchVideo.id}`}>{searchVideo.data.Title}</Link>
           </div>
         })}
         </div> 

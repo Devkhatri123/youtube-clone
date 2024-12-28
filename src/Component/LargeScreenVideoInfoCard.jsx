@@ -26,8 +26,7 @@ function LargeScreenVideoInfoCard(props) {
   const videoId = searchParams.get('v');
    let [isLiked, setisLiked] = useState(false);
    const [issavedVideo,SetsavedVideo] = useState(false);
-    let [isSubscribed,setisSubscribed] = useState(false);
-    const [isDisliked,setisDisliked] = useState(false);
+   const [isDisliked,setisDisliked] = useState(false);
     const [showFullText,setshowFullText] = useState(false);
     let [Loading, setLoading] = useState(false);
     const [Error,SetError] = useState(false);
@@ -147,6 +146,7 @@ function LargeScreenVideoInfoCard(props) {
       }
       useEffect(()=>{
         const getWatchlaterVideo = async() => {
+          try{
         if(user){
           const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/WL`),videoId);
           const GetLikedDoc = await getDoc(LikedDocRef);
@@ -156,6 +156,11 @@ function LargeScreenVideoInfoCard(props) {
             SetsavedVideo(false);
           }
         }
+      }catch(error){
+        SetError(true);
+        SetErrorMessage(error.message)
+        console.log(error.message)
+      }
       }
         getWatchlaterVideo();
        },[user,props.videoId])
@@ -174,15 +179,13 @@ function LargeScreenVideoInfoCard(props) {
           })
         }
  
-  return !Error ? (
+  return !Error || !ErrorMessage ? (
     !Loading ? (
     <div className="largescreen-videoInfoCard">
-      
     <div>
     <h3 id="video-title" >{props.Video?.Title}</h3>
     </div>
-  
-     <div className="large-screen-channel_details">
+   <div className="large-screen-channel_details">
         <div className="large-screen-channel_details_left_part">
           <div className='large-screen-left-part'>
           <img src={props.user?.channelPic} alt={props.user?.name} />

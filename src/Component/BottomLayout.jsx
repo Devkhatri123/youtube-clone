@@ -32,10 +32,8 @@ function BottomLayout(props) {
       }
     } 
 const watchlater = async() => {
-  await VideoContext.WatchLater(props.user,props.videoURL)
-  setTimeout(() => {
-    VideoContext.setbottomlayout(false)
-   }, 3000);
+  await VideoContext.WatchLater(props.user,props.videoURL);
+   VideoContext.setbottomlayout(false)
 }
 const likevideo = () => {
   VideoContext.LikeVideo(props.user,props.videoURL,props.video);

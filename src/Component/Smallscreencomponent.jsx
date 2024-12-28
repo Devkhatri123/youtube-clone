@@ -149,7 +149,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
     })}
     </div>
     {props.ShortVideos && props.ShortVideos.length > 0&& (
-    <div class="short-videos">
+    <div className="short-videos">
      <div className="short-video-section">
         <div className="shelf-header">
            <img src={shortsIcon} alt="shorts-icon" />
@@ -175,7 +175,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
       )}
     <div className="videos">
        {props.FullLengthVideos && props.FullLengthVideos.slice(1).map((FullLengthVideo,index)=>{
-    return  <div id="video" key={index + 1} style={index===props.FullLengthVideos.length?{marginBottom:"50px"}:null}>
+    return  <div id="video" key={index + 1} style={index + 1===props.FullLengthVideos.length?{marginBottom:"50px"}:null}>
       <Link to={`/watch?v=${FullLengthVideo.id}`}>
       <div id="thumbnail_container">
       <img src={FullLengthVideo.Videodata.Thumbnail} alt="" className="video" style={!props.areSearchResult ? {height:ThumbnailHeight, width:ThumbnailWidth}:null}/>

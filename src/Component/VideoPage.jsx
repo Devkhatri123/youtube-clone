@@ -77,7 +77,9 @@ function VideoPage() {
       setvideos(FetchedData);
     });
   }catch(error){
-    console.log(error.message)
+    console.log(error.message);
+    SetError(true);
+    SetErrorMessage(error.message)
   }finally{ setNextVideosLoading(false)}
   }, [videoId]);
   useEffect(() => {
@@ -103,7 +105,6 @@ function VideoPage() {
     const video = document.createElement('video');
     video.src = Video?.videoURL;
     video.addEventListener("loadeddata",()=>{
-      console.log("Testing videoHeight : " + video.videoHeight);
       if(window.innerWidth < 990){
         setCalculatedscreenWidth("unset");
        }else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {

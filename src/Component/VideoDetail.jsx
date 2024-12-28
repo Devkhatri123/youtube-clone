@@ -13,6 +13,7 @@ function VideoDetail() {
     const [user,setuser] = useState(null)
     useEffect(()=>{
         const GetVideo = async() => {
+          try{
             const docRef = doc(firestore,"videos",videoId);
             const videoDoc = await getDoc(docRef);
             if(videoDoc.exists()){
@@ -22,8 +23,10 @@ function VideoDetail() {
            if(userDoc.exists()){
             setuser(userDoc.data());
             }
-            console.log(video)
             }
+          }catch(error){
+            console.log(error.message)
+          }
         }
         GetVideo()
        

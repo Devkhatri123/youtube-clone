@@ -286,7 +286,6 @@
   }
   #left p{
     margin-left: clamp(1rem, 2vw, 0.5rem);
-    color: white;
     font-size: 1.1rem;
   }
   #right{
@@ -308,6 +307,15 @@
   }
   #right #video .video_bottom .video_bttom_left .video_title_and_channelName{
     justify-content: flex-start;
+  }
+  .watchedVideos_body #video .video_bottom .channelnameandviews p{
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    max-height: 3em;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   }
 @media screen and (min-width:600px)  {

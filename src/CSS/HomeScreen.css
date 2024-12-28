@@ -35,6 +35,7 @@
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   padding: 16px 8px;
   max-width: 301px;
+  transition: all 0.3ms;
   transform: translateY(25px);
 }
 
@@ -91,9 +92,6 @@
   height: 269px;
 }
 #short-video {
-  /* min-width: 133px;
-  max-width: 148px; */
-  /* height: 212px; */
   height: -webkit-fill-available;
   overflow: hidden;
 }
@@ -169,6 +167,9 @@
   border-radius: 5px;
   font-weight: 500;
 }
+.video_title_and_channelName p {
+  color: #aaa;
+}
 @media screen and (max-width: 600px) {
   .videos {
     position: relative;
@@ -194,6 +195,9 @@
   .share-video {
     display: none;
   }
+  .watchedVideos_body #video {
+    min-width: calc(33% - -40px) !important;
+}
 }
 @media screen and (min-width: 600px) {
   .videos{
@@ -202,20 +206,16 @@
   #video-bottom-layout {
     max-width: 236px;
     overflow: scroll;
-    /* padding: 8px 18px; */
-    max-height: 269px;
+    max-height: max-content;
   }
   .channelnameandviews {
     display: flex;
     gap: 8px;
   }
-  .video_title_and_channelName p {
-    color: #aaa;
-  }
   #video-bottom-layout .line {
     display: none;
   }
- .title{
+  #video_title{
     color: white;
     display: -webkit-box;
     -webkit-box-orient: vertical;

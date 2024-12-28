@@ -157,7 +157,7 @@ function Library() {
                   LikedVideos.LikedVideos && (
               <div className="playlist-card">
                 <Link to={`/playlist?list=LV`}>
-        <div class="thumbnail">
+        <div className="thumbnail">
       {LikedVideos.LikedVideos &&
       <>
        <img src={LikedVideos.LikedVideos[0]?.Videodata.Thumbnail} alt=""/>
@@ -175,7 +175,7 @@ function Library() {
   ):<p>Loading...</p>}
     {!Loading ? (
       Watchlater.Watchlater &&
-    <div class="playlist-card">
+    <div className="playlist-card">
       <Link to={`/playlist?list=WL`}>
         <div className="thumbnail">
       <>

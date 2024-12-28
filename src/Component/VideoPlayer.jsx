@@ -37,7 +37,7 @@ function VideoPlayer(props) {
   let [hours, sethours] = useState(0);
   const [videoWidth, setvideoWidth] = useState(null);
   const [videoHeight, setvideoHeight] = useState(null);
-  let [Video, Setvideo] = useState(null);
+ let [Video, Setvideo] = useState(null);
   let [Loading, setLoading] = useState(true);
   const [Fullscreen, setFullscreen] = useState(false);
   const [Error, SetError] = useState(false);
@@ -50,12 +50,15 @@ function VideoPlayer(props) {
     try {
       if (videoId) {
         const VideoRef = doc(firestore, "videos", videoId);
-        // const video = await getDoc(videoRef);
         onSnapshot(VideoRef, async (videDoc) => {
           if (videDoc.exists()) {
             Setvideo(videDoc.data());
           }
-        });
+        },(error)=>{
+          SetErrorMessage(error.message);
+          SetError(true);
+         console.log(error.message)
+        })
       }
     } catch (error) {
       console.log(error);
@@ -78,7 +81,6 @@ function VideoPlayer(props) {
         videoRef.current.play();
         videoRef.current.playsInline = true;
         videoRef.current.muted = false;
-        console.log( videoRef.current.duration)
         LargeScreenVideoBelowControls.current.style.display = "block"
         volumeRangeRef.current.value = videoRef.current.volume * 100;
         setisMute(false);
@@ -89,7 +91,6 @@ function VideoPlayer(props) {
   useEffect(()=>{
    if(videoRef.current){
     videoRef.current?.addEventListener("loadeddata", () => {
-    console.log(Video?.Title)
     setInitialvideoWidth(videoRef.current.videoWidth);
     setInitialvideoHeight(videoRef.current.videoHeight);
     })
@@ -260,7 +261,13 @@ useEffect(()=>{
     }
 },[Fullscreen])
   const ChangeVideoDuration = (e) => {
+    try{
     videoRef.current.currentTime = e.target.value * (videoRef.current.duration / 100);
+    }catch(error){
+      console.log(error.message);
+      SetError(true);
+      SetErrorMessage(error.message)
+    }
   };
   const HandleMuteUnmute = () => {
     if (videoRef.current.muted) {
@@ -278,7 +285,7 @@ useEffect(()=>{
   const ExitFullscreen = () => {
     const wrapper = document.getElementById("wrapper");
     const currentVideo = document.getElementById("currentVideo");
-    if(!document.fullscreenEnabled){
+    if(document.fullscreenEnabled){
     document.exitFullscreen();
     wrapper.style.display = "unset";
     wrapper.style.flexDirection = "unset";
@@ -307,7 +314,7 @@ useEffect(()=>{
   else document.body.style.overflow = "unset";
   },[openPlaySpeedModal])
 
-  return !Error || ErrorMessage ? ( 
+  return !Error || !ErrorMessage ? ( 
     <div
       className="video_section"
       style={!props.src ? { width: videoWidth,height:videoHeight }: {height:"320px !important"}

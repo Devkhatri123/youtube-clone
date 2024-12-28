@@ -22,10 +22,6 @@ import { auth, firestore } from '../firebase/firebase';
 import { videoContext } from '../Context/VideoContext';
 function SmallScreenVideoInfoCard(props) {
     const currentState= useContext(videoContext);
-    let [isLiked, setisLiked] = useState(false);
-    const [isDisliked,setisDisliked] = useState(false);
-    let [isSubscribed,setisSubscribed] = useState(false);
-    let [savedVideo,setsavedVideo] = useState(false);
     const [isbuttonDisable,setisbuttonDisable] = useState(false);
     const [LoggedInUser,setLoggedInUser] = useState(null);
     const [queryParameters] = useSearchParams();
@@ -44,14 +40,9 @@ function SmallScreenVideoInfoCard(props) {
     },[])
     const makeSubscribe = async() => {
       try{
-        if(props.CurrentUser){
+        if(LoggedInUser){
           setisbuttonDisable(true);
-          const result = await currentState.subscribeChannel(LoggedInUser,props.user);
-          if(result === "subscribed"){
-            setisSubscribed(true);
-          }else{
-            setisSubscribed(false);
-          }
+         await currentState.subscribeChannel(LoggedInUser,props.user);
           setisbuttonDisable(false);
       }else{
         alert("You are not signedIn");
@@ -61,43 +52,15 @@ function SmallScreenVideoInfoCard(props) {
     }
       }
        useEffect(()=>{
-        const checkSubscribedOrNot = async() => {
-          if(props.CurrentUser){
-          if(props.user){
-          const docRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/subscribedChannel`),props.user.uid);
-          const Doc = await getDoc(docRef);
-          if(Doc.exists()){
-           setisSubscribed(true);
-          }
-        }
-      }
-          }
-        checkSubscribedOrNot()
-      },[props.videoId,props.user,props.CurrentUser]);
-      const doLike = async() => {
-      if(LoggedInUser){
-        const result = await currentState.LikeVideo(LoggedInUser,props.videoId,props.Video)
-        if(result === "videoLiked") setisLiked(true);
-        else setisLiked(false);
-      }
-      }
+         currentState.CheckSubscribedOrNot(LoggedInUser,props.user)
+         },[props.videoId,props.user,LoggedInUser]);
       useEffect(()=>{
-        const checkLikedOrNot = async() => {
-          if(props.CurrentUser){
-          const LikedDocRef = doc(collection(firestore,`users/${props.CurrentUser?.uid}/LV`),props.videoId);
-          const GetLikedDoc = await getDoc(LikedDocRef);
-          if(GetLikedDoc.exists()){
-            setisLiked(true);
-          }else{
-            setisLiked(false);
-          }
-        }
-      }
-        checkLikedOrNot();
-      },[props.videoId,props.user,props.CurrentUser])
+        currentState.checKLikedOrNot(LoggedInUser,props.videoId)
+      },[props.videoId,LoggedInUser])
        useEffect(()=>{
         if(LoggedInUser){
        const checkCurrentWatchedVideo = async () => {
+        try{
       const videoDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/watchedVideos`),props.videoId);
       const videoDoc = await getDoc(videoDocRef);
       const videoCollection = doc(firestore,"videos",props.videoId);
@@ -110,59 +73,17 @@ function SmallScreenVideoInfoCard(props) {
           views:props.Video?.views + 1
         })
       }
+        }catch(error){
+          console.log(error.message)
         }
        checkCurrentWatchedVideo();
       }
+    }
        },[props.videoId,props.Video,LoggedInUser,searchQuery]);
        useEffect(()=>{
-        const getWatchlaterVideo = async() => {
-        if(LoggedInUser){
-          const LikedDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/Watchlater`),searchQuery);
-          const GetLikedDoc = await getDoc(LikedDocRef);
-          if(GetLikedDoc.exists()){
-            setsavedVideo(true);
-          }else{
-            setsavedVideo(false);
-          }
-        }
-      }
-        getWatchlaterVideo();
+        currentState.getWatchlaterVideo(LoggedInUser,searchQuery);
+    
        },[LoggedInUser,searchQuery])
-       const watchLater = async() => {
-         if(LoggedInUser){
-         const result = await currentState.WatchLater(LoggedInUser,props.videoId);
-         if(result === "videoAddedFromWatchLater") setsavedVideo(true);
-         else setsavedVideo(false);
-         }
-       }
-       const dislikevideo = ()=>{
-        currentState.DisLikeVideo(LoggedInUser,props.videoId,props.Video).then((res)=>{
-          if(res == "video disliked"){
-            if(isLiked) setisLiked(false);
-          setisDisliked(true);
-         }else{
-          setisDisliked(false);
-         }
-         })
-        }
-        useEffect(()=>{
-          const checkDislikedOrNot = async() => {
-           try{
-            if(LoggedInUser){
-              const LikedDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/DV`),props.videoId);
-              const GetLikedDoc = await getDoc(LikedDocRef);
-              if(GetLikedDoc.exists()){
-                setisDisliked(true);
-              }else{
-                setisDisliked(false);
-              }
-            }
-          }catch(error){
-            console.log(error.message);
-          }
-        }
-        checkDislikedOrNot()
-      },[props.videoId,props.user,LoggedInUser])
   return (
     <div className="video_page">
        { currentState.shortvideoShowMessages && <Comment video={props.Video} user={props.user} videoId={props.videoId}/>}
@@ -176,25 +97,25 @@ function SmallScreenVideoInfoCard(props) {
                  <span className="channeName">{props.user?.name}</span>
                   <span>{props.user?.subscribers}</span>
                 </div>
-              {isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={makeSubscribe} disabled={isbuttonDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe} disabled={isbuttonDisable ? true : false}>Subscribe</button>} 
+              {currentState.isSubscribed === true ? <button className="subscribe_btn subscribed_btn" onClick={makeSubscribe} disabled={isbuttonDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={makeSubscribe} disabled={isbuttonDisable ? true : false}>Subscribe</button>} 
               </div>
               <div className="like_share_save_container">
                 <div>
-                  {isLiked === false ? (
-                    <BiLike onClick={doLike} />
+                  {currentState.isLiked === false ? (
+                    <BiLike onClick={()=>{currentState.LikeVideo(LoggedInUser,props.videoId,props.Video)}} />
                   ) : (
-                    <BiSolidLike onClick={doLike} />
+                    <BiSolidLike onClick={()=>{currentState.LikeVideo(LoggedInUser,props.videoId,props.Video)}} />
                   )}
                   <span className="likes">{props.Video?.likes}</span>
                   <span>|</span>
-                  {isDisliked ? <BiSolidDislike onClick={dislikevideo}/> :  <BiDislike onClick={dislikevideo} />}
+                  {currentState.isDisLiked ? <BiSolidDislike onClick={()=>{currentState.DisLikeVideo(LoggedInUser,props.videoId,props.Video)}}/> :  <BiDislike onClick={()=>{currentState.DisLikeVideo(LoggedInUser,props.videoId,props.Video)}}/>}
                 </div>
                 <div>
                   <RiShareForwardLine />
                   <span className="share">Share</span>
                 </div>
-                <div onClick={watchLater}>
-                {!savedVideo ? <FaRegBookmark /> : <FaBookmark/>}
+                <div onClick={async()=>{await currentState.WatchLater(LoggedInUser,props.videoId);}}>
+                {!currentState.isSaved ? <FaRegBookmark /> : <FaBookmark/>}
                   <span className="save">Save</span>
                 </div>
                 <div>

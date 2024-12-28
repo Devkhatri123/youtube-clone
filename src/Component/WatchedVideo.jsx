@@ -19,9 +19,9 @@ function WatchedVideo({ video }) {
                                   <h3 id="video_title" className="title">
                                     {video.Videodata?.Title}
                                   </h3>
-                                  <div>
+                                  <div className="channelnameandviews">
                                   <p>
-                            {video.user?.name} • {video.Videodata.views} Views • {videocontext.getVideoPublishedTime(video)}
+                            {video.userData?.name} • {video.Videodata.views} Views • {videocontext.getVideoPublishedTime(video)}
                           </p>
                                   </div>
                                 </div>

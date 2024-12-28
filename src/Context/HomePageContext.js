@@ -10,7 +10,7 @@ export const HomeContext = createContext();
   
     const GetchannelData = async(id) => {
         setLoading(true);
-              try{
+            try{
             const docRef = doc(firestore,`users/${id}`);
             const docData = await getDoc(docRef);
             setuser(docData.data())
@@ -19,14 +19,10 @@ export const HomeContext = createContext();
             const results = videosDocData.docs.map(async(Doc)=>{
             const videosDocRef = doc(firestore,`videos/${Doc.data().videoUrl}`);
             const videosDocData = await getDoc(videosDocRef);
-            return {Videodata:videosDocData.data(),videoUrl:Doc.data().videoUrl}
-            })
-            const resolvedVideos = Promise.all(results);
-          resolvedVideos.then((res)=>{
-               setAllvideos(res);
-            //    return res
-             })
-             return Allvideos
+            return {Videodata:videosDocData.data(),videoURL:Doc.data().videoUrl}
+            });
+            const resolvedVideos = await Promise.all(results);
+           return resolvedVideos;
             }catch(error){
               console.log(error);
               setError(error.message)

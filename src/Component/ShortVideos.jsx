@@ -9,6 +9,7 @@ import { RiMenu2Fill } from "react-icons/ri";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
 import { MdOutlineMessage } from "react-icons/md";
+import { VscUnmute } from "react-icons/vsc";
 import { BsThreeDots } from "react-icons/bs";
 import { IoMdPlay } from "react-icons/io";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -28,12 +29,14 @@ import { auth } from "../firebase/firebase";
 import Comment from "../Component/Comment";
 import { videoContext } from "../Context/VideoContext";
 import DescriptionPage from "./DescriptionPage";
+import { VscMute } from "react-icons/vsc";
 function ShortVideos() {
   let [Index, setIndex] = useState(0);
   const [user, SetUser] = useState(null);
   const [LikeShort, setLikeShort] = useState(false);
   const [Loading, setLoading] = useState(true);
   const [Ispause, setIspause] = useState(false);
+  const [isMuted, setisMuted] = useState(false);
   const [ShortVideos, setShortVideos] = useState([]);
   const [FilteredShortVideos, setFilteredShortVideos] = useState([]);
   const [videoWidth, setvideoWidth] = useState(window.innerWidth);
@@ -148,9 +151,7 @@ function ShortVideos() {
   const HandlePause = (e,currentVideoindex) => {
     setActiveIndex(currentVideoindex);
     setIspause(!Ispause);
-    const short_video_container = document.querySelectorAll(
-      ".short_video_container"
-    );
+    const short_video_container = document.querySelectorAll(".short_video_container");
     let currentContainer = short_video_container[Index];
     let video = currentContainer.getElementsByTagName("video").shortvideo;
     if (Ispause) video.play();
@@ -202,12 +203,12 @@ function ShortVideos() {
   const GotoNextVideo = () => {
     const shortVideoContainers = document.querySelectorAll( ".short_video_container");
     // Ensure Index stays within valid bounds:
-    if (Index > shortVideoContainers.length) return; // Handle reaching the end
+    if (Index > shortVideoContainers.length) return; 
     let currentVideo = shortVideoContainers[Index];
     if(currentVideo.nextElementSibling){
-    currentVideo.getElementsByTagName("video")[0].pause(); // Select first video in the container directly
-    currentVideo.nextElementSibling?.scrollIntoView({ behavior: "smooth" }); // Optional chaining for safety
-    currentVideo.nextElementSibling.style.scrollSnapAlign = "start";
+    currentVideo.getElementsByTagName("video")[0].pause(); // Pause the current video
+    currentVideo.nextElementSibling?.scrollIntoView({ behavior: "smooth",block:"start" }); // Scroll to the next video
+    currentVideo.nextElementSibling.style.scrollSnapAlign = "start"; // Snap the next video to the start of the container
 
     setIndex(Index + 1);
     navigate(
@@ -222,21 +223,13 @@ function ShortVideos() {
   };
   const GotoPreviousVideo = () => {
     const shortVideoContainers = document.querySelectorAll(".short_video_container");
-    if (Index <= 0) return; // Handle reaching the end
-
+    if (Index <= 0) return;
     let currentVideo = shortVideoContainers[Index];
-    currentVideo.getElementsByTagName("video")[0].pause(); // Select first video in the container directly
-
-    currentVideo.previousElementSibling?.scrollIntoView({ behavior: "smooth" }); // Optional chaining for safety
+    currentVideo.getElementsByTagName("video")[0].pause(); 
+    currentVideo.previousElementSibling?.scrollIntoView({ behavior: "smooth" });
     currentVideo.previousElementSibling.style.scrollSnapAlign = "end";
-
     setIndex(Index - 1);
-    navigate(
-      `/short/${
-        currentVideo.previousElementSibling?.getElementsByTagName("video")[0]
-          .dataset.video
-      }`
-    );
+    navigate(`/short/${currentVideo.previousElementSibling?.getElementsByTagName("video")[0].dataset.video}`);
     setActiveIndex(parseInt(currentVideo.previousElementSibling?.getElementsByTagName("video")[0].dataset.index))
     currentVideo.style.scrollSnapAlign = "unset";
   };
@@ -256,7 +249,21 @@ function ShortVideos() {
   useEffect(() => {
     let currentVideo = document.querySelectorAll(".short_video_container")[Index];
     if (currentVideo) {
-      currentVideo.getElementsByTagName("video").shortvideo.play();
+      try{
+     const promise =  currentVideo.getElementsByTagName("video").shortvideo.play();
+     if(promise !== undefined){
+      promise.then(_=>{
+        console.log("Autoplay started")
+      }).catch((error)=>{
+        console.log(error);
+        currentVideo.getElementsByTagName("video").shortvideo.muted = true;
+        setisMuted(true);
+        currentVideo.getElementsByTagName("video").shortvideo.play();
+      })
+     }
+    }catch(error){
+      console.log(error.message);
+    }
     }
   }, [Index, FilteredShortVideos]);
   const sectionTouch = (e) => {
@@ -294,6 +301,13 @@ function ShortVideos() {
             }
           checkSubscribedOrNot()
         },[user,params.id,FilteredShortVideos]);
+        const HandleMute = () =>{
+          const short_video_container = document.querySelectorAll(".short_video_container");
+          let currentContainer = short_video_container[Index];
+          let video = currentContainer.getElementsByTagName("video").shortvideo;
+          video.muted = !isMuted;
+          setisMuted(!isMuted);
+        }
   return Loading ? (
     <p className="text-white">Loading...</p>
   ) : (
@@ -347,7 +361,7 @@ function ShortVideos() {
               <div className="short_channel">
                 <img src={shortvideo.UserData.channelPic || shortvideo.UserData.channelURL} alt="" />
                 <p>{shortvideo.UserData.name}</p>
-                {currentState.isSubscribed === true ? <button className="subscribe_btn subscribed_btn" style={{backgroundColor:" #2f2d2b"}} onClick={()=>{subscribeChannel(shortvideo.UserData)}} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={()=>{subscribeChannel(shortvideo.UserData)}} style={{backgroundColor:" #fff"}} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
+                {currentState.isSubscribed === true ? <button className="subscribe_btn subscribed_btn" style={{background: "rgba(255, 255, 255, 0.1)"}} onClick={()=>{subscribeChannel(shortvideo.UserData)}} disabled={IsbtnDisable ? true : false}>Subscribed</button>:<button className="subscribe_btn" onClick={()=>{subscribeChannel(shortvideo.UserData)}} style={{backgroundColor:" #fff"}} disabled={IsbtnDisable ? true : false}>Subscribe</button>} 
               </div>
               <div className="short_title">
                 <p>{shortvideo.Videodata.Title}</p>
@@ -376,8 +390,8 @@ function ShortVideos() {
               <div className="dislike control" style={
                 currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
               }>
-                <BiDislike />
-                <p>2</p>
+                {currentState.isDisLiked ? <BiSolidDislike onClick={() => {currentState.DisLikeVideo(user,params.id,shortvideo.Videodata)}}/> : <BiDislike onClick={() => {currentState.DisLikeVideo(user,params.id,shortvideo.Videodata)}}/>}
+                <p>Dislike</p>
               </div>
               <div
                 className="message control"
@@ -390,7 +404,7 @@ function ShortVideos() {
                 }
               >
                 <MdOutlineMessage />
-                <p>3520</p>
+                <p>{shortvideo.Videodata.NumberOfComments}</p>
               </div>
               {currentState.shortvideoShowMessages === true && (
                 ActiveIndex == index &&(
@@ -404,7 +418,7 @@ function ShortVideos() {
                 </div>
                 )
               )}
-              <div className="menu control" onClick={()=>{setshortvideoLayout(true);document.body.style.overflow="hidden"}} style={
+              <div className="menu control" onClick={()=>{setshortvideoLayout(!shortvideoLayout);document.body.style.overflow="hidden"}} style={
                 currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
               }>
                 <BsThreeDots />
@@ -426,6 +440,7 @@ function ShortVideos() {
               <div className="menuitems">
               <div onClick={()=>{currentState.setDescription(true);setActiveIndex(index);setshortvideoLayout(false)}}><RiMenu2Fill/><p>Description</p></div>
               <div><FaRegBookmark/><p>Save To Watch later</p></div>
+              <div onClick={HandleMute}>{isMuted ? <VscMute/> : <VscUnmute/>}<p>Mute</p></div>
               </div>
             </div>
               )

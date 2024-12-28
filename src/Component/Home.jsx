@@ -15,14 +15,9 @@ function Home() {
   const [AllVideos, setAllvideos] = useState([]);
   const [user, setuser] = useState();
   const [LoggedInUser, SetLoggedInUser] = useState(null);
-  const [isSubscribed, setisSubscribed] = useState(false);
   const [Error, setError] = useState("");
-  const [btnLoading, setbtnLoading] = useState(true);
   const [PageLoading, setPageLoading] = useState(false);
   const [clickedVideoIndex, setclickedVideoIndex] = useState(0);
-  const [Left, setLeft] = useState(null);
-  const [Top, setTop] = useState(null);
-  const [showLayout, SetshowLayout] = useState(false);
   useEffect(() => {
     auth.onAuthStateChanged((currentuser) => {
       SetLoggedInUser(currentuser);
@@ -34,68 +29,22 @@ function Home() {
       setAllvideos(result);
     };
     GetData();
-  }, [params.id, homeContext]);
-
-  useEffect(() => {
-    const GetSubscribedDoc = async () => {
-      setbtnLoading(true);
-      try {
-        if (LoggedInUser) {
-          const subscribedDocRef = doc(
-            collection(
-              firestore,
-              `users/${LoggedInUser.uid}/subscribedChannel`
-            ),
-            params.id
-          );
-          const subscribedDocData = await getDoc(subscribedDocRef);
-          if (subscribedDocData.exists()) {
-            setisSubscribed(true);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setbtnLoading(false);
-      }
-    };
-    GetSubscribedDoc();
-  }, [LoggedInUser, params.id]);
-
+  }, [params.id]);
   useEffect(() => {
     setuser(homeContext.user);
   }, [homeContext.user]);
   const showModal = (e, index) => {
-    SetshowLayout(!showLayout);
+    videocontext.setbottomlayout(!videocontext.bottomlayout); 
     setclickedVideoIndex(index);
-    if (window.innerWidth <= 600) {
-      document.body.style.opacity = "0.7";
-      setLeft(null);
-      setTop(null);
-    } else {
-      setLeft(e.pageX - 246);
-      setTop(e.clientY);
-    }
+    videocontext.showmodal(e);
     document.body.style.overflow = "hidden";
   };
   useEffect(() => {
-    if (showLayout) document.body.style.overflow = "hidden";
+    if (videocontext.bottomlayout) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "scroll";
-  }, [showLayout]);
-  const dots = document.getElementById("dots");
-  if (dots) {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 600) {
-        setLeft(dots.getBoundingClientRect().left - 246);
-        setTop(dots.getBoundingClientRect().y + 9);
-      } else {
-        setLeft(null);
-        setTop(null);
-      }
-    });
-  }
+  }, [videocontext.bottomlayout]);
   return !PageLoading ? (
-    !Error ? (
+    !homeContext.Error ? (
       <div className="userhomepage">
         <HomeHeader />
         <div id="tabsContainer">
@@ -115,7 +64,7 @@ function Home() {
             }).map((video, index) => {
               return (
                 <div id="video" key={index}>
-                  <Link to={`/watch?v=${video?.videoUrl}`}>
+                  <Link to={`/watch?v=${video?.videoURL}`}>
                     <div id="thumbnail_container">
                       <img
                         src={video?.Videodata.Thumbnail}
@@ -146,14 +95,16 @@ function Home() {
                       <BsThreeDotsVertical
                         className="videomenu"
                         id={clickedVideoIndex === index ? "dots" : null}
+                        style={{fontSize:"20px"}}
                       />
                     </div>
-                    {showLayout && index === clickedVideoIndex && (
+                    {videocontext.bottomlayout && index === clickedVideoIndex && (
                       <>
                         <BottomLayout
-                          Left={Left}
-                          Top={Top}
-                          video={video.video}
+                          Left={videocontext.Left}
+                          Top={videocontext.Top}
+                          video={video?.Videodata}
+                          videoURL={video.videoURL}
                           user={LoggedInUser}
                         />
                       </>
@@ -174,7 +125,7 @@ function Home() {
           alignItems: "center",
         }}
       >
-        {Error}
+        {homeContext.Error}
       </p>
     )
   ) : (

@@ -5,7 +5,7 @@ import { Navbarcontext } from '../Context/NavbarContext'
 function ErrorPage(props) {
   const navbarContext = useContext(Navbarcontext);
   console.log(navbarContext)
-  return navbarContext.Error || navbarContext.ErrorMessage || (
+  return props.Error || props.ErrorMessage || (
     <div className='error-page'>
       <div className='error-page-content'>
         <img src={NointernetPic} alt='NointernetPic'/>
