@@ -151,6 +151,12 @@
     #homepage-body #video svg{
         font-size: 20px;
     }
+    .short-video-title,.views{
+        font-size: 0.8rem;
+    }
+    .short-video{
+        height: unset;
+    }
 }
 
 @media screen and (min-width: 600px) {
@@ -200,8 +206,13 @@
     }
 
     .user-allshortsvideos .short-video-shelf .short-video #short-video video {
-        height: 372px;
+        /* height: 372px; */
+        height: unset;
         /* width: 209px; */
+    }
+    .short-video{
+        width: 207px;
+        height: unset;
     }
     #homepage-body #video .video_bottom .video_bttom_left .video_title_and_channelName {
         height: 68px;
@@ -239,5 +250,10 @@
         max-width: calc(25% - 16px);
         aspect-ratio: 16 / 9;
         
+    }
+}
+@media screen and (max-width:990px){
+    .short-video-title,.views{
+        font-size: 0.8rem;
     }
 }
