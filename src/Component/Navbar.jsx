@@ -15,8 +15,8 @@ function Navbar() {
     <>
      <NavbarStateProvider>
     {screenWidth < 991 ?(
-    <div className="small-screen-navbar"><SmallScreenNavbar/></div>
-    ):<div className="large-screen-navbar"> <LargeScreenNavbar/></div>}
+    <SmallScreenNavbar/>
+    ):<LargeScreenNavbar/>}
     </NavbarStateProvider>
     </>
    );

@@ -62,14 +62,7 @@ function UserPlayList() {
   const showModal = (e,i) => {
     videocontext.setbottomlayout(true);
     setclickedVideoIndex(i);
-    if(window.innerWidth <= 600){
-     setLeft(null);
-    setTop(null);
-    }else{
-      setLeft(e.pageX - 246);
-      setTop(e.clientY);
-    }
-    document.body.style.overflow = "hidden";
+    videocontext.showmodal(e);
   }
   useEffect(()=>{
     if(videocontext.bottomlayout){
@@ -80,17 +73,6 @@ function UserPlayList() {
       document.body.style.overflow="scroll"
     } 
  },[videocontext.bottomlayout])
-  const dots = document.getElementById("dots");
-  if(dots){
-    window.addEventListener("resize",()=>{
-      if(window.innerWidth > 600){
-      setLeft(dots.getBoundingClientRect().left - 246);
-       }else{
-        setLeft(null)
-        setTop(null);
-      }
-    })
-  }
   const returnUserPlaylistTitle = () => {
    if(searchQuery == "WL") return "Watch later";
    else if (searchQuery == "LV") return "Liked Videos";
@@ -159,11 +141,12 @@ function UserPlayList() {
                       <>
                       {videocontext.bottomlayout && (
                         <BottomLayout
-                          Left={Left}
-                          Top={Top}
+                          Left={videocontext.Left}
+                          Top={videocontext.Top}
                           video={video?.Videodata}
                           videoURL={video?.videoId}
                           user={user}
+                          searchQuery = {searchQuery}
                         />
                       )}
                       {videocontext.showToastNotification && (

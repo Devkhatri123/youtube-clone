@@ -22,11 +22,9 @@ import { videoContext } from '../Context/VideoContext';
 import ErrorPage from './ErrorPage';
 import { useSearchParams } from 'react-router-dom';
 function LargeScreenVideoInfoCard(props) {
-  const [searchParams] = useSearchParams();
-  const videoId = searchParams.get('v');
-   let [isLiked, setisLiked] = useState(false);
-   const [issavedVideo,SetsavedVideo] = useState(false);
-   const [isDisliked,setisDisliked] = useState(false);
+    const [searchParams] = useSearchParams();
+    const videoId = searchParams.get('v');
+    const [issavedVideo,SetsavedVideo] = useState(false);
     const [showFullText,setshowFullText] = useState(false);
     let [Loading, setLoading] = useState(false);
     const [Error,SetError] = useState(false);
@@ -41,27 +39,8 @@ function LargeScreenVideoInfoCard(props) {
     },[])
     useEffect(()=>{
       if(user){
-     const checkCurrentWatchedVideo = async () => {
-      try {
-    const videoDocRef = doc(collection(firestore,`users/${user?.uid}/WV`),props.videoId);
-    const videoDoc = await getDoc(videoDocRef);
-    const videoCollection = doc(firestore,"videos",props.videoId);
-    if(!videoDoc.exists()){
-      const data = {
-        videoURL:props.videoId,
+       VideoContext.checkCurrentWatchedVideo(user,props.videoId,props.Video?.views);
       }
-      await setDoc(videoDocRef,data);
-      await updateDoc(videoCollection,{
-        views:props.Video?.views + 1
-      })
-    }
-    }catch (error){
-     SetError(true);
-    SetErrorMessage(error.message)
-    }
-  }
-      checkCurrentWatchedVideo();
-}
     },[props.videoId,user,props.Video?.views])
   const makeSubscribe = async() => {
       if(user){
@@ -82,87 +61,35 @@ function LargeScreenVideoInfoCard(props) {
         checkSubscribedOrNot()
       },[props.user,user]);
       const doLike = async() => {
-       if(props.CurrentUser){
-        const result = VideoContext.LikeVideo(user,props.videoId,props.Video)
-        if(result === "videoLiked") setisLiked(true);
-        else setisLiked(false);
-        setisDisliked(false);
+       if(user){
+        VideoContext.LikeVideo(user,props.videoId,props.Video)
       }
       }
       useEffect(()=>{
-        const checkLikedOrNot = async() => {
-          try{
-          if(user){
-          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/LV`),props.videoId);
-          const GetLikedDoc = await getDoc(LikedDocRef);
-          if(GetLikedDoc.exists()){
-            setisLiked(true);
-          }else{
-            setisLiked(false);
-          }
+           try{
+           VideoContext.checKLikedOrNot(user,props.videoId);
+        }catch(error){
+          console.log(error.message)
+          SetError(true)
+          SetErrorMessage(error.message)
         }
-      }catch(error){
-        console.log(error.message)
-        SetError(true)
-        SetErrorMessage(error.message)
-      }
-      }
-        checkLikedOrNot();
       },[props.videoId,props.user,user]);
       const dislikevideo = ()=>{
-      VideoContext.DisLikeVideo(user,props.videoId,props.Video).then((res)=>{
-        if(res == "video disliked"){
-          if(isLiked) setisLiked(false);
-        setisDisliked(true);
-       }else{
-        setisDisliked(false);
-       }
-       })
+      VideoContext.DisLikeVideo(user,props.videoId,props.Video);
       }
-      useEffect(()=>{
-          const checkDislikedOrNot = async() => {
-           try{
-            if(user){
-              const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/DV`),props.videoId);
-              const GetLikedDoc = await getDoc(LikedDocRef);
-              if(GetLikedDoc.exists()){
-                setisDisliked(true);
-              }else{
-                setisDisliked(false);
-              }
-            }
-          }catch(error){
-            console.log(error.message);
-          }
-        }
-        checkDislikedOrNot()
-      },[props.videoId,props.user,user])
       const watchlater = async() => {
         if(user){
-          const result = await VideoContext.WatchLater(user,props.videoId);
-          if(result === "videoAddedFromWatchLater") SetsavedVideo(true);
-          else SetsavedVideo(false);
+          await VideoContext.WatchLater(user,props.videoId);
           }
       }
       useEffect(()=>{
-        const getWatchlaterVideo = async() => {
-          try{
-        if(user){
-          const LikedDocRef = doc(collection(firestore,`users/${user?.uid}/WL`),videoId);
-          const GetLikedDoc = await getDoc(LikedDocRef);
-          if(GetLikedDoc.exists()){
-            SetsavedVideo(true);
-          }else{
-            SetsavedVideo(false);
-          }
-        }
+        try{
+        VideoContext.getWatchlaterVideo(user,props.videoId);
       }catch(error){
         SetError(true);
         SetErrorMessage(error.message)
         console.log(error.message)
       }
-      }
-        getWatchlaterVideo();
        },[user,props.videoId])
        const urlify = (text) => {
           var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -198,21 +125,21 @@ function LargeScreenVideoInfoCard(props) {
       </div>
       <div className="like_share_save_container">
         <div>
-        {isLiked === false ? (
+        {VideoContext.isLiked === false ? (
             <BiLike onClick={doLike} />
           ) : (
             <BiSolidLike onClick={doLike} />
           )}
           <span className="likes">{props.Video?.likes}</span>
           <span>|</span>
-          {isDisliked ? <BiSolidDislike onClick={dislikevideo}/> :  <BiDislike onClick={dislikevideo} />}
+          {VideoContext.isDisLiked ? <BiSolidDislike onClick={dislikevideo}/> :  <BiDislike onClick={dislikevideo} />}
           </div>
        <div onClick={()=>{VideoContext.setshowModal(true)}}>
           <RiShareForwardLine/>
           <span className="share">Share</span>
         </div>
         <div>
-          {issavedVideo ? <FaBookmark onClick={watchlater}/>:<FaRegBookmark onClick={watchlater}/>}
+          {VideoContext.isSaved ? <FaBookmark onClick={watchlater}/>:<FaRegBookmark onClick={watchlater}/>}
           <span className="share">Save</span>
         </div>
         {VideoContext.showModal && (

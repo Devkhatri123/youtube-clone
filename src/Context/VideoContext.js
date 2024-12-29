@@ -18,6 +18,25 @@ export const videoContext = createContext();
     const [Left,setLeft] = useState(null);
     const [Top,setTop] = useState(null);
 
+ const checkCurrentWatchedVideo = async (user,videoId,views) => {
+      try {
+    const videoDocRef = doc(collection(firestore,`users/${user?.uid}/WV`),videoId);
+    const videoDoc = await getDoc(videoDocRef);
+    const videoCollection = doc(firestore,"videos",videoId);
+    if(!videoDoc.exists()){
+      const data = {
+        videoURL:videoId,
+      }
+      await setDoc(videoDocRef,data);
+      await updateDoc(videoCollection,{
+        views:views + 1
+      })
+    }
+    }catch (error){
+      console.log(error.message)
+    }
+  }
+
     const LikeVideo = async(user,videoId,video) => {
       if(user){
         const docRef = doc(collection(firestore,`users/${user.uid}/LV`),videoId);
@@ -266,6 +285,6 @@ const returnvideoTime = (duration) => {
   console.log(error.message)
 }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,isLiked,isDisLiked,isSaved,Left,Top,setisLiked,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot,checKLikedOrNot,setisDisLiked,setisSaved,getWatchlaterVideo,showmodal}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,isLiked,isDisLiked,isSaved,Left,Top,setisLiked,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot,checKLikedOrNot,setisDisLiked,setisSaved,getWatchlaterVideo,showmodal,checkCurrentWatchedVideo}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider

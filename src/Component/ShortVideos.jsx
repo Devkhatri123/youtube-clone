@@ -143,11 +143,18 @@ function ShortVideos() {
       return video.id === id;
     });
    await currentState.LikeVideo(user,params.id,LikedVideo[0].Videodata);
-   console.log("opeartioon done")
   };
   useEffect(()=>{
-     currentState.checKLikedOrNot(user,params.id)
+     currentState.checKLikedOrNot(user,params.id);
   },[params.id,FilteredShortVideos])
+   useEffect(()=>{
+        if(user){
+          const LikedVideo = FilteredShortVideos.filter((video) => {
+            return video.id === params.id;
+          });
+          currentState.checkCurrentWatchedVideo(user,params.id,LikedVideo[0]?.Videodata?.views);
+        }
+      },[params.id,user,FilteredShortVideos])
   const HandlePause = (e,currentVideoindex) => {
     setActiveIndex(currentVideoindex);
     setIspause(!Ispause);

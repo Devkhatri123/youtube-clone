@@ -5,7 +5,9 @@ import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { RiShareForwardLine } from "react-icons/ri";
 import ShareOnSocialMediaModal from './ShareOnSocialMediaModal';
+import { MdDeleteForever } from "react-icons/md";
 import { videoContext } from '../Context/VideoContext';
+
 function BottomLayout(props) {
     const VideoContext = useContext(videoContext);
     const touchStartRef = useRef(0);
@@ -76,6 +78,12 @@ document.addEventListener("click",(e)=>{
       <RiShareForwardLine/>
       <p>Share video</p>
      </div>
+     {props.searchQuery&&(
+     <div className="DeleteVideo">
+      <MdDeleteForever/>
+      <p>Delete Video From {props.searchQuery  == "WL" ? "Watch Later":"Liked Videos"}</p>
+     </div>
+     )}
    </div>
     ):<ShareOnSocialMediaModal URL={props.videoURL}/>
   )
