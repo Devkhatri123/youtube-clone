@@ -10,7 +10,6 @@ function MiniSideBar(props) {
 const [shortVideo,setshortVideo] = useState([])
 useEffect(()=>{
   if(props){
-    console.log(props.NonFilteredVideos)
     try{
  setshortVideo(props.NonFilteredVideos && props.NonFilteredVideos.filter((video)=>{
     return video !== undefined  && video.Videodata.shortVideo;

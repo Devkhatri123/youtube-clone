@@ -3,7 +3,7 @@
     display: flex;
     position: fixed;
     bottom: 0px;
-    background: #0f0f0f;
+    background-color: rgba(15, 15, 15, 0.7);
     width: 100%;
     justify-content: space-around;
     padding: 6px 0;

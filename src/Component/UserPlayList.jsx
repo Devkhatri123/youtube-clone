@@ -19,8 +19,6 @@ function UserPlayList() {
   const [user, setuser] = useState(null);
   const [listvideos, Setlistvideos] = useState([]);
   const [clickedVideoIndex,setclickedVideoIndex] = useState(null);
-  const [Left,setLeft] = useState(null);
-  const [Top,setTop] = useState(null);
   useEffect(() => {
     auth.onAuthStateChanged((LoggedInUser) => {
       setuser(LoggedInUser);
@@ -80,9 +78,9 @@ function UserPlayList() {
   }
   return (
     <>
-    {listvideos.listvideos && (
       <>
-    <MiniSideBar NonFilteredVideos={listvideos.listvideo && listvideos.listvideos}/>
+    {/* <MiniSideBar NonFilteredVideos={listvideos.listvideo && listvideos.listvideos}/> */}
+    {listvideos.listvideos && listvideos.listvideos.length > 0 ? (
     <div id="list">
      <div id="left">
         <div className="video">
@@ -160,8 +158,8 @@ function UserPlayList() {
             })}
       </div>
     </div>
+      ):<p style={{display:"flex",justifyContent:"center",alignItems:"center",height:"100vh",color:"white"}}>No Videos in Playlist</p>}
     </>
-  )}
     </>
   );
 }

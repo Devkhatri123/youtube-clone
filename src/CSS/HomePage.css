@@ -97,7 +97,7 @@
 .user-allshortsvideos .short-video-shelf {
     margin: 0;
     overflow: unset;
-    display: grid;
+    display: flex;
     width: fit-content;
 }
 
@@ -177,10 +177,6 @@
         aspect-ratio: 16 / 9;
         
     }
-
-    .user-allshortsvideos .short-video-shelf {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
 @media screen and (min-width: 874px) {
@@ -201,10 +197,6 @@
         font-size: 2.2rem;
     }
 
-    .user-allshortsvideos .short-video-shelf {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
     .user-allshortsvideos .short-video-shelf .short-video #short-video video {
         /* height: 372px; */
         height: unset;
@@ -221,6 +213,7 @@
 
 @media screen and (min-width: 990px) {
     .user-allshortsvideos .short-video-shelf {
+        display: grid;
         grid-template-columns: repeat(5, 1fr);
         row-gap: 12px;
     }
@@ -250,6 +243,24 @@
         max-width: calc(25% - 16px);
         aspect-ratio: 16 / 9;
         
+    }
+}
+@media screen and (min-width:640px) and (max-width:990px) {
+   .user-allshortsvideos .short-video {
+       max-width: calc(33.33% - 0px);
+        
+    }
+    .user-allshortsvideos .short-video-shelf .short-video #short-video video {
+        /* height: 372px; */
+        height: unset;
+        /* width: 209px; */
+    }
+    .short-video{
+        width: unset;
+        height: unset;
+    }
+    #homepage-body #video .video_bottom .video_bttom_left .video_title_and_channelName {
+        height: 68px;
     }
 }
 @media screen and (max-width:990px){

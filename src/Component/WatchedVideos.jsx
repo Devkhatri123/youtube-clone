@@ -15,8 +15,9 @@ function WatchedVideos() {
     onSnapshot(collection(firestore,`users/${auth.currentUser.uid}/WV`),async(snapShot)=>{
       setwatchedVideos(await Promise.all(
       snapShot.docs.map(async(Doc)=>{
-         const VideoDocRef = doc(firestore,"videos",Doc.data().videoURL);
+      const VideoDocRef = doc(firestore,"videos",Doc.data().videoURL);
        const getVideo = await getDoc(VideoDocRef);
+       if(getVideo.exists()){
        const userDocRef = doc(firestore,"users",getVideo.data()?.createdBy);
        const user = await getDoc(userDocRef);
        return {
@@ -24,6 +25,7 @@ function WatchedVideos() {
         Videodata:getVideo.data(),
         userData:user.data(),
       }
+    }
       }),
     )
   )
@@ -65,7 +67,7 @@ function WatchedVideos() {
       gap:'8px'
      }}>
       {watchedVideos.slice(0,6).filter((video)=>{
-        return !video.Videodata.shortVideo
+        return !video?.Videodata?.shortVideo
       }).map((video,i)=>{
         return <WatchedVideo video={video} key={i} />;
       })}

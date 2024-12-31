@@ -226,6 +226,9 @@
     line-height: 1.25;
     text-overflow: ellipsis;
   }
+  .video_bottom{
+    margin: 20px 7px 10px 0px !important;
+  }
 }
 @media screen and (min-width: 600px) and (max-width: 990px) {
     .large-screen-main-videoPage{

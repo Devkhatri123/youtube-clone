@@ -32,7 +32,6 @@ function Library() {
     useEffect(() => {
       auth.onAuthStateChanged((user) => {
         Setuser(user);
-        console.log(user);
       });
     }, []);
 
@@ -142,25 +141,22 @@ function Library() {
           !error || !ErrorMessage ? (
             <div className='libraryPage'>
             <div className="watched_Videos">
-           
-              <WatchedVideos />
+            <WatchedVideos />
             </div>
-            {LikedVideos.LikedVideos && LikedVideos.LikedVideos.length > 0 &&(
-              
-              <>
+             <>
             <div className="playlists">
               <div className="playlist-header">
                 <h3>Playlists</h3>
               </div>
               <div className='playlists-cards'>
                 {!Loading ? (
-                  LikedVideos.LikedVideos && (
+                LikedVideos.LikedVideos &&  LikedVideos.LikedVideos.length > 0 && (
               <div className="playlist-card">
                 <Link to={`/playlist?list=LV`}>
         <div className="thumbnail">
       {LikedVideos.LikedVideos &&
       <>
-       <img src={LikedVideos.LikedVideos[0]?.Videodata.Thumbnail} alt=""/>
+       <img src={LikedVideos.LikedVideos[0]?.Videodata?.Thumbnail} alt=""/>
             <div className="overlay">
             <BiLike style={{fontsize: "1.5rem"}}/>
             <p>Liked Videos</p>
@@ -174,12 +170,12 @@ function Library() {
   )
   ):<p>Loading...</p>}
     {!Loading ? (
-      Watchlater.Watchlater &&
+      Watchlater.Watchlater &&  Watchlater.Watchlater.length >0 &&
     <div className="playlist-card">
       <Link to={`/playlist?list=WL`}>
         <div className="thumbnail">
       <>
-       <img src={Watchlater.Watchlater[0].Videodata.Thumbnail} alt=""/>
+       <img src={Watchlater.Watchlater[0]?.Videodata?.Thumbnail} alt=""/>
             <div className="overlay">
             <FiClock style={{fontsize: "1.5rem"}}/>
             <p>Watch Later Videos</p>
@@ -193,8 +189,7 @@ function Library() {
     </div>
             </div>
             </>
-    )}
-            <div className="createVideo">
+   <div className="createVideo">
               <a href="#">
                 <IoPlayOutline />
                 <p>Your Videos</p>
@@ -217,7 +212,7 @@ function Library() {
               <Link to={`/watch?v=${LikedVideo?.videoId}`}>
               <div id="thumbnail_container">
               <img src={LikedVideo.Videodata?.Thumbnail} alt="" className="video"/>
-              <p className='videoLength'>{videocontext.returnvideoTime(LikedVideo.Videodata.videoLength)}</p>
+              <p className='videoLength'>{videocontext.returnvideoTime(LikedVideo.Videodata?.videoLength)}</p>
               </div>
                  </Link>
                  <div className="video_bottom">
@@ -228,7 +223,7 @@ function Library() {
                                   </h3>
                                   <div>
                                   <p>
-                            {LikedVideos.user?.name} • {LikedVideo.Videodata.views} Views • {videocontext.getVideoPublishedTime(LikedVideo)}
+                            {LikedVideos.user?.name} • {LikedVideo.Videodata?.views} Views • {videocontext.getVideoPublishedTime(LikedVideo)}
                           </p>
                                   </div>
                                 </div>
@@ -255,7 +250,7 @@ function Library() {
               <Link to={`/watch?v=${Watchlatervideo.Videodata?.videoId}`}>
               <div id="thumbnail_container">
               <img src={Watchlatervideo.Videodata?.Thumbnail} alt="" className="video"/>
-             <p className='videoLength'>{videocontext.returnvideoTime(Watchlatervideo.Videodata.videoLength)}</p>
+             <p className='videoLength'>{videocontext.returnvideoTime(Watchlatervideo.Videodata?.videoLength)}</p>
               </div>
                  </Link>
                  <div className="video_bottom">
@@ -266,7 +261,7 @@ function Library() {
                                   </h3>
                                   <div>
                                   <p>
-                            {Watchlater.user?.name} • {Watchlatervideo.Videodata.views} Views • {videocontext.getVideoPublishedTime(Watchlatervideo)}
+                            {Watchlater.user?.name} • {Watchlatervideo.Videodata?.views} Views • {videocontext.getVideoPublishedTime(Watchlatervideo)}
                           </p>
                                   </div>
                                 </div>

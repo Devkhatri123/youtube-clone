@@ -65,7 +65,7 @@ export const videoContext = createContext();
             likes: video.likes - 1,
           });
           setshowToastNotification(true);
-          setNotificationMessage("video disliked");
+          setNotificationMessage("video Removed from Liked Videos");
           setisLiked(false)
         }
       }else{
@@ -209,6 +209,32 @@ export const videoContext = createContext();
 }
 }
 }
+const RemoveVideoPlaylist = async(LoggedInUser,PlaylistType,videoOwner,videoId) => {
+  console.log(videoOwner)
+  console.log(videoId )
+ try{
+    if(LoggedInUser){
+    if(PlaylistType === "CV" ){
+      if(videoOwner.uid === LoggedInUser.uid){
+     const docRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/createdVideos`),videoId);
+     const VideoDocRef = doc(collection(firestore,"videos"),videoId);
+     await deleteDoc(docRef);
+     await deleteDoc(VideoDocRef);
+    console.log("video removed from created videos");
+    }
+  }else{
+    const docRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/${PlaylistType}`),videoId);
+    await deleteDoc(docRef);
+  }
+  setshowToastNotification(true);
+  setNotificationMessage("Video Removed From Playlist.Reload the page to see the changes");
+}
+  }catch(error){
+    setshowToastNotification(true);
+    setNotificationMessage("Error Occured");
+    console.log(error.message)
+  }
+}
 const showmodal = (e) => {
   if (window.innerWidth <= 600) {
     document.body.style.opacity = "0.7";
@@ -285,6 +311,6 @@ const returnvideoTime = (duration) => {
   console.log(error.message)
 }
 }
-    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,isLiked,isDisLiked,isSaved,Left,Top,setisLiked,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot,checKLikedOrNot,setisDisLiked,setisSaved,getWatchlaterVideo,showmodal,checkCurrentWatchedVideo}}>{children}</videoContext.Provider>
+    return <videoContext.Provider value={{showModal,showToastNotification,shortvideoShowMessages,NotificationMessage,Description,bottomlayout,isSubscribed,isLiked,isDisLiked,isSaved,Left,Top,setisLiked,setisSubscribed,setDescription,setshortvideoShowMessages,setbottomlayout,setshowModal,setNotificationMessage,setshowToastNotification,LikeVideo,WatchLater,getVideoPublishedTime,returnvideoTime,subscribeChannel,DisLikeVideo,CheckSubscribedOrNot,checKLikedOrNot,setisDisLiked,setisSaved,getWatchlaterVideo,showmodal,checkCurrentWatchedVideo,RemoveVideoPlaylist}}>{children}</videoContext.Provider>
 }
 export default VideoActionProvider

@@ -196,7 +196,7 @@ function CommentBody(props) {
                   <>
                <div id='showreplybtn' onClick={()=>{setshowReplies(!showReplies);setclickedReplyMessageIndex(index)}}>{!showReplies?<IoIosArrowDown />:clickedReplyMessageIndex === index?<IoIosArrowUp/>:<IoIosArrowDown />}<button>{comment.replies.length} replies</button></div>
                  {showReplies && index === clickedReplyMessageIndex &&(
-                  <div className="Comments">
+                  <div className="Comments" style={{height:"100%",overflowY:"scroll"}}>
                   {comment.replies.map((replycomment,i)=>{
                     return <div id="comment" key={i}>
                     <div className="commentChannelPic"><img src={replycomment.ReplyuserPic} alt={replycomment.Replyname} /></div>

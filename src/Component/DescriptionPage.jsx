@@ -20,7 +20,6 @@ function DescriptionPage(props) {
   const params = useParams()
   const HandleCurrentComponent = () => {
     currentState.setDescription(false)
-   // document.body.style.overflowY = "scroll";
   }
   useEffect(()=>{
    if(currentState.Description){

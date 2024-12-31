@@ -15,7 +15,6 @@ function Home() {
   const [AllVideos, setAllvideos] = useState([]);
   const [user, setuser] = useState();
   const [LoggedInUser, SetLoggedInUser] = useState(null);
-  const [Error, setError] = useState("");
   const [PageLoading, setPageLoading] = useState(false);
   const [clickedVideoIndex, setclickedVideoIndex] = useState(0);
   useEffect(() => {
@@ -31,8 +30,12 @@ function Home() {
     GetData();
   }, [params.id]);
   useEffect(() => {
+    console.log(AllVideos);
+  }, [AllVideos]);
+  useEffect(() => {
     setuser(homeContext.user);
   }, [homeContext.user]);
+
   const showModal = (e, index) => {
     videocontext.setbottomlayout(!videocontext.bottomlayout); 
     setclickedVideoIndex(index);
@@ -59,30 +62,28 @@ function Home() {
         </div>
         <div id="homepage-body">
           {AllVideos &&
-            AllVideos.filter((video) => {
-              return !video.Videodata.shortVideo;
-            }).map((video, index) => {
+            AllVideos.map((video, index) => {
               return (
                 <div id="video" key={index}>
                   <Link to={`/watch?v=${video?.videoURL}`}>
                     <div id="thumbnail_container">
                       <img
-                        src={video?.Videodata.Thumbnail}
+                        src={video?.Videodata?.Thumbnail}
                         alt=""
                         className="video"
                       />
-                    <p className="videoLength">{videocontext.returnvideoTime(video?.Videodata.videoLength)}</p>
+                    <p className="videoLength">{videocontext.returnvideoTime(video?.Videodata?.videoLength)}</p>
                     </div>
                   </Link>
                   <div className="video_bottom">
                     <div className="video_bttom_left">
                       <div className="video_title_and_channelName">
                         <h3 id="video_title" className="title">
-                          {video?.Videodata.Title}
+                          {video?.Videodata?.Title}
                         </h3>
                         <div>
                         <p>
-                            {user?.name} • {video?.Videodata.views} Views • {videocontext.getVideoPublishedTime(video)}
+                            {user?.name} • {video?.Videodata?.views} Views • {videocontext.getVideoPublishedTime(video)}
                           </p>
                         </div>
                       </div>
@@ -104,8 +105,10 @@ function Home() {
                           Left={videocontext.Left}
                           Top={videocontext.Top}
                           video={video?.Videodata}
+                          videoOwner={user}
                           videoURL={video.videoURL}
                           user={LoggedInUser}
+                          searchQuery={"CV"}
                         />
                       </>
                     )}

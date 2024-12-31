@@ -60,12 +60,6 @@ function Footer() {
         <SiYoutubeshorts />
         <p>Shorts</p>
         </Link>} 
-      {user ? (
-        <a href="#">
-          <MdOutlineSubscriptions />
-          <p>Subscriptions</p>
-        </a>
-      ) : null}
       <Link to="/Library">
       {!user?(
         <>

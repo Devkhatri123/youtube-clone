@@ -37,10 +37,7 @@ export const Uploadvideo = createContext();
       });
       
   });
-  console.log(newFile);
-
-
-    const uploadVideoTask =  uploadBytesResumable(videopRef, videoFile);
+ const uploadVideoTask =  uploadBytesResumable(videopRef, videoFile);
     uploadVideoTask.on(
       "state_changed",
       (snapshot) => {
@@ -104,7 +101,7 @@ export const Uploadvideo = createContext();
     }).catch((error)=>{
       console.log(error)
     })
-    await addDoc(collection(firestore,`users/${auth.currentUser.uid}/createdVideos`),{
+    await setDoc(doc(collection(firestore,`users/${auth.currentUser.uid}/createdVideos`),videoId),{
       videoUrl:videoId,
     }).then(()=>{
       navigate("/youtube-clone");

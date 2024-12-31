@@ -56,7 +56,18 @@ document.addEventListener("click",(e)=>{
     VideoContext.setbottomlayout(true)
   }
 }
-})
+});
+const returnPlaylistType = (searchQuery) => {
+  if(searchQuery === "WL"){
+    return "Watch Later";
+  }else if(searchQuery === "LV"){
+    return "Liked Videos";
+  }else if (searchQuery === "CV"){
+    return "Created Videos";
+  }else if (searchQuery === "WV"){
+    return "Watched Videos";
+  }
+}
   return VideoContext.bottomlayout  && (
     !VideoContext.showModal ? (
       
@@ -79,9 +90,9 @@ document.addEventListener("click",(e)=>{
       <p>Share video</p>
      </div>
      {props.searchQuery&&(
-     <div className="DeleteVideo">
+     <div className="DeleteVideo" onClick={()=>{VideoContext.RemoveVideoPlaylist(props.user,props.searchQuery,props.videoOwner,props.videoURL);VideoContext.setbottomlayout(false)}}>
       <MdDeleteForever/>
-      <p>Delete Video From {props.searchQuery  == "WL" ? "Watch Later":"Liked Videos"}</p>
+      <p>Remove Video From {returnPlaylistType(props.searchQuery)}</p>
      </div>
      )}
    </div>
