@@ -279,8 +279,8 @@ useEffect(()=>{
     videoRef.current.style.height = "unset !important";
     videoRef.current.style.borderRadius = "0 !important";
     }else{
-      currentVideo.style.width = videoWidth + "px";
-      currentVideo.style.height = `${videoHeight+"px !important"}`;
+      videoRef.current.style.width = videoWidth + "px";
+      videoRef.current.style.height = `${videoHeight+"px !important"}`;
     }
 },[Fullscreen])
   const ChangeVideoDuration = (e) => {

@@ -19,9 +19,6 @@ import {
   doc,
   getDoc,
   collection,
-  updateDoc,
-  setDoc,
-  deleteDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { useNavigate } from "react-router";
@@ -30,11 +27,9 @@ import Comment from "../Component/Comment";
 import { videoContext } from "../Context/VideoContext";
 import DescriptionPage from "./DescriptionPage";
 import { VscMute } from "react-icons/vsc";
-import { PanoramaFishEyeSharp } from "@mui/icons-material";
 function ShortVideos() {
   let [Index, setIndex] = useState(0);
   const [user, SetUser] = useState(null);
-  const [LikeShort, setLikeShort] = useState(false);
   const [Loading, setLoading] = useState(true);
   const [Ispause, setIspause] = useState(false);
   const [isMuted, setisMuted] = useState(false);
@@ -122,23 +117,6 @@ function ShortVideos() {
     };
   }, [videoWidth, videoHeight,windowHeight]);
 
-  useEffect(() => {
-    const GetLikeVideo = async () => {
-      if (user) {
-        const docRef = doc(
-          collection(firestore, `users/${auth.currentUser?.uid}/LikedVideos`),
-          params.id
-        );
-        const getLikedDoc = await getDoc(docRef);
-        if (getLikedDoc.exists()) {
-          setLikeShort(true);
-        } else {
-          setLikeShort(false);
-        }
-      }
-    };
-    GetLikeVideo();
-  }, [params.id, user]);
   const HandleLike = async (id) => {
     const LikedVideo = FilteredShortVideos.filter((video) => {
       return video.id === id;
@@ -338,6 +316,7 @@ useEffect(()=>{
         !currentState.shortvideoShowMessages ? handleTouchStart : null
       }
       onTouchEnd={!currentState.shortvideoShowMessages ? handleTouchEnd : null}
+      style={currentState.shortvideoShowMessages || currentState.Description ? { pointerEvents: "none" } : null}
     >
       <Link to={"/youtube-clone"}>
         <IoIosArrowRoundBack className="back_icon" />
