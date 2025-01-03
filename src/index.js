@@ -39,12 +39,11 @@ let router = createBrowserRouter([
     path: "/Library",
     element: (
       <>
-        {/* <App/> */}
-        <Navbar />
         <VideoActionProvider>
+        <Navbar />
         <Library />
-        </VideoActionProvider>
         <Footer />
+        </VideoActionProvider>
       </>
     ),
   },
