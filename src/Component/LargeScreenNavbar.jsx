@@ -219,7 +219,7 @@ useEffect(()=>{
       <p>{VideoContext.getVideoPublishedTime(newvideo)}</p>
       </Link>
      </div>
-     <img src={newvideo?.videoData?.Thumbnail} alt="video-thumbnail" className='video-thumbnail'/>
+     <img src={newvideo?.Videodata?.Thumbnail} alt="video-thumbnail" className='video-thumbnail'/>
     </div>
     </>
 })}

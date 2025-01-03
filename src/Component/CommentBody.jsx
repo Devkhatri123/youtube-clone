@@ -215,14 +215,14 @@ function CommentBody(props) {
                         <div className="icons">
                           {user && replycomment.ReplyCommentLikes?.usersId.includes(user.uid) ? <BiSolidLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>:<BiLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>}<span>{replycomment.ReplyCommentLikes.ReplyCommentnumberOfLikes}</span>
                           <BiDislike/>
-                          <MdOutlineMessage onClick={()=>{setcurrentReplyVideoIndex(index);setshowReplyInput(!showReplyInput)}}/>
+                          <MdOutlineMessage onClick={()=>{setcurrentReplyVideoIndex(index);setshowReplyInput(!showReplyInput);console.log("currentReplyVideoIndex: "+ currentReplyVideoIndex + "Actual Index : " + index)}}/>
                        </div>
                       </div>
                       {showReplyInput && currentReplyVideoIndex == index &&(
                 <div className="replybox">
                   <input type="text" name="" id="replyinput" value={ReplyMessage} onChange={HandleReplyMessage} placeholder='Send a reply here'/>
                 <div>
-                  <button onClick={()=>{setReply(false)}}>cancel</button>
+                  <button onClick={()=>{setshowReplyInput(false);setcurrentReplyVideoIndex(null)}}>cancel</button>
                   <button onClick={()=>{sendReplyMessage(index)}}>send</button>
                   </div>
                 </div>
