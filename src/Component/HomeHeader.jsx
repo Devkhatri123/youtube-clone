@@ -10,8 +10,6 @@ function HomeHeader(props) {
   const homeContext = useContext(HomeContext);
    const VideoContext = useContext(videoContext);
    useEffect(()=>{
-   console.log(homeContext.user);
-    
     const GetLoggeInUser = async () => {
       try{
     auth.onAuthStateChanged((currentuser)=>{
@@ -32,7 +30,7 @@ function HomeHeader(props) {
     }
   }
     GetSubscribedDoc();
-  },[LoggedInUser,params.id]);
+  },[LoggedInUser,params.id,homeContext?.user]);
   const unSubscribe = () => {
     VideoContext.subscribeChannel(LoggedInUser,homeContext?.user);
   }

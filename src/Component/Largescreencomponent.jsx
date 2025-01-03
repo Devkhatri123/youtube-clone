@@ -46,18 +46,11 @@ const Largescreencomponent = (props) => {
                       to={`/${FullLengthVideo.Videodata.createdBy}/${FullLengthVideo.UserData?.name.replace(" ","")}/videos`}
                       style={{ maxWidth: "max-content", width: "71px" }}
                     >
-                      {FullLengthVideo.UserData?.channelURL ? (
-                        <img
-                          src={FullLengthVideo.UserData?.channelURL}
+                      <img
+                          src={FullLengthVideo.UserData?.channelPic}
                           alt={FullLengthVideo.UserData?.name}
                         />
-                      ) : (
-                        <img
-                          src={FullLengthVideo.UserData?.channelURL}
-                          alt={FullLengthVideo.UserData?.name}
-                        />
-                      )}
-                    </Link>
+                     </Link>
                     <Link to={`/watch?v=${FullLengthVideo.id}`}>
                       <div className="video_title_and_channelName">
                         <h3 id="video_title" className="title">
