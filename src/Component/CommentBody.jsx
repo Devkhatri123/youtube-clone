@@ -159,7 +159,6 @@ function CommentBody(props) {
           const HandleReplies = (i) => {  
             setcurrentReplyVideoIndex(i);
             setshowReplyInput(!showReplyInput);
-            console.log("currentReplyVideoIndex: "+ currentReplyVideoIndex + "Actual Index : " + i);
           }
   return (
     <>
