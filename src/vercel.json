@@ -2,8 +2,12 @@
     "routes": [
       
         {
-            "src": "/(.*)",
-            "dest": "index.html"
+            "src": "/",
+            "dest": "/"
+        },
+        {
+            "src": "/watch?",
+            "dest": "/"
         }
     ]
 }
