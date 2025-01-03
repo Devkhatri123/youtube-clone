@@ -23,7 +23,7 @@ function CommentBody(props) {
     const [ReplyMessage,setReplyMessage] = useState('');
     const [showReplyInput,setshowReplyInput] = useState(false);
     const [clickedReplyMessageIndex,setclickedReplyMessageIndex] = useState(null);
-    const [currentReplyVideoIndex,setcurrentReplyVideoIndex] = useState(null);
+    const [currentReplyVideoIndex,setcurrentReplyVideoIndex] = useState(0);
     useEffect(()=>{
         auth.onAuthStateChanged((curretnUser)=>{
            setUser(curretnUser);
@@ -154,6 +154,12 @@ function CommentBody(props) {
             }
             setReply(false);
             setReplyMessage('');
+            setshowReplyInput(false);
+          }
+          const HandleReplies = (i) => {  
+            setcurrentReplyVideoIndex(i);
+            setshowReplyInput(!showReplyInput);
+            console.log("currentReplyVideoIndex: "+ currentReplyVideoIndex + "Actual Index : " + i);
           }
   return (
     <>
@@ -215,10 +221,10 @@ function CommentBody(props) {
                         <div className="icons">
                           {user && replycomment.ReplyCommentLikes?.usersId.includes(user.uid) ? <BiSolidLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>:<BiLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>}<span>{replycomment.ReplyCommentLikes.ReplyCommentnumberOfLikes}</span>
                           <BiDislike/>
-                          <MdOutlineMessage onClick={()=>{setcurrentReplyVideoIndex(index);setshowReplyInput(!showReplyInput);console.log("currentReplyVideoIndex: "+ currentReplyVideoIndex + "Actual Index : " + index)}}/>
+                          <MdOutlineMessage onClick={()=>{HandleReplies(i)}}/>
                        </div>
                       </div>
-                      {showReplyInput && currentReplyVideoIndex == index &&(
+                      {showReplyInput && currentReplyVideoIndex == i &&(
                 <div className="replybox">
                   <input type="text" name="" id="replyinput" value={ReplyMessage} onChange={HandleReplyMessage} placeholder='Send a reply here'/>
                 <div>
