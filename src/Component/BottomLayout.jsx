@@ -90,7 +90,7 @@ const returnPlaylistType = (searchQuery) => {
       <p>Share video</p>
      </div>
      {props.searchQuery&&(
-     <div className="DeleteVideo" onClick={()=>{VideoContext.RemoveVideoPlaylist(props.user,props.searchQuery,props.videoOwner,props.videoURL);VideoContext.setbottomlayout(false)}}>
+     <div className="DeleteVideo" onClick={()=>{VideoContext.RemoveVideoPlaylist(props.user,props.searchQuery,props.videoOwner,props.videoURL,props.video);VideoContext.setbottomlayout(false)}}>
       <MdDeleteForever/>
       <p>Remove Video From {returnPlaylistType(props.searchQuery)}</p>
      </div>

@@ -2,9 +2,6 @@ import React,{useEffect,useState,useContext} from 'react'
 import DescriptionPage from './DescriptionPage';
 import VideoDetail from './VideoDetail';
 import Comment from './Comment';
-import Videos from './Videos';
-import { collection,doc,getDoc,updateDoc,setDoc,deleteDoc } from 'firebase/firestore';
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike } from "react-icons/bi";
 import { BiSolidLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
@@ -17,8 +14,8 @@ import { IoReloadOutline } from "react-icons/io5";
 import { FaRegFlag } from "react-icons/fa6";
 import { FaFlag } from "react-icons/fa6";
 import "../CSS/VideoPage.css";
-import { Link, useSearchParams } from "react-router-dom";
-import { auth, firestore } from '../firebase/firebase';
+import { useSearchParams } from "react-router-dom";
+import { auth } from '../firebase/firebase';
 import { videoContext } from '../Context/VideoContext';
 function SmallScreenVideoInfoCard(props) {
     const currentState= useContext(videoContext);
@@ -42,7 +39,7 @@ function SmallScreenVideoInfoCard(props) {
       try{
         if(LoggedInUser){
           setisbuttonDisable(true);
-         await currentState.subscribeChannel(LoggedInUser,props.user);
+          currentState.subscribeChannel(LoggedInUser,props.user);
           setisbuttonDisable(false);
       }else{
         alert("You are not signedIn");
@@ -58,32 +55,8 @@ function SmallScreenVideoInfoCard(props) {
         currentState.checKLikedOrNot(LoggedInUser,props.videoId)
       },[props.videoId,LoggedInUser])
        useEffect(()=>{
-        if(LoggedInUser){
-       const checkCurrentWatchedVideo = async () => {
-        try{
-      const videoDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/watchedVideos`),props.videoId);
-      const videoDoc = await getDoc(videoDocRef);
-      const videoCollection = doc(firestore,"videos",props.videoId);
-      if(!videoDoc.exists()){
-        const data = {
-          videoUrl:props.videoId,
-        }
-        await setDoc(videoDocRef,data);
-        await updateDoc(videoCollection,{
-          views:props.Video?.views + 1
-        })
-      }
-        }catch(error){
-          console.log(error.message)
-        }
-       checkCurrentWatchedVideo();
-      }
-    }
-       },[props.videoId,props.Video,LoggedInUser,searchQuery]);
-       useEffect(()=>{
         currentState.getWatchlaterVideo(LoggedInUser,searchQuery);
-    
-       },[LoggedInUser,searchQuery])
+      },[LoggedInUser,searchQuery])
   return (
     <div className="video_page">
        { currentState.shortvideoShowMessages && <Comment video={props.Video} user={props.user} videoId={props.videoId}/>}
@@ -118,13 +91,8 @@ function SmallScreenVideoInfoCard(props) {
                 {!currentState.isSaved ? <FaRegBookmark /> : <FaBookmark/>}
                   <span className="save">Save</span>
                 </div>
-                <div>
-                  <FaRegFlag />
-                  <span className="report">Report</span>
-                </div>
               </div>
-              {/* {currentState.shortvideoShowMessages ? <Comment video={Video} user={user} videoId={params.id}/>:null} */}
-              <div className="comments" >
+              <div className="comments">
               {props.Video?.comments === "On"?(
                 <>
                 {props.Video?.Comments ? (
@@ -140,7 +108,7 @@ function SmallScreenVideoInfoCard(props) {
                   <span>{props.Video?.Comments[0]?.CommentText}</span>
                 </div>
                 </>
-                 ):<p>No Comments Till Now</p>}
+                 ):<p  onClick={()=>{currentState.setshortvideoShowMessages(true);document.body.style.overflow="hidden";window.scrollTo(0,0)}}>No Comments Till Now</p>}
                 </>
               ) : (
                  <p className="comments_turnedOff_message">Comments are Turned Off for this video</p>

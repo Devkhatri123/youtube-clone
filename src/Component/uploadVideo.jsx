@@ -77,8 +77,7 @@ return closeUploadPage ? (
     openComponent === false ? (
     !commentMode ? (
     <div className="uploadVideo">
-    
-      <IoMdClose className="close_page_icon" />
+    <IoMdClose className="close_page_icon" onClick={()=>{setcloseUploadPage(!closeUploadPage)}} />
       <input
             type="file"
             accept="video/*"
@@ -88,7 +87,6 @@ return closeUploadPage ? (
           />
       {Video !== "" ? (
         <div className="Preview_video">
-          {/* <video src={Video} controls poster={Thumbnail ? Thumbnail : null} /> */}
          <div ref={videoRef}><VideoPlayer src={Video} poster={Thumbnail} id="videplayer"/></div> 
         {UploadVideoContext.Videoprogress > 0 ? <button className="select_file" onClick={() => inputRef.current.click()} disabled style={{opacity: "0.3"}}>Select File</button>:<button className="select_file" onClick={() => inputRef.current.click()}>Select File</button>}  
           <div className="uploadVideoProgress"><p className='text-white' style={{width:UploadVideoContext.Videoprogress + '%'}}></p></div>

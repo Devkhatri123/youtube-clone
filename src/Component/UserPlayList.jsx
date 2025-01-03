@@ -86,7 +86,7 @@ function UserPlayList() {
         <div className="video">
           <img
             src={
-              listvideos.listvideos[0].Videodata.Thumbnail
+              listvideos.listvideos[0].Videodata?.Thumbnail
             }
             alt=""
           />
@@ -102,25 +102,25 @@ function UserPlayList() {
             listvideos.listvideos.map((video, index) => {
               return (
                 <div id="video" key={index}>
-                  <Link to={`/watch/${video?.videoId}`}>
-                    <div id="thumbnail_container" style={video?.Videodata.shortVideo ?{background:"black"}:{background:"unset"}}>
+                   <Link to={`/watch?v=${video?.videoId}`}>
+                    <div id="thumbnail_container" style={video?.Videodata?.shortVideo ?{background:"black"}:{background:"unset"}}>
                       <img
-                        src={video?.Videodata.Thumbnail}
+                        src={video?.Videodata?.Thumbnail}
                         alt=""
-                        className="video" style={video?.Videodata.shortVideo ? {objectFit:"contain"}:{objectFit:"cover"}}
+                        className="video" style={video?.Videodata?.shortVideo ? {objectFit:"contain"}:{objectFit:"cover"}}
                       />
-                   <p className="videoLength">{videocontext.returnvideoTime(video?.Videodata.videoLength)}</p>
+                   <p className="videoLength">{videocontext.returnvideoTime(video?.Videodata?.videoLength)}</p>
                     </div>
                   </Link>
                   <div className="video_bottom">
                     <div className="video_bttom_left">
                       <div className="video_title_and_channelName">
                         <h3 id="video_title" className="title">
-                          {video?.Videodata.Title}
+                          {video?.Videodata?.Title}
                         </h3>
                         <div>
                           <p>
-                            {listvideos.user?.name} • {video?.Videodata.views} Views • {videocontext.getVideoPublishedTime(video)}
+                            {listvideos.user?.name} • {video?.Videodata?.views} Views • {videocontext.getVideoPublishedTime(video)}
                           </p>
                         </div>
                       </div>

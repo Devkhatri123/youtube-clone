@@ -100,7 +100,6 @@ function VideoPlayer(props) {
     const currentVideo = videoRef.current;
     const video_section = document.getElementsByClassName("video_section")[0];
     if (currentVideo) {
-      if(!Fullscreen){
       if (window.innerWidth < 507) {
         setvideoWidth(window.innerWidth);
         setvideoHeight(videoWidth * (9 / 16));
@@ -111,10 +110,12 @@ function VideoPlayer(props) {
         currentVideo.style.margin = "0 auto";
       } else if (window.innerWidth >= 990 && window.innerWidth <= 1115) {
         if(InitialvideoHeight > 480 && InitialvideoHeight < 720){
+          
           setvideoWidth(640);
           setvideoHeight("unset");
           video_section.style.height =  "306px";
           LargeScreenVideoBelowControls.current.style.bottom = "-40px";
+          
         }
         else if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
           setvideoWidth(window.innerWidth - 474);
@@ -125,6 +126,10 @@ function VideoPlayer(props) {
         setvideoWidth(640);
         setvideoHeight(360);
         }
+        if(props.src){
+          video_section.style.height = "320px";
+          currentVideo.style.margin = "0 auto";
+        } else  currentVideo.style.margin = "unset";
         currentVideo.style.margin = "unset";
       } else if (window.innerWidth > 1115 && window.innerWidth <= 1754) {
         if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
@@ -132,13 +137,20 @@ function VideoPlayer(props) {
           setvideoHeight((videoWidth / 2));
           video_section.style.height = videoHeight + "px";
           LargeScreenVideoBelowControls.current.style.bottom = "-37px";
+          if(props.src){
+            video_section.style.height = "320px";
+            currentVideo.style.margin = "0 auto";
+          } else  currentVideo.style.margin = "unset";
         }else{
           setvideoHeight(videoWidth * 0.5625);
           setvideoWidth(window.innerWidth - 474);
           LargeScreenVideoBelowControls.current.style.bottom = "-30px";
+          if(props.src){
+            video_section.style.height = "320px";
+            currentVideo.style.margin = "0 auto";
+          } else  currentVideo.style.margin = "unset";
           //  video_section.style.height = videoHeight + "px";
         }
-        currentVideo.style.margin = "unset";
       } else {
         if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
           setvideoWidth(1280);
@@ -175,21 +187,32 @@ function VideoPlayer(props) {
             setvideoWidth(640);
             setvideoHeight(360);
             }
+            if(props.src){
+              video_section.style.height = "320px";
+              currentVideo.style.margin = "0 auto";
+            } else  currentVideo.style.margin = "unset";
             currentVideo.style.margin = "unset";
           } else if (window.innerWidth > 1115 && window.innerWidth <= 1754) {
+           
              if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
               setvideoWidth(window.innerWidth - 474);
               setvideoHeight((videoWidth / 2));
               video_section.style.height = videoHeight + "px";
               LargeScreenVideoBelowControls.current.style.bottom = "-37px";
+              if(props.src){
+                video_section.style.height = "320px";
+                currentVideo.style.margin = "0 auto";
+              } else  currentVideo.style.margin = "unset";
             }else{
               setvideoHeight(videoWidth * 0.5625);
               setvideoWidth(window.innerWidth - 474);
               LargeScreenVideoBelowControls.current.style.bottom = "-30px";
+              if(props.src){
+                video_section.style.height = "320px";
+                currentVideo.style.margin = "0 auto";
+              } else  currentVideo.style.margin = "unset";
               //  video_section.style.height = videoHeight + "px";
             }
-            currentVideo.style.margin = "unset";
-           
           }else {
             if(InitialvideoHeight > 720 && InitialvideoHeight < 1080){
               setvideoWidth(1280);
@@ -203,17 +226,14 @@ function VideoPlayer(props) {
           }
           // setvideoWidth(window.innerWidth - 171);
         }
-      };
       window.addEventListener("resize", updateVideoSize);
 
       return () => {
         window.removeEventListener("resize", updateVideoSize);
-        // setvideoWidth(0);
-        // setvideoHeight(0);
-      };
+       };
     }
     }
-  }, [videoWidth, videoHeight,videoId,InitialvideoHeight,InitialvideoWidth,Fullscreen]);
+  }, [videoWidth, videoHeight,videoId,InitialvideoHeight,InitialvideoWidth]);
 
   const TotalTime = (e) => {
     const duration = e.target.duration;
@@ -258,6 +278,9 @@ useEffect(()=>{
     videoRef.current.style.width = "-webkit-fill-available !important";
     videoRef.current.style.height = "unset !important";
     videoRef.current.style.borderRadius = "0 !important";
+    }else{
+      currentVideo.style.width = videoWidth + "px";
+      currentVideo.style.height = `${videoHeight+"px !important"}`;
     }
 },[Fullscreen])
   const ChangeVideoDuration = (e) => {
@@ -290,9 +313,9 @@ useEffect(()=>{
     wrapper.style.display = "unset";
     wrapper.style.flexDirection = "unset";
     wrapper.style.justifyContent = "unset";
-    currentVideo.style.width = videoWidth;
-    currentVideo.style.height = videoHeight;
-    currentVideo.style.borderRadius = "12px";
+    currentVideo.style.width = videoWidth  + "px";
+    currentVideo.style.height = `${videoHeight+"px !important"}`;
+    // currentVideo.style.borderRadius = "12px";
     }setFullscreen(false);
   };
   const showVolumeRange = () => {
@@ -321,8 +344,7 @@ useEffect(()=>{
       }
     >
       <div className="video_top_controls">
-        <MdClosedCaptionOff />
-        {isMute ? (
+       {isMute ? (
           <IoVolumeMuteSharp onClick={HandleMuteUnmute} />
         ) : (
           <VscUnmute onClick={HandleMuteUnmute} />
@@ -338,7 +360,7 @@ useEffect(()=>{
             onTimeUpdate={HandlProgress}
             ref={videoRef}
             id="currentVideo"
-            style={{ height: "300px",margin:" 0 auto !important" }}
+            style={{ height: "320px",margin:" 0 auto !important" }}
           />
         ) : (
           <div className="videoContainer">
@@ -363,7 +385,6 @@ useEffect(()=>{
         )}
         <div className="middle_controls">
           <div>
-            <MdSkipPrevious />
             {reloadVideo ? (
               <IoReloadOutline onClick={ReloadVideo} />
             ) : isPaused ? (
@@ -371,7 +392,6 @@ useEffect(()=>{
             ) : (
               <MdPause onClick={HandlePlayPause} />
             )}
-            <MdSkipNext />
           </div>
         </div>
         <div className="below_controls">
@@ -399,11 +419,13 @@ useEffect(()=>{
                       TotalVideoSeconds.toString().padStart(2, 0)}
                 </span>
               </p>
-              {!Fullscreen ? (
+              {!props.src && (
+              !Fullscreen ? (
                 <RxEnterFullScreen onClick={HandleFullScreen} />
               ) : (
                 <MdOutlineFullscreenExit onClick={ExitFullscreen} />
-              )}
+              )
+            )}
             </div>
             <input
               type="range"
@@ -420,7 +442,7 @@ useEffect(()=>{
         <div
           className="large-screen-video-below-controls"
          ref={LargeScreenVideoBelowControls}
-         style={{bottom:Fullscreen? "0px":null}}
+         style={{bottom:Fullscreen? "-30px":null}}
         >
            {openPlaySpeedModal && (
         <>
@@ -502,6 +524,7 @@ useEffect(()=>{
                 </span>
               </p>
             </div>
+            {!props.src && (
             <div className="bottom-toggle-buttons-right">
               <GoGear onClick={()=>setopenPlaySpeedModal(true)}/>
               {!Fullscreen ? (
@@ -510,6 +533,7 @@ useEffect(()=>{
                 <MdOutlineFullscreenExit onClick={ExitFullscreen} />
               )}
             </div>
+            )}
           </div>
         </div>
       </div>

@@ -12,9 +12,10 @@ import "../CSS/Navbar.css";
 import { createSearchParams, Link } from 'react-router-dom';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Navbarcontext } from '../Context/NavbarContext';
+import { videoContext } from '../Context/VideoContext';
  const LargeScreenNavbar =() => {
   const currentState = useContext(Navbarcontext);
-  
+  const VideoContext = useContext(videoContext);
   const inputRef = useRef(null);
   const [searchTerm,setsearchTerm] = useState('');
   const [Loading,setLoading] = useState(true);
@@ -103,7 +104,7 @@ import { Navbarcontext } from '../Context/NavbarContext';
       const createrDocData = await getDoc(CreaterDocRef);
       return {
         videoId:videoDocData.id,
-        videoData:videoDocData.data(),
+        Videodata:videoDocData.data(),
         userData:createrDocData.data(),
       }
     }
@@ -111,13 +112,20 @@ import { Navbarcontext } from '../Context/NavbarContext';
     )
     setnewVideos(newVideos)
      });
-     setLoading(false)
+     setLoading(false);
+     if(openNotifications){
+      document.body.style.overflow="hidden";
+    }else document.body.style.overflow="scroll";
     }catch(error){
       console.log(error);
     }finally{
     setopenNotifications(!openNotifications)
-    }
   }
+}
+useEffect(()=>{
+  if(openNotifications) document.body.style.overflow="hidden";
+  else document.body.style.overflow="scroll";
+},[openNotifications])
   useEffect(()=>{
     const GetCurentUser = async() => {
       currentState.setError(true)
@@ -199,19 +207,23 @@ import { Navbarcontext } from '../Context/NavbarContext';
     </div>
 
     {!Loading ? (
-    newVideos && newVideos.filter((newvideo)=>{
+      <div style={{overflowY:"auto"}}>
+   {newVideos && newVideos.filter((newvideo)=>{
       return newvideo !== undefined
     }).map((newvideo,index)=>{
-    return <div className="notification" key={index}>
+    return <>
+     <div className="notification" key={index}>
      <img src={newvideo?.userData?.channelPic} alt="channelpic" style={{width:"40px",height:"40px",borderRadius:"50%"}}/>
      <div style={{minWidth:"271px"}}>
-      <Link to={`/watch?v=${newvideo?.videoId}`}> <p className='video-title'>{newvideo?.videoData?.Title}</p>
-      <p>4 hours ago</p>
+      <Link to={`/watch?v=${newvideo?.videoId}`}> <p className='video-title'>{newvideo?.Videodata?.Title}</p>
+      <p>{VideoContext.getVideoPublishedTime(newvideo)}</p>
       </Link>
      </div>
      <img src={newvideo?.videoData?.Thumbnail} alt="video-thumbnail" className='video-thumbnail'/>
     </div>
-})
+    </>
+})}
+</div>
 ):<p>Loading...</p>}
    </div>
    )}

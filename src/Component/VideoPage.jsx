@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import VideoInfoCard from "./VideoInfoCard";
 import "../CSS/VideoPage.css";
-import { firestore, auth } from "../firebase/firebase";
+import { firestore } from "../firebase/firebase";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
 import Smallscreencomponent from "./Smallscreencomponent";
@@ -27,7 +27,7 @@ function VideoPage() {
     setLoading(true);
     try {
       const VideoRef = doc(firestore, "videos", videoId);
-      onSnapshot(VideoRef, async (videDoc) => {
+          onSnapshot(VideoRef, async (videDoc) => {
         if (videDoc.exists()) {
           Setvideo(videDoc.data());
           const userRef = doc(firestore, "users", videDoc.data().createdBy);
@@ -36,10 +36,13 @@ function VideoPage() {
               setUser(userDoc.data());
             }
           });
+        }else{
+          SetError(true);
+          SetErrorMessage("Video not found")
         }
       },(error)=>{
         SetError(true);
-        SetErrorMessage(error.message)
+        SetErrorMessage("Some Error Occured")
       }
     );
       setLoading(false);
@@ -178,6 +181,7 @@ function VideoPage() {
   }, [CalculatedscreenWidth, nextVideosPortionWidth,Video?.videoURL]);
 
   return !ErrorMessage || !Error ?(
+    !Loading ? (
     <div className="greaterthan-2000px-screen-div">
     <VideoInfoCard CalculatedscreenWidth={CalculatedscreenWidth} NextVideos={FullLengthVideos} videoId={videoId} nextVideos={videos}
     Video={Video}
@@ -194,7 +198,7 @@ function VideoPage() {
                       </div>
                       ):<p>Loading</p>}
       </div>
-
+    ):<p style={{display:"flex",justifyContent:"center",alignContent:"center",height:"100vh"}}>Loading</p>
    ):<ErrorPage ErrorMessage={ErrorMessage}/>
 }
 

@@ -190,10 +190,6 @@ function Library() {
             </div>
             </>
    <div className="createVideo">
-              <a href="#">
-                <IoPlayOutline />
-                <p>Your Videos</p>
-              </a>
               <a href="#" >
                 <MdOutlineVideocam onClick={HandleUploadVideo} />
                 <p onClick={HandleUploadVideo}>Create Video</p>

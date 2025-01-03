@@ -22,9 +22,6 @@ import { videoContext } from '../Context/VideoContext';
 import ErrorPage from './ErrorPage';
 import { useSearchParams } from 'react-router-dom';
 function LargeScreenVideoInfoCard(props) {
-    const [searchParams] = useSearchParams();
-    const videoId = searchParams.get('v');
-    const [issavedVideo,SetsavedVideo] = useState(false);
     const [showFullText,setshowFullText] = useState(false);
     let [Loading, setLoading] = useState(false);
     const [Error,SetError] = useState(false);

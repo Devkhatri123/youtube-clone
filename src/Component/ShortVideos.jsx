@@ -30,6 +30,7 @@ import Comment from "../Component/Comment";
 import { videoContext } from "../Context/VideoContext";
 import DescriptionPage from "./DescriptionPage";
 import { VscMute } from "react-icons/vsc";
+import { PanoramaFishEyeSharp } from "@mui/icons-material";
 function ShortVideos() {
   let [Index, setIndex] = useState(0);
   const [user, SetUser] = useState(null);
@@ -209,7 +210,6 @@ function ShortVideos() {
   };
   const GotoNextVideo = () => {
     const shortVideoContainers = document.querySelectorAll( ".short_video_container");
-    // Ensure Index stays within valid bounds:
     if (Index > shortVideoContainers.length) return; 
     let currentVideo = shortVideoContainers[Index];
     if(currentVideo.nextElementSibling){
@@ -242,21 +242,30 @@ function ShortVideos() {
   };
   useEffect(() => {
     const handleKeyup = (e) => {
+      
       if (e.key === "ArrowDown" || e.keyCode === 40) {
+        if(currentState.Description){
+          currentState.setDescription(false);
+          currentState.setshortvideoShowMessages(false);
+        } 
         GotoNextVideo();
       } else if (e.key === "ArrowUp") {
+        if(currentState.Description){
+          currentState.setDescription(false);
+          currentState.setshortvideoShowMessages(false);
+        } 
         GotoPreviousVideo();
       }
-    };
-    window.addEventListener("keyup", handleKeyup);
+  }
+  if( !currentState.shortvideoShowMessages || !currentState.Description)window.addEventListener("keyup", handleKeyup);
     return () => {
       window.removeEventListener("keyup", handleKeyup);
     };
-  }, [Index, FilteredShortVideos]);
+  }, [Index, FilteredShortVideos,currentState.shortvideoShowMessages,currentState.Description]);
   useEffect(() => {
-    let currentVideo = document.querySelectorAll(".short_video_container")[Index];
-    if (currentVideo) {
       try{
+        let currentVideo = document.querySelectorAll(".short_video_container")[Index];
+    if (currentVideo) {
      const promise =  currentVideo.getElementsByTagName("video").shortvideo.play();
      if(promise !== undefined){
       promise.then(_=>{
@@ -268,9 +277,9 @@ function ShortVideos() {
         currentVideo.getElementsByTagName("video").shortvideo.play();
       })
      }
+    }
     }catch(error){
       console.log(error.message);
-    }
     }
   }, [Index, FilteredShortVideos]);
   const sectionTouch = (e) => {
@@ -314,7 +323,10 @@ function ShortVideos() {
           let video = currentContainer.getElementsByTagName("video").shortvideo;
           video.muted = !isMuted;
           setisMuted(!isMuted);
-        }
+}
+useEffect(()=>{
+ currentState.getWatchlaterVideo(user,params.id);
+},[params.id,FilteredShortVideos])
   return Loading ? (
     <p className="text-white">Loading...</p>
   ) : (
@@ -427,7 +439,7 @@ function ShortVideos() {
               )}
               <div className="menu control" onClick={()=>{setshortvideoLayout(!shortvideoLayout);document.body.style.overflow="hidden"}} style={
                 currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
-              }>
+              } >
                 <BsThreeDots />
               </div>
               <div className="channel control" style={
@@ -446,7 +458,7 @@ function ShortVideos() {
               <div className="line" onTouchMove={drageSection} onTouchStart={sectionTouch} onTouchEnd={HideLayout}><span></span></div>
               <div className="menuitems">
               <div onClick={()=>{currentState.setDescription(true);setActiveIndex(index);setshortvideoLayout(false)}}><RiMenu2Fill/><p>Description</p></div>
-              <div><FaRegBookmark/><p>Save To Watch later</p></div>
+              <div onClick={()=>{currentState.WatchLater(user,params.id)}}>{currentState.isSaved ?<><FaRegBookmark/><p>Save To Watch later</p> </>: <><FaBookmark/><p>Remove From watchlater</p></>}</div>
               <div onClick={HandleMute}>{isMuted ? <VscMute/> : <VscUnmute/>}<p>Mute</p></div>
               </div>
             </div>

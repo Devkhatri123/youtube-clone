@@ -21,7 +21,7 @@
   justify-content: center;
 }
 #toast_notification {
-  min-width: 325px;
+  min-width: fit-content;
   position: fixed;
   left: 0;
   background: #f1f1f1;
@@ -365,5 +365,9 @@
   #video {
     flex: 1 1 calc(20% - 17px); /* 20% width minus space for the gap */
     max-width: calc(20% - 17px);
+  }
+  .large-screen-main-videoPage .videos{
+    max-width: 1600px;
+    margin: 0 auto;
   }
 }

@@ -61,9 +61,8 @@ function Home() {
           </div>
         </div>
         <div id="homepage-body">
-          {AllVideos &&
-            AllVideos.map((video, index) => {
-              return (
+          {AllVideos && AllVideos.filter((video) => video?.Videodata?.shortVideo === false).map((video, index) => {
+           return (
                 <div id="video" key={index}>
                   <Link to={`/watch?v=${video?.videoURL}`}>
                     <div id="thumbnail_container">

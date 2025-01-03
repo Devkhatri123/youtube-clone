@@ -439,6 +439,13 @@
 
 .fullscreenVideoTitle {
   font-size: 1.5rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.25;
+  text-overflow: ellipsis;
 }
 
 #description_page {
@@ -729,7 +736,7 @@
     display: none;
   }
   .fullVideoPage {
-    width: 70%;
+    width: 70% !important;
   }
   .Next_videos {
     width: 30%;

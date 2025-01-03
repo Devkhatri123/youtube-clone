@@ -18,7 +18,7 @@ function MainPage() {
     const Getvideos = async () => {
       setLoading(true)
    try{
-    const getvideosdocs = await getDocs(collection(firestore,"videos")).then((res)=>{
+    await getDocs(collection(firestore,"videos")).then((res)=>{
       if(!res.empty){
      const result = res.docs.map(async(Doc)=>{
         const videoCreatorDocRef = doc(firestore, "users", Doc.data().createdBy);
@@ -61,7 +61,7 @@ function MainPage() {
     ) : (
       <>
         <Navbar />
-        {error ||ErrorMessage  ||currentState.Error || currentState.ErrorMessage? (
+        {error ||ErrorMessage || currentState.Error || currentState.ErrorMessage? (
           <NavbarStateProvider>
           <ErrorPage ErrorMessage={ErrorMessage}/>
           </NavbarStateProvider>

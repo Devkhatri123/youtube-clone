@@ -52,8 +52,8 @@ let router = createBrowserRouter([
     path: "/watch?",
     element: (
       <>
+       <VideoActionProvider>
         <Navbar />
-        <VideoActionProvider>
           <VideoPage />
         </VideoActionProvider>
       </>
@@ -83,12 +83,12 @@ let router = createBrowserRouter([
     path: `/results/?`,
     element: (
       <>
+      <VideoActionProvider>
         <Navbar />
         <NavbarStateProvider>
-          <VideoActionProvider>
           <SearchResults />
-          </VideoActionProvider>
         </NavbarStateProvider>
+        </VideoActionProvider>
       </>
     ),
   },
@@ -96,12 +96,12 @@ let router = createBrowserRouter([
     path: `/:id/:name/videos`,
     element: (
       <>
+       <VideoActionProvider>
         <Navbar />
         <HomePageStateProvider>
-          <VideoActionProvider>
             <Home />
-          </VideoActionProvider>
         </HomePageStateProvider>
+        </VideoActionProvider>
       </>
     ),
   },
@@ -109,10 +109,12 @@ let router = createBrowserRouter([
     path: `/:id/:name/Shorts`,
     element: (
       <>
+        <VideoActionProvider>
         <Navbar />
         <HomePageStateProvider>
           <HomepageShorts />
         </HomePageStateProvider>
+        </VideoActionProvider>
       </>
     ),
   },
@@ -120,8 +122,8 @@ let router = createBrowserRouter([
     path: `/playlist?`,
     element: (
       <>
-        <Navbar />
         <VideoActionProvider>
+        <Navbar />
           <UserPlayList />
         </VideoActionProvider>
       </>

@@ -21,7 +21,9 @@ function CommentBody(props) {
     const [CommentsLoading,setCommentLoading] = useState(true);
     const [showReplies,setshowReplies] = useState(false);
     const [ReplyMessage,setReplyMessage] = useState('');
+    const [showReplyInput,setshowReplyInput] = useState(false);
     const [clickedReplyMessageIndex,setclickedReplyMessageIndex] = useState(null);
+    const [currentReplyVideoIndex,setcurrentReplyVideoIndex] = useState(null);
     useEffect(()=>{
         auth.onAuthStateChanged((curretnUser)=>{
            setUser(curretnUser);
@@ -155,12 +157,12 @@ function CommentBody(props) {
           }
   return (
     <>
-      <div className="message-body">
+      <div className="message-body" style={{height:"100vh",overflow:"auto"}}>
           <div className="send-message-input">
             <img src={user?.photoURL} alt={user?.displayName} />
             <input type="text" id='message'placeholder='Send Your Message Here' value={Message} onChange={HandleText} onKeyDown={SendMessage}/>
           </div>
-          <div className='Comments'>
+          <div className='Comments' style={{height:"100vh",overflow:"auto"}}>
             {!CommentsLoading ? (
           Comments ? Comments?.map((comment,index)=>{
            return <div id="comment" key={index}>
@@ -181,7 +183,6 @@ function CommentBody(props) {
                     <BiDislike/>
                     <MdOutlineMessage onClick={()=>{setclickedReplyMessage(index);setReply(!Reply)}}/>
                   </div>
-                    <BsThreeDotsVertical/>
                 </div>
                 {Reply && index == clickedReplyMessage &&(
                 <div className="replybox">
@@ -214,9 +215,18 @@ function CommentBody(props) {
                         <div className="icons">
                           {user && replycomment.ReplyCommentLikes?.usersId.includes(user.uid) ? <BiSolidLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>:<BiLike onClick={(e)=>{replyCommentLike(e,{ParentCommentindex:index,childCommentindex:i})}}/>}<span>{replycomment.ReplyCommentLikes.ReplyCommentnumberOfLikes}</span>
                           <BiDislike/>
+                          <MdOutlineMessage onClick={()=>{setcurrentReplyVideoIndex(index);setshowReplyInput(!showReplyInput)}}/>
                        </div>
-                          <BsThreeDotsVertical/>
                       </div>
+                      {showReplyInput && currentReplyVideoIndex == index &&(
+                <div className="replybox">
+                  <input type="text" name="" id="replyinput" value={ReplyMessage} onChange={HandleReplyMessage} placeholder='Send a reply here'/>
+                <div>
+                  <button onClick={()=>{setReply(false)}}>cancel</button>
+                  <button onClick={()=>{sendReplyMessage(index)}}>send</button>
+                  </div>
+                </div>
+                )}
                       </div>
                       </div>
                   })}

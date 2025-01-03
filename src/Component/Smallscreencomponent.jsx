@@ -158,6 +158,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
         <div className="short-video-shelf">
        {props.ShortVideos && props.ShortVideos.map((shortvideo,index)=>{
           return <div className="short-video" key={index}>
+            <Link to={`/short/${shortvideo.id}`}>
           <div id="short-video">
             
             <img src={shortvideo.Videodata.Thumbnail} alt=''></img>
@@ -166,7 +167,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
             <div className="views">{shortvideo.Videodata.views} Views</div>
             </div>
             </div>
-            
+            </Link>
           </div>
        })}
        </div>
@@ -204,7 +205,7 @@ if(videocontext.showToastNotification) setbottomLayout(false)
                               {FullLengthVideo.UserData?.name} •
                               {" "} {FullLengthVideo.Videodata?.views} Views •
                             </p>
-                            <p>{videocontext.getVideoPublishedTime(FullLengthVideo)}</p>
+                               <p>  {videocontext.getVideoPublishedTime(FullLengthVideo)}</p>
                           </div>
                         </div>
                       </div>

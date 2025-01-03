@@ -43,12 +43,7 @@ const Largescreencomponent = (props) => {
                 <div className="video_bottom">
                   <div className="video_bttom_left">
                     <Link
-                      to={`/${
-                        FullLengthVideo.Videodata.createdBy
-                      }/${FullLengthVideo.UserData?.name.replace(
-                        " ",
-                        ""
-                      )}/videos`}
+                      to={`/${FullLengthVideo.Videodata.createdBy}/${FullLengthVideo.UserData?.name.replace(" ","")}/videos`}
                       style={{ maxWidth: "max-content", width: "71px" }}
                     >
                       {FullLengthVideo.UserData?.channelURL ? (
@@ -63,7 +58,7 @@ const Largescreencomponent = (props) => {
                         />
                       )}
                     </Link>
-                    <Link to={`/watch/${FullLengthVideo.id}`}>
+                    <Link to={`/watch?v=${FullLengthVideo.id}`}>
                       <div className="video_title_and_channelName">
                         <h3 id="video_title" className="title">
                           {FullLengthVideo.Videodata?.Title}

@@ -2,14 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { HomeContext } from '../Context/HomePageContext';
 import { auth, firestore } from '../firebase/firebase';
 import "../CSS/HomePage.css"
-import { collection, doc, getDoc } from 'firebase/firestore';
 import { useParams } from 'react-router';
+import { videoContext } from '../Context/VideoContext';
 function HomeHeader(props) {
   const params = useParams();
   const [LoggedInUser,SetLoggedInUser] = useState(null);
-  const [isSubscribed,setisSubscribed] = useState(false);
-  const [btnLoading,setbtnLoading] = useState(true);
-   const homeContext = useContext(HomeContext);
+  const homeContext = useContext(HomeContext);
+   const VideoContext = useContext(videoContext);
    useEffect(()=>{
    console.log(homeContext.user);
     
@@ -26,30 +25,24 @@ function HomeHeader(props) {
    },[])
    useEffect(()=>{
     const GetSubscribedDoc = async () => {
-      setbtnLoading(true);
       try{
-      if(LoggedInUser){
-    const subscribedDocRef = doc(collection(firestore,`users/${LoggedInUser.uid}/subscribedChannel`),params.id);
-    const subscribedDocData = await getDoc(subscribedDocRef);
-    if(subscribedDocData.exists()){
-      setisSubscribed(true);
-    }
-  }
+        VideoContext.CheckSubscribedOrNot(LoggedInUser,homeContext?.user);
     }catch(error){
       console.log(error)
-    }finally{
-      setbtnLoading(false);
     }
   }
     GetSubscribedDoc();
   },[LoggedInUser,params.id]);
+  const unSubscribe = () => {
+    VideoContext.subscribeChannel(LoggedInUser,homeContext?.user);
+  }
   return (
     <>
     <div id="header">
          <img src={homeContext.user?.channelPic} alt="" />
          <div id="header-top">
          <h1>{homeContext.user?.name}</h1>
-        {btnLoading ? <button disabled>Loading...</button>:<button style={isSubscribed ?{color:"white",background:"#272727"}:{color:"black",background:"white"}}>{isSubscribed ? "subscribed":"subscribe"}</button>} 
+         {VideoContext.isSubscribed ? <button style={{color:"white",background:"#272727"}} onClick={unSubscribe}>Subscribed</button>:<button style={{color:"black",background:"white"}} onClick={unSubscribe}>Subscribe</button>}
          </div>
          </div>
     </>

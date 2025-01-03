@@ -25,7 +25,7 @@ function HomepageShorts() {
       <HomeHeader/>
       <div id="tabsContainer">
           <div id="videos">
-            <Link to={"#"}>Videos</Link>
+          <Link to={`/${params.id}/${homeContext.user?.name.replace(" ","")}}/videos`}>Videos</Link>
           </div>
           <div id="Shortvideos">
             <Link to={`/${params.id}/${homeContext.user?.name.replace(" ","")}}/Shorts`}>Shorts</Link>
@@ -38,6 +38,7 @@ function HomepageShorts() {
         <div className="short-video-shelf">
        {AllShortsVideo && AllShortsVideo.map((shortvideo,index)=>{
           return <div className="short-video" key={index}>
+            <Link to={`/short/${shortvideo.id}`}>
           <div id="short-video">
             <video src={shortvideo.Videodata.videoURL} ></video>
             <div className="short-video-detail">
@@ -45,6 +46,7 @@ function HomepageShorts() {
             <div className="views">{shortvideo.Videodata.views} Views</div>
             </div>
             </div>
+            </Link>
           </div>
        })}
        </div>

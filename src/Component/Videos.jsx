@@ -50,9 +50,9 @@ const returnComponent = () => {
 }
   return (
     <>
-    {!Error && !ErrorMessage && (
+    {!Error && !ErrorMessage ? (
     returnComponent()
-    )}
+    ):<p style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>{ErrorMessage}</p>}
    </>
   );
 }

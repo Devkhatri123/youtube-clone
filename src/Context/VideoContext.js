@@ -151,10 +151,10 @@ export const videoContext = createContext();
       document.body.style.opacity = "1";
       setshowToastNotification(true);
  }
-  const getWatchlaterVideo = async(LoggedInUser,searchQuery) => {
+  const getWatchlaterVideo = async(LoggedInUser,videoId) => {
          if(LoggedInUser){
           try{
-           const LikedDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/WL`),searchQuery);
+           const LikedDocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/WL`),videoId);
            const GetLikedDoc = await getDoc(LikedDocRef);
            if(GetLikedDoc.exists()){
              setisSaved(true);
@@ -209,9 +209,8 @@ export const videoContext = createContext();
 }
 }
 }
-const RemoveVideoPlaylist = async(LoggedInUser,PlaylistType,videoOwner,videoId) => {
-  console.log(videoOwner)
-  console.log(videoId )
+const RemoveVideoPlaylist = async(LoggedInUser,PlaylistType,videoOwner,videoId,video) => {
+  console.log(video)
  try{
     if(LoggedInUser){
     if(PlaylistType === "CV" ){
@@ -220,9 +219,28 @@ const RemoveVideoPlaylist = async(LoggedInUser,PlaylistType,videoOwner,videoId) 
      const VideoDocRef = doc(collection(firestore,"videos"),videoId);
      await deleteDoc(docRef);
      await deleteDoc(VideoDocRef);
-    console.log("video removed from created videos");
     }
+  }else if(PlaylistType === "WV"){
+    const docRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/WV`),videoId);
+    const VideoDocRef = doc(collection(firestore,"videos"),videoId);
+    await updateDoc(VideoDocRef,{
+      views:video.views - 1,
+    });
+    await deleteDoc(docRef);
+  }else if(PlaylistType === "LV"){
+    const VideoDocRef = doc(collection(firestore,"videos"),videoId);
+    const LikedocRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/LV`),videoId);
+   if((await getDoc(LikedocRef)).exists()){
+    await updateDoc(VideoDocRef,{
+      likes:video.likes - 1,
+    });
+    await deleteDoc(LikedocRef);
   }else{
+    setshowToastNotification(true);
+    setNotificationMessage("Video Removed From Playlist.Reload the page to see the changes");
+  }
+  }
+  else{
     const docRef = doc(collection(firestore,`users/${LoggedInUser?.uid}/${PlaylistType}`),videoId);
     await deleteDoc(docRef);
   }
@@ -259,9 +277,10 @@ if (dots) {
   });
 }
  const getVideoPublishedTime = (FullLengthVideo) => {
+  console.log(FullLengthVideo)
   try{
   if(FullLengthVideo.Videodata.Time){
-     let seconds = Math.floor((Date.now() - FullLengthVideo.Videodata.Time)/1000);
+     let seconds = Math.floor((Date.now() - FullLengthVideo?.Videodata.Time || FullLengthVideo.Time)/1000);
       let value = seconds;
       if(seconds >= 31536000){
         value = Math.floor(seconds/31536000);

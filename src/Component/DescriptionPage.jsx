@@ -98,7 +98,7 @@ function DescriptionPage(props) {
                 <h2>{Video?.Title}</h2>
               </div>
               <div className="creator-channel">
-                <img src={user?.channelURL} alt="" />
+                <img src={user?.channelPic} alt="" />
                 <p>{user?.name}</p>
               </div>
             </div>
@@ -111,23 +111,21 @@ function DescriptionPage(props) {
                 <p>{Video?.views}</p>
                 <p>Views</p>
               </div>
-              <div className="uploadDate">
-                <p>24 Aug</p>
-                <p>2024</p>
-              </div>
-            </div>
+             </div>
+            {Video?.description && Video?.description.length > 0 && (
+              <>
             <div className="main-description">
             <div onClick={()=>setshowFullText(!showFullText)} style={{overflow:"auto"}} dangerouslySetInnerHTML={{__html:  
             Video?.description.length > 0 ? (
-                  Video?.description.length > 160 ? (
+                Video?.description.length > 160 ? (
                     showFullText?urlify(Video.description):urlify(Video.description.substring(0,160))+`...`):(urlify(Video.description))):("no text")
-               }}
-                  >
-                
+               }}>
                  </div>
             </div>
+            </>
+               )}
             <div className="creator-channel">
-                <img src={user?.channelURL} alt="" />
+                <img src={user?.channelPic} alt="" />
                 <div style={{height: "32px"}}>
                 <p style={{fontsize: "0.8rem"}}>{user?.name}</p>
                 <p style={{fontsize: "0.8rem",color:"darkgray",marginleft: "0.5rem"}}>{user?.subscribers} {user?.subscribers > 1? "subscribers":"subscriber"}  </p>
