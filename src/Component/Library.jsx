@@ -16,11 +16,15 @@ import { onSnapshot,doc,getDoc,collection } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import UploadvideoProvider from '../Context/UploadVideoContext';
 import { Link } from 'react-router-dom';
+import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
 import ErrorPage from './ErrorPage';
 import { videoContext } from '../Context/VideoContext';
 function Library() {
     const videocontext = useContext(videoContext);
     const contentsRef = useRef();
+    const watchListRef = useRef();
+    const [watchListscrolled,setwatchListscrolled] = useState(false);
     let [isUploadVideoEnabled,setisUploadVideoEnabled] = useState(false);
     let [user,Setuser] = useState(null);
     const [scrolled,setscrolled] = useState(false);
@@ -110,10 +114,6 @@ function Library() {
       }
     GetWatchlater()
     },[user]);
-    useEffect(()=>{
-    console.log(Watchlater);
-    
-    },[Watchlater])
     const HandleUploadVideo = () => {
         setisUploadVideoEnabled(true);
     }
@@ -130,6 +130,20 @@ function Library() {
         behavior: 'smooth'
     });
     setscrolled(false)
+    }
+    const ScrollRight = (e) => {
+      watchListRef.current.scrollBy({
+        left: 847,
+        behavior: 'smooth'
+    });
+    setwatchListscrolled(true)
+    }
+    const ScrollLeft = (e) => {
+      watchListRef.current.scrollBy({
+        left: -847,
+        behavior: 'smooth'
+    });
+    setwatchListscrolled(false)
     }
     return (
       isUploadVideoEnabled ? (
@@ -235,7 +249,9 @@ function Library() {
              </>
             )}
             { Watchlater.Watchlater&&Watchlater.Watchlater.length > 0 &&(
-             <div  className='Shelf'>
+              <>
+              <div className='forwardIcon watched_VideosforwardIcon' style={{display: !watchListscrolled?"block": "none"}} onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
+             <div  className='Shelf' ref={watchListRef}>
              <div  className='Shelf-header'>
              <h3>Watch later <span style={{color:"#8e9493"}}>{Watchlater?.Watchlater?.length}</span></h3>
             <Link to={`/playlist?list=WL`}>View all</Link>
@@ -268,6 +284,8 @@ function Library() {
             }
             </div>
             </div>
+             <div className="backwardIcon"style={watchListscrolled?{display:"block",position:"absolute",bottom:"0",top:"0",height:"36px",transform: "translate(-17px, 174px)"}:{display:"none"}} onClick={(e)=>{ScrollLeft(e)}}><IoIosArrowBack/></div>
+            </>
             )}
           </div>
           ):<ErrorPage ErrorMessage={ErrorMessage}/>

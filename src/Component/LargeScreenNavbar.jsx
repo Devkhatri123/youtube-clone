@@ -13,6 +13,7 @@ import { createSearchParams, Link } from 'react-router-dom';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Navbarcontext } from '../Context/NavbarContext';
 import { videoContext } from '../Context/VideoContext';
+import { update } from 'lodash';
  const LargeScreenNavbar =() => {
   const currentState = useContext(Navbarcontext);
   const VideoContext = useContext(videoContext);
@@ -70,7 +71,6 @@ import { videoContext } from '../Context/VideoContext';
       let Provider = new GoogleAuthProvider();
       await signInWithPopup(auth, Provider)
         .then(async(res) => {
-         console.log(res);
         let docRef= doc(firestore,"users",res.user.uid);
          const data = { 
           uid: res.user.uid,
@@ -90,7 +90,7 @@ import { videoContext } from '../Context/VideoContext';
           console.log(error);
         });
     };
-    const HandleToggle = () =>{
+    const HandleToggle = async() =>{
       setLoading(true);
       
      try{
@@ -115,6 +115,13 @@ import { videoContext } from '../Context/VideoContext';
      setLoading(false);
      if(openNotifications){
       document.body.style.overflow="hidden";
+      const doc = doc(firestore,`users/${user?.uid}`);
+      const DocData = await getDoc(doc);
+      if(DocData.data().Numberofvideos > 0){
+       await update(doc,{
+        Numberofvideos:0,
+      });
+      };
     }else document.body.style.overflow="scroll";
     }catch(error){
       console.log(error);
@@ -127,19 +134,9 @@ useEffect(()=>{
   else document.body.style.overflow="scroll";
 },[openNotifications])
   useEffect(()=>{
-    const GetCurentUser = async() => {
-      currentState.setError(true)
-      try{
-      const userDocRef = doc(firestore,`users/${user?.uid}`);
-      const userData = (await getDoc(userDocRef)).data();
-      setCurrentUser(userData);
-      currentState.setError(false)
-      }catch(error){
-        currentState.setError(true)
-        currentState.setErrorMessage(error.message)
-       }
-    }
-    GetCurentUser();
+    auth.onAuthStateChanged(async(user)=>{
+      setCurrentUser(user);
+    });
   },[user]);
   const searchResult = () => {
     if(searchTerm){

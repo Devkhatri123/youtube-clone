@@ -63,7 +63,10 @@ const returnPlaylistType = (searchQuery) => {
   }else if(searchQuery === "LV"){
     return "Liked Videos";
   }else if (searchQuery === "CV"){
+    if(props.videoOwner.uid == props.user.uid){
+      console.log(props.videoOwner)
     return "Created Videos";
+    }
   }else if (searchQuery === "WV"){
     return "Watched Videos";
   }
@@ -89,7 +92,7 @@ const returnPlaylistType = (searchQuery) => {
       <RiShareForwardLine/>
       <p>Share video</p>
      </div>
-     {props.searchQuery&&(
+     {props.searchQuery && (
      <div className="DeleteVideo" onClick={()=>{VideoContext.RemoveVideoPlaylist(props.user,props.searchQuery,props.videoOwner,props.videoURL,props.video);VideoContext.setbottomlayout(false)}}>
       <MdDeleteForever/>
       <p>Remove Video From {returnPlaylistType(props.searchQuery)}</p>

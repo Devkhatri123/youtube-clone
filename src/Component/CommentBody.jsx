@@ -244,7 +244,7 @@ function CommentBody(props) {
             </div>
            
           }):<p style={{display:"flex",justifycontent: "center",alignItems:"center",height:"50vh",justifyContent: "center"}}>No Comments Till Now</p>
-        ):<div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"50vh"}}><span class="loader"></span></div>}
+        ):<div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"50vh"}}><span className="loader"></span></div>}
         </div>
         </div>
     </>

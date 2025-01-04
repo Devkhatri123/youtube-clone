@@ -26,12 +26,10 @@ function DescriptionPage(props) {
     const FetchVideo = async () => {
       try {
         const VideoRef = doc(firestore, "videos", videoId || params.id);
-        // const video = await getDoc(videoRef);
         onSnapshot(VideoRef,async(videDoc)=>{
         if (videDoc.exists()) {
           Setvideo(videDoc.data());
           const userRef = doc(firestore, "users", videDoc.data().createdBy);
-          //const User = await getDoc(userRef);
          onSnapshot(userRef,(userDoc)=>{
           if (userDoc.exists()) {
             setUser(userDoc.data());
@@ -72,7 +70,6 @@ function DescriptionPage(props) {
   }
   const HideLayout = () => {
     const swipeDistance = touchStartRef.current - touchEndRef.current;
-    // shortvideolayout.current.style.transform= `translateY(${Math.abs(swipeDistance)}px)`;
     if(swipeDistance <= -100){
       DescriptionRef.current.style.display = "none";
       currentState.setDescription(false)

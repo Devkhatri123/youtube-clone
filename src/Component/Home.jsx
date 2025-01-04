@@ -24,18 +24,20 @@ function Home() {
   }, []);
   useEffect(() => {
     const GetData = async () => {
+      try{
+        setPageLoading(true);
       const result = await homeContext.GetchannelData(params.id);
       setAllvideos(result);
+      setPageLoading(false);
+      }catch(error){
+        console.log(error.message);
+      }
     };
     GetData();
   }, [params.id]);
   useEffect(() => {
-    console.log(AllVideos);
-  }, [AllVideos]);
-  useEffect(() => {
     setuser(homeContext.user);
   }, [homeContext.user]);
-
   const showModal = (e, index) => {
     videocontext.setbottomlayout(!videocontext.bottomlayout); 
     setclickedVideoIndex(index);
@@ -55,7 +57,7 @@ function Home() {
             <Link to={"#"}>Videos</Link>
           </div>
           <div id="Shortvideos">
-            <Link to={`/${params.id}/${user?.name.replace(" ", "")}}/Shorts`}>
+            <Link to={`/${params.id}/${user?.name.replace(" ", "")}/Shorts`}>
               Shorts
             </Link>
           </div>
@@ -131,7 +133,7 @@ function Home() {
       </p>
     )
   ) : (
-    <p>Loading...</p>
+    <p style={{display:"flex",justifyContent:"center",alignItems:"center",height:"100vh"}}>Loading...</p>
   );
 }
 

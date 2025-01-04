@@ -108,7 +108,7 @@ body {
   margin-right: 10px;
 }
 
-.short_title {
+.short_title p {
   font-size: 1rem;
   /* font-weight: bold; */
   line-height: 1.5;

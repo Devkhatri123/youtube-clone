@@ -105,7 +105,7 @@ export const Uploadvideo = createContext();
       videoUrl:videoId,
     }).then(()=>{
       navigate("/youtube-clone");
-      console.log("video has been uploaded")
+      localStorage.clear();
     })
    })
   }

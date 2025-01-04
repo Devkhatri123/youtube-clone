@@ -42,9 +42,6 @@ function UploadVideo() {
     }
     GetUser()
 },[])
-useEffect(()=>{
-console.log(user);
-},[user])
   const HandleThumbNailChange = (e) => {
     if (Video !== "") {
       setThumbnail(URL.createObjectURL(e.target.files[0]));

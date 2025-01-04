@@ -244,17 +244,14 @@ function ShortVideos() {
       try{
         let currentVideo = document.querySelectorAll(".short_video_container")[Index];
     if (currentVideo) {
-     const promise =  currentVideo.getElementsByTagName("video").shortvideo.play();
-     if(promise !== undefined){
-      promise.then(_=>{
+     const promise =  currentVideo.getElementsByTagName("video").shortvideo.play().then(_=>{
         console.log("Autoplay started")
       }).catch((error)=>{
         console.log(error);
         currentVideo.getElementsByTagName("video").shortvideo.muted = true;
         setisMuted(true);
         currentVideo.getElementsByTagName("video").shortvideo.play();
-      })
-     }
+      });
     }
     }catch(error){
       console.log(error.message);
@@ -327,9 +324,9 @@ useEffect(()=>{
             className="short_video_container"
             key={index}
             style={
-              currentState.shortvideoShowMessages
-                ? { height:windowHeight, position: "unset" }
-                : {  height:windowHeight, position: "relative" }
+              currentState.shortvideoShowMessages || currentState.Description
+                ? { height:windowHeight, position: "unset",pointerEvents:"auto" }
+                : {  height:windowHeight, position: "relative",pointerEvents:"unset" }
             }
             data-id={shortvideo.id}
           >
@@ -391,6 +388,7 @@ useEffect(()=>{
                 {currentState.isDisLiked ? <BiSolidDislike onClick={() => {currentState.DisLikeVideo(user,params.id,shortvideo.Videodata)}}/> : <BiDislike onClick={() => {currentState.DisLikeVideo(user,params.id,shortvideo.Videodata)}}/>}
                 <p>Dislike</p>
               </div>
+              {shortvideo.Videodata?.comments === "On"&&(
               <div
                 className="message control"
                 onClick={() => {
@@ -404,6 +402,7 @@ useEffect(()=>{
                 <MdOutlineMessage />
                 <p>{shortvideo.Videodata.NumberOfComments}</p>
               </div>
+              )}
               {currentState.shortvideoShowMessages === true && (
                 ActiveIndex == index &&(
                 <div className="shortVivdeoComment">
@@ -421,15 +420,6 @@ useEffect(()=>{
               } >
                 <BsThreeDots />
               </div>
-              <div className="channel control" style={
-                currentState.shortvideoShowMessages || currentState.Description? { visibility:"hidden" }: {visibility:"visible"}
-              }>
-                <img
-                  src={shortvideo.UserData.channelPic || shortvideo.UserData.channelURL}
-                  alt=""
-                  style={{ width: "45px", borderRadius: "10px" }}
-                />
-              </div>
             </div>
             {shortvideoLayout && (
               ActiveIndex === index && (
@@ -437,7 +427,7 @@ useEffect(()=>{
               <div className="line" onTouchMove={drageSection} onTouchStart={sectionTouch} onTouchEnd={HideLayout}><span></span></div>
               <div className="menuitems">
               <div onClick={()=>{currentState.setDescription(true);setActiveIndex(index);setshortvideoLayout(false)}}><RiMenu2Fill/><p>Description</p></div>
-              <div onClick={()=>{currentState.WatchLater(user,params.id)}}>{currentState.isSaved ?<><FaRegBookmark/><p>Save To Watch later</p> </>: <><FaBookmark/><p>Remove From watchlater</p></>}</div>
+              <div onClick={()=>{currentState.WatchLater(user,params.id)}}> {!currentState.isSaved ?<><FaRegBookmark/><p>Save To Watch later</p> </>: <><FaBookmark/><p>Remove From watchlater</p></>}</div>
               <div onClick={HandleMute}>{isMuted ? <VscMute/> : <VscUnmute/>}<p>Mute</p></div>
               </div>
             </div>

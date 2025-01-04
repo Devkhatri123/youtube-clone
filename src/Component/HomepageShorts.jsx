@@ -6,6 +6,7 @@ import "../CSS/HomePage.css"
 function HomepageShorts() {
     const homeContext = useContext(HomeContext);
     const [AllShortsVideo,setAllShortsVideo] = useState([]);
+    const [user,setuser] = useState(null);
     const params = useParams()
     useEffect(()=>{
         const GetData = async() => {
@@ -20,15 +21,18 @@ function HomepageShorts() {
         }
         GetData()
     },[params.id,homeContext]);
+    useEffect(()=>{
+        setuser(homeContext.user)
+    },[homeContext.user])
   return (
     <div className='shorts-home-page'>
       <HomeHeader/>
       <div id="tabsContainer">
           <div id="videos">
-          <Link to={`/${params.id}/${homeContext.user?.name.replace(" ","")}}/videos`}>Videos</Link>
+          <Link to={`/${params.id}/${user?.name.replace(" ","")}/videos`}>Videos</Link>
           </div>
           <div id="Shortvideos">
-            <Link to={`/${params.id}/${homeContext.user?.name.replace(" ","")}}/Shorts`}>Shorts</Link>
+            <Link to={`/${params.id}/${user?.name.replace(" ","")}/Shorts`}>Shorts</Link>
            </div>
          </div>
          <div className='user-allshortsvideos'>

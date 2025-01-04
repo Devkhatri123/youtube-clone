@@ -1,6 +1,6 @@
 import {React,useState} from 'react'
 import UploadVideo from './uploadVideo'
-
+import {IoIosArrowRoundBack} from "react-icons/io";
 function CommentType() {
     let [OpenuploadPage,setOpenuploadPage] = useState(false);
     const showComp= ()=>{
@@ -14,6 +14,7 @@ function CommentType() {
     <UploadVideo/>
   ):(
     <div className='comment_Type'>
+      <IoIosArrowRoundBack className='backArrow' onClick={()=>{window.history.back()}}/>
         <h3>Comment Mode</h3>
         <div>
       <input type="radio" name='commentType' value="on" id='on' onChange={HandleRadioBtnValue}/><label htmlFor="On" >On</label>
