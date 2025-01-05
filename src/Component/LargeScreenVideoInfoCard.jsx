@@ -29,6 +29,8 @@ function LargeScreenVideoInfoCard(props) {
     const [user,setuser] = useState(null);
     const [IsbtnDisable,setIsbtnDisable] = useState(false);
     const VideoContext = useContext(videoContext);
+    const [searhcParams] = useSearchParams();
+    const videoId = searhcParams.get('v');
     useEffect(()=>{
     auth.onAuthStateChanged((currentuser)=>{
       setuser(currentuser);

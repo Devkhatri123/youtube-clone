@@ -9,7 +9,6 @@ import UploadVideo from './uploadVideo';
 import { CgPlayList } from "react-icons/cg";
 import { FiClock } from "react-icons/fi";
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { IoIosArrowForward } from "react-icons/io";
 import { auth } from '../firebase/firebase';
 import NotSignedIn from './NotSignedIn';
 import { onSnapshot,doc,getDoc,collection } from 'firebase/firestore';
@@ -17,7 +16,6 @@ import { firestore } from '../firebase/firebase';
 import UploadvideoProvider from '../Context/UploadVideoContext';
 import { Link } from 'react-router-dom';
 import { IoIosArrowForward } from "react-icons/io";
-import { IoIosArrowBack } from "react-icons/io";
 import ErrorPage from './ErrorPage';
 import { videoContext } from '../Context/VideoContext';
 function Library() {
@@ -250,13 +248,13 @@ function Library() {
             )}
             { Watchlater.Watchlater&&Watchlater.Watchlater.length > 0 &&(
               <>
-              <div className='forwardIcon watched_VideosforwardIcon' style={{display: !watchListscrolled?"block": "none"}} onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
-             <div  className='Shelf' ref={watchListRef}>
+              <div className='WatchListforwardIcon watched_VideosforwardIcon' style={{display: !watchListscrolled?"block": "none"}} onClick={(e)=>{ScrollRight(e)}}><IoIosArrowForward/></div>
+             <div  className='Shelf'>
              <div  className='Shelf-header'>
              <h3>Watch later <span style={{color:"#8e9493"}}>{Watchlater?.Watchlater?.length}</span></h3>
             <Link to={`/playlist?list=WL`}>View all</Link>
              </div>
-            <div id="contents">
+            <div id="contents" ref={watchListRef}>
             {Watchlater.Watchlater && Watchlater.Watchlater.slice(0,6).map((Watchlatervideo,i)=>{
               return <div id="video" key={i}>
               <Link to={`/watch?v=${Watchlatervideo.Videodata?.videoId}`}>
@@ -284,7 +282,7 @@ function Library() {
             }
             </div>
             </div>
-             <div className="backwardIcon"style={watchListscrolled?{display:"block",position:"absolute",bottom:"0",top:"0",height:"36px",transform: "translate(-17px, 174px)"}:{display:"none"}} onClick={(e)=>{ScrollLeft(e)}}><IoIosArrowBack/></div>
+             <div className="WatchListbackwardIcon"style={watchListscrolled?{display:"block",position:"absolute",height:"36px",transform: "translate(-74px,-155px)"}:{display:"none"}} onClick={(e)=>{ScrollLeft(e)}}><IoIosArrowBack/></div>
             </>
             )}
           </div>

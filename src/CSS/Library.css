@@ -262,6 +262,22 @@
 #contents #video a #thumbnail_container img {
   object-fit: contain;
 }
+#list #left>.video{
+  padding-top: 56.25%;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+} 
+#list #left>.video>img{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  object-fit: contain;
+  bottom: 0;
+  height: 100%;
+  background: black;
+}
 @media screen and (max-width:990px) {
   .watched_Videos {
     margin-left: 12px;
@@ -351,7 +367,6 @@
   #list #left>div svg{
     font-size: 1.2rem;
   }
-
   #right #video{
     aspect-ratio: unset;
     display: flex;
@@ -437,7 +452,7 @@
     flex-shrink: 1;
     flex-basis: calc(26% - 16px);
     aspect-ratio: 16 / 9;
-    max-width: calc(26% - 16px);
+    min-width: calc(25.7% - 16px);
   }
   #contents #video a #thumbnail_container{
     border-radius: 7px;
@@ -465,6 +480,15 @@
     width: 34px;
     transform: translate(-18px, -147px);
     cursor: pointer;
+  }
+  .WatchListbackwardIcon{
+    background: #212121;
+        padding: 10px;
+        border-radius: 50%;
+        /* bottom: -57px; */
+        width: 34px;
+        transform: translate(-74px, -155px);
+        cursor: pointer;
   }
   .watched_video {
     flex-grow: 1;
@@ -494,6 +518,16 @@
   }
   .watched_VideosforwardIcon{
     transform: translate(879px, 94px);
+    height: max-content;
+    position: absolute;
+    z-index: 1;
+    background: #212121;
+    padding: 10px;
+    border-radius: 50%;
+    width: 34px;
+  }
+  .WatchListforwardIcon{
+    transform: translate(823px, 111px);
     height: max-content;
     position: absolute;
     z-index: 1;

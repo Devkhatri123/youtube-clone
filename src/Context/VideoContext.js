@@ -76,6 +76,8 @@ const VideoActionProvider = ({ children }) => {
   const checKLikedOrNot = async (user, videoId) => {
     if (user) {
       try {
+        setisLiked(false);
+        setisDisLiked(false);
         const docRef = doc(collection(firestore, `users/${user.uid}/LV`), videoId);
         const dislikedocRef = doc(collection(firestore, `users/${user.uid}/DV`), videoId);
         if ((await getDoc(docRef)).exists()) {
